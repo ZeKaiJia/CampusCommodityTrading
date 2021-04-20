@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-row type="flex" justify="center">
-      <span class="title">浙江理工大学科技与艺术学院 {{this.usrTypeName}}端</span>
+      <span class="title">{{this.roleInfo.roleNameCn}}端</span>
     </el-row>
     <el-row type="flex" justify="center">
-      <el-carousel :interval="4000" arrow="always" height="560px" style="width: 1150px">
+      <el-carousel :interval="4000" arrow="always" height="580px" style="width: 1150px">
         <el-carousel-item
           v-for="item in src"
           :key="item"
@@ -29,8 +29,8 @@
     </el-row>
     <!--管理员导航栏-->
     <el-card
-      v-if="usrType === 'admin'"
-      class="card"
+            v-if="roleInfo.roleNameEn === 'admin'"
+            class="card"
     >
       <el-row :gutter="20">
         <el-col :span="6">
@@ -63,10 +63,10 @@
         </el-col>
       </el-row>
     </el-card>
-    <!--教师导航栏-->
+    <!--买家导航栏-->
     <el-card
-      v-if="usrType === 'teacher'"
-      class="card"
+            v-if="roleInfo.roleNameEn === 'buyer'"
+            class="card"
     >
       <el-row :gutter="20">
         <el-col :span="6">
@@ -99,10 +99,10 @@
           </el-col>
       </el-row>
     </el-card>
-    <!--学生导航栏-->
+    <!--卖家导航栏-->
     <el-card
-      v-if="usrType === 'student'"
-      class="card"
+            v-if="roleInfo.roleNameEn === 'saler'"
+            class="card"
     >
       <el-row :gutter="20">
         <el-col :span="6">
@@ -139,43 +139,61 @@
 </template>
 
 <script>
-import school1 from '../assets/img/school/school1.jpg'
-import school2 from '../assets/img/school/school2.jpg'
-import school3 from '../assets/img/school/school3.jpg'
-import { easyChangeRoleName, getCookie } from '../plugins/utils'
-export default {
-  name: 'Welcome',
-  data() {
-    return {
-      // 轮播图
-      src: [
-        school1,
-        school2,
-        school3
-      ],
-      // 开启加载
-      loading: true,
-      // 用户类别
-      usrType: '',
-      // 用户中文类别
-      usrTypeName: ''
-    }
-  },
-  created() {
-    this.usrType = getCookie('type')
-    this.usrTypeName = easyChangeRoleName(this.usrType)
-  },
-  methods: {
-    jump(activePath) {
-      this.information.$emit('activePath', activePath)
-      this.$router.push(activePath)
+  import school1 from '../assets/img/welcome/school1.jpg'
+  import school2 from '../assets/img/welcome/school2.jpg'
+  import school3 from '../assets/img/welcome/school3.jpg'
+  import welcome1 from '../assets/img/welcome/welcome1.jpg'
+  import welcome2 from '../assets/img/welcome/welcome2.jpeg'
+  import {checkError, getCookie} from '../plugins/utils'
+
+  export default {
+    name: 'Welcome',
+    data() {
+      return {
+        // 轮播图
+        src: [
+          welcome1,
+          welcome2,
+          school1,
+          school2,
+          school3
+        ],
+        // 开启加载
+        loading: true,
+        // 角色ID
+        roleId: '',
+        roleInfo: ''
+      }
     },
-    // 图片加载成功
-    loadSuccess() {
-      this.loading = false
+    created() {
+      this.roleId = getCookie('type')
+      this.findRoleInfo()
     },
-    // 图片加载失败
-    loadError() {
+    methods: {
+      // 点击按钮添加新用户
+      async findRoleInfo() {
+        const {data: res} = await this.$http.get(
+                `role/selectById?roleId=${this.roleId}`,
+        )
+        if (res.code !== 200) {
+          this.addDialogVisible = false
+          return this.$message.error('查询角色失败' + checkError(res))
+        } else {
+          this.addDialogVisible = false
+          this.$message.success('查询角色成功')
+        }
+        this.roleInfo = res.data
+      },
+      jump(activePath) {
+        this.information.$emit('activePath', activePath)
+        this.$router.push(activePath)
+      },
+      // 图片加载成功
+      loadSuccess() {
+        this.loading = false
+      },
+      // 图片加载失败
+      loadError() {
       this.loading = false
     }
   }

@@ -1,17 +1,19 @@
 <template>
   <el-container class="home-container">
     <!--头部区域-->
-    <el-header>
-      <div>
-        <img style="margin-left: 10px" src="../assets/img/avater.png" alt="" />
-        <span style="cursor: default;">基于前后端分离的教务平台后台管理系统</span>
-      </div>
-      <div>
-        <span style="cursor: default">{{this.showUser}}</span>
+    <el-header style="padding-left: 0">
+      <div class="top-head">
         <div>
-          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+          <i class="el-icon-s-goods"/>
+          <span style="cursor: default;">校园二手商品交易平台</span>
         </div>
-        <el-button type="info" @click="logout">退出</el-button>
+        <div style="margin-right: 24px">
+          <span style="cursor: default;">{{this.showUser}}</span>
+          <div>
+            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+          </div>
+          <el-button type="info" @click="logout">退出</el-button>
+        </div>
       </div>
     </el-header>
     <!--页面主体区域-->
@@ -23,9 +25,9 @@
         </div>
         <!--侧边栏菜单区域-->
         <el-menu
-          background-color="#203a57"
-          text-color="#fff"
-          active-text-color="#38ae70"
+          background-color="#d1d6dc"
+          text-color="#000"
+          active-text-color="#000"
           :router="true"
           :collapse="isCollapse"
           :unique-opened="false"
@@ -65,98 +67,29 @@
       </el-aside>
       <el-container>
         <!--侧边栏右侧区域-->
-        <el-main style="max-height: 88.6vh;">
+        <el-main style="max-height: 100%;">
           <!--路由占位符-->
-          <router-view />
+          <router-view/>
         </el-main>
-        <el-footer height="30px">
-          <div style="display: flex; justify-content: center; cursor: default">Copyright © 2020 · 浙江理工大学科技与艺术学院 版权所有 · 浙ICP备20021194号-1
-            <img src="https://img.alicdn.com/tfs/TB1Z.avK.z1gK0jSZLeXXb9kVXa-200-200.png"
-                 style="width: 24px; height: 24px; margin-top: 3px; margin-left: 8px"/>
-          </div>
-        </el-footer>
       </el-container>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import { clearCookie, getCookie } from '../plugins/utils'
-export default {
-  data() {
-    return {
-      showUser: '',
-      menuList: [
-        {
-          id: 1,
-          authName: '用户管理',
-          children: [{ id: 11, authName: '用户列表', path: 'users' }]
-        },
-        {
-          id: 2,
-          authName: '权限管理',
-          children: [
-            { id: 21, authName: '角色列表', path: 'types' },
-            { id: 22, authName: '权限列表', path: 'rights' }
-          ]
-        },
-        {
-          id: 3,
-          authName: '学生管理',
-          children: [{
-            id: 31,
-            authName: '学生列表',
-            path: 'students'
-          }]
-        },
-        {
-          id: 4,
-          authName: '课程管理',
-          children: [{
-            id: 41,
-            authName: '课程列表',
-            path: 'subjects'
-          }]
-        },
-        {
-          id: 5,
-          authName: '成绩管理',
-          children: [{
-            id: 51,
-            authName: '成绩列表',
-            path: 'scores'
-          },
+  import {clearCookie, getCookie} from '../plugins/utils'
+
+  export default {
+    data() {
+      return {
+        showUser: '',
+        menuList: [
           {
-            id: 52,
-            authName: '学生成绩单',
-            path: 'stuTranscripts'
-          },
-          {
-            id: 53,
-            authName: '课程成绩单',
-            path: 'subTranscripts'
+            id: 1,
+            authName: '用户管理',
+            children: [{id: 11, authName: '用户列表', path: 'users'}]
           }
-          ]
-        },
-        {
-          id: 6,
-          authName: '数据统计',
-          children: [{
-            id: 61,
-            authName: '综合数据',
-            path: 'statuses'
-          }]
-        },
-        {
-          id: 7,
-          authName: '文档管理',
-          children: [{
-            id: 71,
-            authName: 'API文档',
-            path: 'docs'
-          }]
-        }
-      ],
+        ],
       iconsObj: {
         1: 'iconfont icon-icon-test35',
         2: 'iconfont icon-icon-test16',
@@ -176,7 +109,7 @@ export default {
   },
   created() {
     this.getMenuList()
-    this.showUser = getCookie('nick')
+    this.showUser = getCookie('user')
     this.information.$on('activePath', path => {
       this.activePath = path
     })
@@ -185,14 +118,16 @@ export default {
   methods: {
     async logout() {
       window.sessionStorage.clear()
-      clearCookie('nick')
       clearCookie('type')
+      clearCookie('user')
       await this.$router.push('/login')
       await this.$http.get('user/logout')
     },
     // 获取所有的菜单
+    // TODO
     async getMenuList() {
       const type = getCookie('type')
+      console.log(type)
       if (type === 'teacher') {
         this.menuList = this.menuList.slice(2, 6)
         this.menuList[2].children.splice(1, 1)
@@ -220,20 +155,26 @@ export default {
 .home-container {
   height: 100%;
 }
-.el-header {
-  background-color: #29384c;
+.el-header .top-head{
+  background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   padding-left: 0;
   align-items: center;
-  color: white;
+  color: black;
+  width: 100vw;
+  height: 95%;
+  box-shadow: 0 2px 4px 0 var(--cb-color-shadow,rgba(0,0,0,0.16));
+
   img {
     width: 60px;
     height: 60px;
   }
+
   > div {
     display: flex;
     align-items: center;
+
     span {
       margin-left: 15px;
       font-size: 24px;
@@ -241,7 +182,8 @@ export default {
   }
 }
 .el-aside {
-  background-color: #203a57;
+  background-color: #d1d6dc;
+  margin-top: -2px;
   .el-menu {
     border-right: 0;
   }
@@ -253,10 +195,10 @@ export default {
   margin-right: 22px;
 }
 .toggle-button {
-  background-color: #374a5d;
+  background-color: #f5f5f5;
   font-size: 10px;
   line-height: 24px;
-  color: white;
+  color: black;
   text-align: center;
   letter-spacing: 0.2em;
   cursor: pointer;
@@ -271,4 +213,10 @@ export default {
   text-align: center;
   line-height: 30px;
 }
+  .el-icon-s-goods {
+    margin-left: 12px;
+    color: #405570;
+    font-size: 48px;
+    height: 100%;
+  }
 </style>

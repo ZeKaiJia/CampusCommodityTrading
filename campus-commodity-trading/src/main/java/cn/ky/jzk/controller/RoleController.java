@@ -83,7 +83,7 @@ public class RoleController extends BaseController {
 
     @GetMapping(value = "/selectById")
     @ResponseBody
-    public Response<Role> selectById(String roleId) {
+    public Response<Role> selectById(@RequestParam String roleId) {
         temp =  roleService.selectById(roleId);
         if (temp == null) {
             getFailResult(404, "未找到数据");
