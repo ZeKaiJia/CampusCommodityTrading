@@ -1,0 +1,11 @@
+# Global
+*/*.iml
+
+# Vue
+*/node_modules
+
+# Java
+*/target
+
+# Self
+.idea

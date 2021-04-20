@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.ky.jzk.mapper.RelationRoleUserMapper">
+    <cache eviction="FIFO" readOnly="true" size="1024" flushInterval="30000"/>
+    <insert id="insert">
+        INSERT INTO rel_user_role (userName, roleId)
+        VALUE (#{userName}, #{roleId})
+    </insert>
+    <update id="update">
+        UPDATE rel_user_role
+        <set>
+            <if test="roleId != null and roleId != ''">
+                roleId = #{roleId},
+            </if>
+        </set>
+        WHERE userName = #{userName}
+    </update>
+    <select id="selectUserRole" resultType="cn.ky.jzk.model.Role">
+        SELECT *
+        FROM sys_role
+        WHERE roleId = (
+                 SELECT roleId
+                 FROM rel_user_role
+                 WHERE userName = #{userName}
+             )
+    </select>
+</mapper>

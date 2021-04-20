@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.ky.jzk.mapper.CommodityMapper">
+    <cache eviction="FIFO" readOnly="true" size="1024" flushInterval="30000"/>
+    <insert id="insert" parameterType="cn.ky.jzk.model.Commodity">
+        INSERT INTO sys_commodity (comId, comName, comQuantity, comQuantityNow, comEachPrice, comDescription)
+        VALUE (#{comId}, #{comName}, #{comQuantity}, #{comQuantityNow}, #{comEachPrice}, #{comDescription})
+    </insert>
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM sys_commodity
+        WHERE comId = #{comId}
+    </delete>
+    <update id="update" parameterType="cn.ky.jzk.model.Commodity">
+        UPDATE sys_commodity
+        <set>
+            <if test="comName != null and comName != ''">
+                comName = #{comName},
+            </if>
+            <if test="comQuantity != null and comQuantity != ''">
+                comQuantity = #{comQuantity},
+            </if>
+            <if test="comQuantityNow != null and comQuantityNow != ''">
+                comQuantityNow = #{comQuantityNow},
+            </if>
+            <if test="comEachPrice != null and comEachPrice != ''">
+                comEachPrice = #{comEachPrice},
+            </if>
+            <if test="comDescription != null and comDescription != ''">
+                comDescription = #{comDescription},
+            </if>
+        </set>
+        WHERE comId = #{comId}
+    </update>
+    <select id="select" resultType="cn.ky.jzk.model.Commodity">
+        SELECT *
+        FROM sys_commodity
+    </select>
+    <select id="selectById" resultType="cn.ky.jzk.model.Commodity">
+        SELECT *
+        FROM sys_commodity
+        WHERE comId = #{comId}
+    </select>
+</mapper>
