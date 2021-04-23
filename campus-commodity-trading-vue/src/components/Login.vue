@@ -198,11 +198,9 @@ export default {
           { min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur' }
         ],
         userPhone: [
-          { required: true, message: '请输入用户联系电话', trigger: 'blur' },
           { validator: checkMobile, trigger: 'blur' }
         ],
         userEmail: [
-          { required: true, message: '请输入用户电子邮箱', trigger: 'blur' },
           { validator: checkEmail, trigger: 'blur' }
         ],
         roleNameCn: [
@@ -262,6 +260,7 @@ export default {
           const { data: type } = await this.$http.get(`role/selectUserRole?userName=${result.data.userName}`)
           setCookie('type', type.data.roleId, 24 * 60 * 60)
           setCookie('user', result.data.userNick, 24 * 60 * 60)
+          setCookie('ID', result.data.userName, 24 * 60 * 60)
           this.$message.success('欢迎您，' + result.data.userNick)
           await this.$router.push({ path: '/home' }, () => {}, () => {})
         }

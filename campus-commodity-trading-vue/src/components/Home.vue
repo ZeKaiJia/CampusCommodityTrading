@@ -120,25 +120,14 @@
       window.sessionStorage.clear()
       clearCookie('type')
       clearCookie('user')
+      clearCookie('ID')
       await this.$router.push('/login')
-      await this.$http.get('user/logout')
     },
     // 获取所有的菜单
     // TODO
     async getMenuList() {
       const type = getCookie('type')
       console.log(type)
-      if (type === 'teacher') {
-        this.menuList = this.menuList.slice(2, 6)
-        this.menuList[2].children.splice(1, 1)
-      } else if (type === 'student') {
-        this.menuList = this.menuList.slice(3, 6)
-        this.menuList[1].children = this.menuList[1].children.slice(1, 2)
-      } else if (type === 'admin') {
-        const list1 = this.menuList.slice(0, 2)
-        const list2 = this.menuList.slice(5, 7)
-        this.menuList = list1.concat(list2)
-      }
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse

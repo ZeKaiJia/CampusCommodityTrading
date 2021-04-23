@@ -13,7 +13,7 @@
         <el-col :span="8">
           <el-input
             placeholder="请输入用户名"
-            v-model="queryInfo.usrName"
+            v-model="queryInfo.userName"
             @clear="getUserList"
             clearable
           >
@@ -29,19 +29,6 @@
           >添加用户
           </el-button
           >
-        </el-col>
-        <el-col :span="1.5">
-          <el-tooltip
-            class="item"
-            effect="light"
-            placement="right"
-            style="margin-top: 10px"
-            content="通过锁定用户可以禁用该用户数据的修改和删除操作"
-          >
-            <el-button style="padding: 0; border-color: white" circle>
-              <i class="el-icon-info" style="font-size: 20px"/>
-            </el-button>
-          </el-tooltip>
         </el-col>
         <el-col :span="8">
           <el-alert
@@ -59,106 +46,17 @@
         border
         v-loading="loading"
       >
-        <!--拓展列-->
-        <el-table-column type="expand" label="详细" width="64px" align="center">
-          <template slot-scope="scope">
-            <el-row>
-              <el-col :span="3" align="right">
-                <el-tag type="info" effect="plain">
-                  联系电话
-                </el-tag>
-              </el-col>
-              <el-col :span="10">
-                <el-tag type="info" effect="plain">
-                  {{scope.row.usrPhone}}
-                </el-tag>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="3" align="right">
-                <el-tag type="info" effect="plain">
-                  电子邮箱
-                </el-tag>
-              </el-col>
-              <el-col :span="10">
-                <el-tag type="info" effect="plain">
-                  {{scope.row.usrEmail}}
-                </el-tag>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="3" align="right">
-                <el-tag type="info" effect="plain">
-                  最近登录
-                </el-tag>
-              </el-col>
-              <el-col :span="10">
-                <el-tag type="info" effect="plain">
-                  {{scope.row.lastLogin}}
-                </el-tag>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="3" align="right">
-                <el-tag type="info" effect="plain">
-                  创建时间
-                </el-tag>
-              </el-col>
-              <el-col :span="10">
-                <el-tag type="info" effect="plain">
-                  {{scope.row.utcCreate}}
-                </el-tag>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="3" align="right">
-                <el-tag type="info" effect="plain">
-                  修改时间
-                </el-tag>
-              </el-col>
-              <el-col :span="10">
-                <el-tag type="info" effect="plain">
-                  {{scope.row.utcModify}}
-                </el-tag>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="3" align="right">
-                <el-tag type="info" effect="plain">
-                  修改人
-                </el-tag>
-              </el-col>
-              <el-col :span="10">
-                <el-tag type="info" effect="plain">
-                  {{scope.row.modifyBy === '' ? '空' : scope.row.modifyBy}}
-                </el-tag>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="3" align="right">
-                <el-tag type="info" effect="plain">
-                  备注
-                </el-tag>
-              </el-col>
-              <el-col :span="10">
-                <el-tag type="info" effect="plain">
-                  {{scope.row.remark === '' ? '空' : scope.row.remark}}
-                </el-tag>
-              </el-col>
-            </el-row>
-          </template>
-        </el-table-column>
         <!--索引列-->
         <el-table-column label="序号" width="58px" align="center">
           <template slot-scope="scope">
             <span>{{scope.$index+(currentPage - 1) * pageSize + 1}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="用户名" prop="usrName" align="center"/>
+        <el-table-column label="用户名" prop="userName" align="center"/>
         <el-table-column label="密码" align="center">
           <template slot-scope="scope">
             <span>{{showPassword ?
-              (scope.row.usrName === checkPassUser ? scope.row.usrPassword + ' '  : '******** ')
+              (scope.row.userName === checkPassUser ? scope.row.userPassword + ' '  : '******** ')
               : '******** '}}</span>
             <el-button
               icon="el-icon-view"
@@ -167,19 +65,15 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="角色" prop="usrType" align="center"/>
-        <el-table-column label="昵称" prop="usrNick" align="center"/>
-        <el-table-column label="状态" align="center" width="180px">
+        <el-table-column label="姓名" prop="userNick" align="center" width="100px"/>
+        <el-table-column label="联系电话" align="center">
           <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.valid"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              active-text="开启"
-              inactive-text="锁定"
-              @change="userStateChange(scope.row)"
-            >
-            </el-switch>
+            <span>{{scope.row.userPhone === null ? '暂无信息' : scope.row.userPhone}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="电子邮箱" prop="userEmail" align="center">
+          <template slot-scope="scope">
+            <span>{{scope.row.userEmail === null ? '暂无信息' : scope.row.userEmail}}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="180px">
@@ -197,14 +91,14 @@
                 type="primary"
                 icon="el-icon-edit"
                 size="mini"
-                @click="showEditDialog(scope.row.usrName)"
+                @click="showEditDialog(scope.row.userName)"
                 round
               />
             </el-tooltip>
             <el-tooltip
               class="dark"
               effect="dark"
-              content="删除角色"
+              content="删除用户"
               placement="top"
               :enterable="false"
               :hide-after="2000"
@@ -214,7 +108,7 @@
                 type="danger"
                 icon="el-icon-delete"
                 size="mini"
-                @click="removeUserByName(scope.row.usrName)"
+                @click="removeUserByName(scope.row.userName)"
                 round
               />
             </el-tooltip>
@@ -234,55 +128,47 @@
     </el-card>
     <!--添加用户的对话框-->
     <el-dialog
-      title="添加用户"
-      :visible.sync="addDialogVisible"
-      width="50%"
-      @close="addDialogClosed"
+            title="添加用户"
+            :visible.sync="addDialogVisible"
+            width="50%"
+            @close="addDialogClosed"
     >
       <!--内容主题区域-->
       <el-form
-        :model="addForm"
-        :rules="addFormRules"
-        ref="addFormRef"
-        label-width="100px"
-        v-loading="dialogLoading"
+              :model="addForm"
+              :rules="addFormRules"
+              ref="addFormRef"
+              label-width="100px"
+              v-loading="dialogLoading"
       >
-        <el-form-item label="用户名" prop="usrName">
-          <el-input v-model="addForm.usrName" />
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="addForm.userName" />
         </el-form-item>
-        <el-form-item label="密码" prop="usrPassword">
-          <el-input v-model="addForm.usrPassword" />
+        <el-form-item label="密码" prop="userPassword">
+          <el-input v-model="addForm.userPassword" />
         </el-form-item>
-        <el-form-item label="昵称" prop="usrNick">
-          <el-input v-model="addForm.usrNick" />
+        <el-form-item label="姓名" prop="userNick">
+          <el-input v-model="addForm.userNick" />
         </el-form-item>
-        <el-form-item label="角色" prop="usrType">
+        <el-form-item label="角色" prop="roleNameCn">
           <template>
-            <el-select v-model="addForm.usrType" placeholder="请选择">
+            <el-select v-model="addForm.roleNameCn" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
               </el-option>
             </el-select>
           </template>
         </el-form-item>
-        <el-form-item label="联系电话" prop="usrPhone">
-          <el-input v-model.number="addForm.usrPhone" type="number"/>
+        <el-form-item label="联系电话" prop="userPhone">
+          <el-input v-model.number="addForm.userPhone" type="number"/>
         </el-form-item>
-        <el-form-item label="电子邮箱" prop="usrEmail">
-          <el-input v-model="addForm.usrEmail" />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input
-            v-model="addForm.remark"
-            placeholder="请输入备注"
-            maxlength="20"
-            show-word-limit
-          />
+        <el-form-item label="电子邮箱" prop="userEmail">
+          <el-input v-model="addForm.userEmail" />
         </el-form-item>
       </el-form>
       <!--底部按钮区-->
@@ -306,42 +192,34 @@
         label-width="100px"
         v-loading="dialogLoading"
       >
-        <el-form-item label="用户名" prop="usrName">
-          <el-input v-model="editForm.usrName" disabled/>
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="editForm.userName" disabled/>
         </el-form-item>
-        <el-form-item label="密码" prop="usrPassword">
-          <el-input v-model="editForm.usrPassword" />
+        <el-form-item label="密码" prop="userPassword">
+          <el-input v-model="editForm.userPassword" />
         </el-form-item>
-        <el-form-item label="昵称" prop="usrNick">
-          <el-input v-model="editForm.usrNick" />
+        <el-form-item label="姓名" prop="userNick">
+          <el-input v-model="editForm.userNick" />
         </el-form-item>
-        <el-form-item label="角色" prop="usrType">
+        <el-form-item label="角色" prop="roleNameCn">
           <template>
-            <el-select v-model="editForm.usrType" placeholder="请选择">
+            <el-select v-model="editForm.roleNameCn" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
               </el-option>
             </el-select>
           </template>
         </el-form-item>
-        <el-form-item label="联系电话" prop="usrPhone">
-          <el-input v-model.number="editForm.usrPhone" type="number"/>
+        <el-form-item label="联系电话" prop="userPhone">
+          <el-input v-model.number="editForm.userPhone" type="number"/>
         </el-form-item>
-        <el-form-item label="电子邮箱" prop="usrEmail">
-          <el-input v-model="editForm.usrEmail" />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input
-            v-model="editForm.remark"
-            placeholder="请输入备注"
-            maxlength="20"
-            show-word-limit
-          />
+        <el-form-item label="电子邮箱" prop="userEmail">
+          <el-input v-model="editForm.userEmail" />
         </el-form-item>
       </el-form>
       <!--底部按钮区-->
@@ -356,7 +234,7 @@
 </template>
 
 <script>
-import { sliceData, timestampToTime, checkError, easyChangeRoleName } from '../../plugins/utils'
+  import {sliceData, checkError, getCookie} from '../../plugins/utils'
 export default {
   name: 'Users',
   data() {
@@ -367,6 +245,14 @@ export default {
         return callback()
       } else {
         callback(new Error('请输入合法的邮箱'))
+      }
+    }
+    // 验证密码
+    const checkPass = (rule, value, callback) => {
+      if (value !== '********') {
+        return callback()
+      } else {
+        callback(new Error('请输入正确的密码'))
       }
     }
     // 验证手机号
@@ -385,16 +271,7 @@ export default {
       // 路由url
       routeUrl: '/users',
       // 角色类型选择 TODO
-      options: [{
-        value: 'admin',
-        label: '管理员'
-      }, {
-        value: 'teacher',
-        label: '教师'
-      }, {
-        value: 'student',
-        label: '学生'
-      }],
+      options: [],
       // 获取密码用户
       checkPassUser: '',
       // 显示密码
@@ -405,7 +282,7 @@ export default {
       currentPage: 1,
       // 获取用户列表的参数对象
       queryInfo: {
-        usrName: ''
+        userName: ''
       },
       // 读取到的用户数据
       userList: [],
@@ -418,96 +295,91 @@ export default {
       editDialogVisible: false,
       // 添加用户的表单数据
       addForm: {
-        usrName: '',
-        usrPassword: '',
-        usrNick: '',
-        usrPhone: '',
-        usrEmail: '',
-        remark: '',
-        modifyBy: '',
-        usrType: ''
+        userName: '',
+        userPassword: '',
+        userNick: '',
+        userPhone: '',
+        userEmail: '',
+        roleNameCn: ''
       },
       // 修改用户的表单数据
       editForm: {
-        usrName: '',
-        usrPassword: '',
-        usrNick: '',
-        usrPhone: '',
-        usrEmail: '',
-        remark: '',
-        usrType: '',
-        valid: ''
+        userName: '',
+        userPassword: '',
+        userNick: '',
+        userPhone: '',
+        userEmail: '',
+        roleNameCn: ''
       },
       // 添加表单的验证规则对象
       addFormRules: {
-        usrName: [
+        userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur' }
         ],
-        usrPassword: [
+        userPassword: [
           { required: true, message: '请输入用户密码', trigger: 'blur' },
-          { min: 6, max: 14, message: '长度在6到14个字符', trigger: 'blur' }
-        ],
-        usrNick: [
-          { required: true, message: '请输入用户昵称', trigger: 'blur' },
           { min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur' }
         ],
-        usrPhone: [
-          { required: true, message: '请输入用户联系电话', trigger: 'blur' },
+        userNick: [
+          { required: true, message: '请输入您的姓名', trigger: 'blur' },
+          { min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur' }
+        ],
+        userPhone: [
           { validator: checkMobile, trigger: 'blur' }
         ],
-        usrEmail: [
-          { required: true, message: '请输入用户电子邮箱', trigger: 'blur' },
+        userEmail: [
           { validator: checkEmail, trigger: 'blur' }
         ],
-        usrType: [
+        roleNameCn: [
           { required: true, message: '请选择用户角色类型', trigger: 'blur' }
         ]
       },
       editFormRules: {
-        usrPassword: [
+        userPassword: [
+          { validator: checkPass, trigger: 'blur' },
           { required: true, message: '请输入用户密码', trigger: 'blur' },
-          { min: 6, max: 14, message: '长度在6到14个字符', trigger: 'blur' }
-        ],
-        usrNick: [
-          { required: true, message: '请输入用户昵称', trigger: 'blur' },
           { min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur' }
         ],
-        usrPhone: [
-          { required: true, message: '请输入用户联系电话', trigger: 'blur' },
+        userNick: [
+          { required: true, message: '请输入您的姓名', trigger: 'blur' },
+          { min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur' }
+        ],
+        userPhone: [
           { validator: checkMobile, trigger: 'blur' }
         ],
-        usrEmail: [
-          { required: true, message: '请输入用户电子邮箱', trigger: 'blur' },
+        userEmail: [
           { validator: checkEmail, trigger: 'blur' }
         ],
-        usrType: [
-          { required: true, message: '请输入用户角色类型', trigger: 'blur' }
+        roleNameCn: [
+          { required: true, message: '请选择用户角色类型', trigger: 'blur' }
         ]
       }
     }
   },
   created() {
     this.information.$emit('activePath', this.routeUrl)
+    this.getRoleList()
     this.getUserList()
   },
   methods: {
+    // 获取角色列表
+    async getRoleList() {
+      const { data: res } = await this.$http.get('role/select')
+      if (res.code !== 200) {
+        return this.$message.error('获取角色列表失败!' + checkError(res))
+      }
+      for (let i = 0; i < res.data.length; i++) {
+        await this.options.push({'label': res.data[i].roleNameEn, 'value': res.data[i].roleNameCn})
+      }
+    },
     // 获取用户列表
     async getUserList() {
       this.loading = true
-      const { data: res } = await this.$http.get('user/selectAll')
+      const { data: res } = await this.$http.get('user/select')
       if (res.code !== 200) {
         this.loading = false
         return this.$message.error('获取用户列表失败!' + checkError(res))
-      }
-      for (let i = 0; i < res.data.length; i++) {
-        res.data[i].usrType = await this.selectEachRole(res.data[i].usrName)
-        res.data[i].utcCreate = timestampToTime(res.data[i].utcCreate)
-        res.data[i].utcModify = timestampToTime(res.data[i].utcModify)
-        res.data[i].lastLogin =
-          res.data[i].lastLogin > 31539467000
-            ? timestampToTime(res.data[i].lastLogin)
-            : '新用户'
       }
       this.userList = res.data
       // 根据当前页数和每页显示数控大小截取数据
@@ -519,11 +391,6 @@ export default {
       this.total = res.data.length
       this.loading = false
     },
-    // 获取用户角色
-    async selectEachRole (usrName) {
-      const { data: res } = await this.$http.get(`role/findRoleDesByUserName?usrName=${usrName}`)
-      return res.data
-    },
     // 查找用户
     async selectUser() {
       this.loading = true
@@ -534,15 +401,8 @@ export default {
         this.loading = false
         return this.$message.error('获取用户列表失败!' + checkError(res))
       }
-      res.data.usrType = await this.selectEachRole(res.data.usrName)
       this.userList = []
       this.userList.push(res.data)
-      this.userList[0].utcCreate = timestampToTime(this.userList[0].utcCreate)
-      this.userList[0].utcModify = timestampToTime(this.userList[0].utcModify)
-      this.userList[0].lastLogin =
-        this.userList[0].lastLogin > 31539467000
-          ? timestampToTime(this.userList[0].lastLogin)
-          : '新用户'
       // 定向搜索只可能查询到一条记录
       this.showUsrList = this.userList
       this.total = res.data.length
@@ -550,50 +410,11 @@ export default {
     },
     // 查看用户密码
     checkPassword(data) {
-      if (this.checkPassUser === data.usrName || this.checkPassUser === '') {
+      this.checkPassUser = getCookie("ID")
+      if (this.checkPassUser === data.userName || this.checkPassUser === '') {
         this.showPassword = !this.showPassword
-      }
-      if (!this.showPassword && this.checkPassUser !== data.usrName) {
-        this.showPassword = true
-      }
-      this.checkPassUser = data.usrName
-    },
-    // 监听 pagesize 改变的事件
-    handleSizeChange(newSize) {
-      this.queryInfo.pageSize = newSize
-      this.getUserList()
-    },
-    // 监听 page 改变的事件
-    handleCurrentChange(newSize) {
-      this.queryInfo.pageSize = newSize
-      this.getUserList()
-    },
-    // 监听 switch 开关的改变
-    async userStateChange(userInfo) {
-      if (userInfo.valid === false) {
-        const { data: res } = await this.$http.post(
-          `user/disable?usrName=${userInfo.usrName}`
-        )
-        if (res.code !== 200) {
-          setTimeout(() => {
-            userInfo.valid = true
-          }, 1000)
-          return this.$message.error('锁定用户失败！' + checkError(res))
-        } else {
-          return this.$message.success('锁定用户成功！')
-        }
       } else {
-        const { data: res } = await this.$http.post(
-          `user/recover?usrName=${userInfo.usrName}`
-        )
-        if (res.code !== 200) {
-          setTimeout(() => {
-            userInfo.valid = false
-          }, 1000)
-          return this.$message.error('开启用户失败！' + checkError(res))
-        } else {
-          return this.$message.success('开启用户成功！')
-        }
+        return this.$message.error('不能查看其它用户的密码!')
       }
     },
     // 监听添加用户对话框的关闭事件
@@ -609,7 +430,7 @@ export default {
         if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
         this.dialogLoading = true
         const { data: res } = await this.$http.post(
-          `user/insert?usrType=${this.addForm.usrType}`,
+          `user/insert?roleNameCn=${this.addForm.roleNameCn}`,
           this.addForm
         )
         this.dialogLoading = false
@@ -620,20 +441,16 @@ export default {
           this.addDialogVisible = false
           this.$message.success('添加用户成功')
         }
-        this.getUserList()
+        await this.getUserList()
       })
     },
     // 点击按钮修改用户信息
     editUser() {
       this.$refs.editFormRef.validate(async (valid) => {
         if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
-        if (!this.editForm.valid) {
-          this.editDialogVisible = false
-          return this.$message.warning('数据被锁定无法进行操作')
-        }
         this.dialogLoading = true
         const { data: res } = await this.$http.post(
-          `user/update?usrType=${this.editForm.usrType}`,
+          `user/update?roleNameCn=${this.editForm.roleNameCn}`,
           this.editForm
         )
         this.dialogLoading = false
@@ -644,11 +461,11 @@ export default {
           this.editDialogVisible = false
           this.$message.success('修改用户成功')
         }
-        this.getUserList()
+        await this.getUserList()
       })
     },
     // 点击按钮删除用户信息
-    async removeUserByName(usrName) {
+    async removeUserByName(userName) {
       // 弹框询问
       const confirmResult = await this.$confirm(
         '此操作将永久删除该用户, 是否继续?',
@@ -664,28 +481,29 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已撤回删除操作')
       }
-      const { data: valid } = await this.$http.get(`user/selectByName?usrName=${usrName}`)
-      if (!valid.data.valid) {
-        return this.$message.warning('数据被锁定无法进行操作')
-      }
-      const { data: res } = await this.$http.post(`user/delete?usrName=${usrName}`)
+      const { data: res } = await this.$http.post(`user/delete?userName=${userName}`)
       if (res.code !== 200) {
         return this.$message.error('删除用户失败' + checkError(res))
       }
       this.$message.success('删除用户成功')
-      this.getUserList()
+      await this.getUserList()
     },
     // 监听修改用户对话框的点击事件
-    async showEditDialog(usrName) {
+    async showEditDialog(userName) {
       const { data: res } = await this.$http.get(
-        `user/selectByName?usrName=${usrName}`
+        `user/selectByName?userName=${userName}`
       )
       if (res.code !== 200) {
         return this.$message.error('查询用户信息失败' + checkError(res))
       }
-      res.data.usrType = await this.selectEachRole(usrName)
-      res.data.usrType = easyChangeRoleName(res.data.usrType)
+      // 获取角色信息
+      const { data: type } = await this.$http.get(`role/selectUserRole?userName=${res.data.userName}`)
+      // 判断密码是否显示
+      res.data.roleNameCn = type.data.roleNameCn
       this.editForm = res.data
+      if (getCookie('ID') !== userName) {
+        this.editForm.userPassword = '********'
+      }
       this.editDialogVisible = true
       this.dialogLoading = false
     },

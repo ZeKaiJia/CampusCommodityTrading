@@ -27,6 +27,7 @@
         </el-carousel-item>
       </el-carousel>
     </el-row>
+    <!--TODO-->
     <!--管理员导航栏-->
     <el-card
             v-if="roleInfo.roleNameEn === 'admin'"
@@ -170,7 +171,7 @@
       this.findRoleInfo()
     },
     methods: {
-      // 点击按钮添加新用户
+      // 查询用户角色信息
       async findRoleInfo() {
         const {data: res} = await this.$http.get(
                 `role/selectById?roleId=${this.roleId}`,
@@ -180,7 +181,6 @@
           return this.$message.error('查询角色失败' + checkError(res))
         } else {
           this.addDialogVisible = false
-          this.$message.success('查询角色成功')
         }
         this.roleInfo = res.data
       },
