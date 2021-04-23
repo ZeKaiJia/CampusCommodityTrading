@@ -19,4 +19,6 @@ public interface RelationRoleUserMapper {
     void update(@Param("userName") String userName, @Param("roleId") String roleId);
 
     Role selectUserRole(@Param("userName") String userName);
+
+    void delete(@Param("userName") String userName);
 }

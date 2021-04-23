@@ -241,7 +241,7 @@ export default {
     // 验证邮箱
     const checkEmail = (rule, value, callback) => {
       const regEmail = /^([a-zA-z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-      if (regEmail.test(value)) {
+      if (regEmail.test(value) || value === null) {
         return callback()
       } else {
         callback(new Error('请输入合法的邮箱'))
@@ -258,7 +258,7 @@ export default {
     // 验证手机号
     const checkMobile = (rule, value, callback) => {
       const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
-      if (regMobile.test(value)) {
+      if (regMobile.test(value) || value === null) {
         return callback()
       } else {
         callback(new Error('请输入合法的手机号'))
@@ -498,8 +498,11 @@ export default {
       }
       // 获取角色信息
       const { data: type } = await this.$http.get(`role/selectUserRole?userName=${res.data.userName}`)
-      // 判断密码是否显示
-      res.data.roleNameCn = type.data.roleNameCn
+      if (type.code === 404) {
+        res.data.roleNameCn = ''
+      } else {
+        res.data.roleNameCn = type.data.roleNameCn
+      }
       this.editForm = res.data
       if (getCookie('ID') !== userName) {
         this.editForm.userPassword = '********'

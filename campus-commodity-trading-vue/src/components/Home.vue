@@ -88,11 +88,16 @@
             id: 1,
             authName: '用户管理',
             children: [{id: 11, authName: '用户列表', path: 'users'}]
+          },
+          {
+            id: 2,
+            authName: '角色管理',
+            children: [{id: 21, authName: '角色列表', path: 'types'}]
           }
         ],
       iconsObj: {
         1: 'iconfont icon-icon-test35',
-        2: 'iconfont icon-icon-test16',
+        2: 'iconfont icon-icon-test38',
         3: 'iconfont icon-icon-test38',
         4: 'iconfont icon-icon-test9',
         5: 'iconfont icon-icon-test31',

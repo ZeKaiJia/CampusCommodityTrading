@@ -64,7 +64,8 @@ public class UserServiceImpl implements UserService {
         if (temp == null) {
             return null;
         }
-        relationRoleUserMapper.update(user.getUserName(), role.getRoleId());
+        relationRoleUserMapper.delete(user.getUserName());
+        relationRoleUserMapper.insert(user.getUserName(), role.getRoleId());
         userMapper.update(user);
         return user;
     }

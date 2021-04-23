@@ -18,6 +18,10 @@
         </set>
         WHERE userName = #{userName}
     </update>
+    <delete id="delete">
+        DELETE FROM rel_user_role
+        WHERE userName = #{userName}
+    </delete>
     <select id="selectUserRole" resultType="cn.ky.jzk.model.Role">
         SELECT *
         FROM sys_role
