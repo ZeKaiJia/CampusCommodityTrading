@@ -16,9 +16,9 @@ public interface RelationCommodityUserMapper {
 
     void insert(@Param("userName") String userName, @Param("comId") String comId, @Param("number") Integer number);
 
-    List<Commodity> selectByName(@Param("userName") String userName);
+    List<String> selectByName(@Param("userName") String userName);
 
-    List<Commodity> selectById(@Param("comId") String comId);
+    List<String> selectById(@Param("comId") String comId);
 
     Integer selectQuantity(@Param("userName") String userName, @Param("comId") String comId);
 

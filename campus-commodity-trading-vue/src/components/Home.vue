@@ -101,8 +101,8 @@
             id: 3,
             authName: '商品管理',
             children: [
-              {id: 31, authName: '发布商品', path: 'types'},
-              {id: 32, authName: '购买商品', path: 'types'}
+              {id: 31, authName: '我的商品', path: 'myCommodity'},
+              {id: 32, authName: '购买商品', path: 'buyCommodity'}
             ]
           }
         ],

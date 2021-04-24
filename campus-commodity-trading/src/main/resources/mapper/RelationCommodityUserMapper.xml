@@ -22,23 +22,15 @@
         WHERE userName = #{userName}
         AND comId = #{comId}
     </delete>
-    <select id="selectByName" resultType="cn.ky.jzk.model.Commodity">
-        SELECT *
-        FROM sys_commodity
-        WHERE comId = (
-            SELECT comId
-            FROM rel_user_commodity
-            WHERE userName = #{userName}
-        )
+    <select id="selectByName" resultType="string">
+        SELECT comId
+        FROM rel_user_commodity
+        WHERE userName = #{userName}
     </select>
-    <select id="selectById" resultType="cn.ky.jzk.model.Commodity">
-        SELECT *
-        FROM sys_user
-        WHERE userName = (
-            SELECT userName
-            FROM rel_user_commodity
-            WHERE comId = #{comId}
-        )
+    <select id="selectById" resultType="string">
+        SELECT userName
+        FROM rel_user_commodity
+        WHERE comId = #{comId}
     </select>
     <select id="selectQuantity" resultType="integer">
         SELECT sum(number)

@@ -5,7 +5,7 @@ import Home from '../components/Home'
 import Welcome from '../components/Welcome'
 import Users from '../components/user/Users'
 import Self from '../components/user/Self'
-import Commodity from "../components/commodity/Commodity";
+import MyCommodity from "../components/commodity/MyCommodity";
 import Rights from '../components/power/Rights'
 import Types from '../components/power/Types'
 import Students from '../components/student/Students'
@@ -33,7 +33,7 @@ const router = new Router({
         { path: '/welcome', component: Welcome },
         { path: '/users', component: Users },
         { path: '/self', component: Self },
-        { path: '/commoditys', component: Commodity },
+        { path: '/myCommodity', component: MyCommodity },
         { path: '/rights', component: Rights },
         { path: '/types', component: Types },
         { path: '/students', component: Students },

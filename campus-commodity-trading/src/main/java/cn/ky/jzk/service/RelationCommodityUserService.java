@@ -1,6 +1,7 @@
 package cn.ky.jzk.service;
 
 import cn.ky.jzk.model.Commodity;
+import cn.ky.jzk.model.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface RelationCommodityUserService {
 
     List<Commodity> selectByName(String userName);
 
-    List<Commodity> selectById(String comId);
+    List<User> selectById(String comId);
 
     Integer selectQuantity(String userName, String comId);
 

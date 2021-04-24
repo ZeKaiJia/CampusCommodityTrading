@@ -73,12 +73,20 @@
         <el-col :span="6" style="align-items: center">
           <el-row style="margin-top: -15px">
             <el-table :data="myInfo" :header-cell-style="{background:'#eef1f6',color:'#606266'}">
-              <el-table-column label="联系电话" prop="userPhone" align="center"/>
+              <el-table-column label="联系电话" align="center">
+                <template slot-scope="scope">
+                  <span>{{scope.row.userPhone === null ? '暂无信息' : scope.row.userPhone}}</span>
+                </template>
+              </el-table-column>
             </el-table>
           </el-row>
           <el-row style="margin-top: 28px">
             <el-table :data="myInfo" :header-cell-style="{background:'#eef1f6',color:'#606266'}">
-              <el-table-column label="电子邮箱" prop="userEmail" align="center"/>
+              <el-table-column label="电子邮箱" align="center">
+                <template slot-scope="scope">
+                  <span>{{scope.row.userEmail === null ? '暂无信息' : scope.row.userEmail}}</span>
+                </template>
+              </el-table-column>
             </el-table>
           </el-row>
         </el-col>

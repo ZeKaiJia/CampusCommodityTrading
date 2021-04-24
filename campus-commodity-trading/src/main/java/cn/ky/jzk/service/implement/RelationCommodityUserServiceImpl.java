@@ -1,17 +1,23 @@
 package cn.ky.jzk.service.implement;
 
+import cn.ky.jzk.mapper.CommodityMapper;
 import cn.ky.jzk.mapper.RelationCommodityUserMapper;
 import cn.ky.jzk.mapper.RelationRoleUserMapper;
+import cn.ky.jzk.mapper.UserMapper;
 import cn.ky.jzk.model.Commodity;
 import cn.ky.jzk.model.Role;
+import cn.ky.jzk.model.User;
 import cn.ky.jzk.service.RelationCommodityUserService;
 import cn.ky.jzk.service.RelationRoleUserService;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import sun.tools.jconsole.JConsole;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,28 +31,48 @@ public class RelationCommodityUserServiceImpl implements RelationCommodityUserSe
     @Autowired
     private RelationCommodityUserMapper relationCommodityUserMapper;
 
-    List<Commodity> commodities;
+    @Autowired
+    private CommodityMapper commodityMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
+
+    List<Commodity> commodities = new ArrayList<Commodity>();
+
+    List<User> users = new ArrayList<User>();
 
 
     @Override
     public void insert(String userName, String comId, Integer number) {
         Integer num =  relationCommodityUserMapper.selectQuantity(userName, comId);
-        if (num != 0) {
+        System.err.println(num);
+        if (num == null) {
+            relationCommodityUserMapper.insert(userName, comId, number);
+        } else {
             relationCommodityUserMapper.deleteSingle(userName, comId);
             relationCommodityUserMapper.insert(userName, comId, num + number);
-        } else {
-            relationCommodityUserMapper.insert(userName, comId, number);
         }
     }
 
     @Override
     public List<Commodity> selectByName(String userName) {
-        return relationCommodityUserMapper.selectByName(userName);
+        commodities.clear();
+        List<String> res = relationCommodityUserMapper.selectByName(userName);
+        for (String str : res) {
+            commodities.add(commodityMapper.selectById(str));
+        }
+        return commodities;
     }
 
     @Override
-    public List<Commodity> selectById(String comId) {
-        return relationCommodityUserMapper.selectById(comId);
+    public List<User> selectById(String comId) {
+        users.clear();
+        List<String> res = relationCommodityUserMapper.selectById(comId);
+        for (String str : res) {
+            users.add(userMapper.selectByName(str));
+        }
+        return users;
     }
 
     @Override
