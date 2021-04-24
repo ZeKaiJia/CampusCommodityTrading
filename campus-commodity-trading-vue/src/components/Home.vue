@@ -87,12 +87,23 @@
           {
             id: 1,
             authName: '用户管理',
-            children: [{id: 11, authName: '用户列表', path: 'users'}]
+            children: [
+              {id: 11, authName: '个人信息', path: 'self'},
+              {id: 12, authName: '用户列表', path: 'users'}
+              ]
           },
           {
             id: 2,
             authName: '角色管理',
             children: [{id: 21, authName: '角色列表', path: 'types'}]
+          },
+          {
+            id: 3,
+            authName: '商品管理',
+            children: [
+              {id: 31, authName: '发布商品', path: 'types'},
+              {id: 32, authName: '购买商品', path: 'types'}
+            ]
           }
         ],
       iconsObj: {

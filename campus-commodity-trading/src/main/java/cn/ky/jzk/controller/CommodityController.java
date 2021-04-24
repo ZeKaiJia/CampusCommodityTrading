@@ -3,6 +3,7 @@ package cn.ky.jzk.controller;
 import cn.ky.jzk.model.Commodity;
 import cn.ky.jzk.model.Role;
 import cn.ky.jzk.service.CommodityService;
+import cn.ky.jzk.service.RelationCommodityUserService;
 import cn.ky.jzk.service.RoleService;
 import cn.ky.jzk.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +25,20 @@ public class CommodityController extends BaseController {
     @Qualifier("commodityServiceImpl")
     private CommodityService commodityService;
 
+    @Autowired
+    @Qualifier("relationCommodityUserServiceImpl")
+    private RelationCommodityUserService relationCommodityUserService;
+
     private Commodity temp;
 
     @PostMapping(value = "/insert")
     @ResponseBody
-    public Response<Commodity> insert(@RequestBody Commodity commodity) {
+    public Response<Commodity> insert(@RequestBody Commodity commodity, @RequestParam String userName) {
         temp = commodityService.insert(commodity);
         if (temp == null) {
             return getFailResult(404, "ID已存在");
         }
+        relationCommodityUserService.insert(userName, commodity.getComId());
         return getSuccessResult(temp);
     }
 
@@ -43,6 +49,7 @@ public class CommodityController extends BaseController {
         if (temp == null) {
             return getFailResult(404, "ID不存在");
         }
+        relationCommodityUserService.delete(comId);
         return getSuccessResult(temp);
     }
 
@@ -74,5 +81,15 @@ public class CommodityController extends BaseController {
             getFailResult(404, "未找到数据");
         }
         return getSuccessResult(temp);
+    }
+
+    @GetMapping(value = "/selectUserCommodity")
+    @ResponseBody
+    public Response<List<Commodity>> selectUserCommodity(String userName) {
+        List<Commodity> res = relationCommodityUserService.select(userName);
+        if (res.size() == 0) {
+            getFailResult(404, "未找到数据");
+        }
+        return getSuccessResult(res);
     }
 }

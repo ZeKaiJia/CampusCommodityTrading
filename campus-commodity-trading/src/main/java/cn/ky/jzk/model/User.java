@@ -29,6 +29,11 @@ public class User {
      */
     private String userNick;
     /**
+     * 性别
+     * The User gender.
+     */
+    private String userGender;
+    /**
      * 电话
      * The User phone.
      */

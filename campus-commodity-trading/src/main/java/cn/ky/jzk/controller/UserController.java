@@ -3,6 +3,7 @@ package cn.ky.jzk.controller;
 import cn.ky.jzk.mapper.RelationRoleUserMapper;
 import cn.ky.jzk.model.Role;
 import cn.ky.jzk.model.User;
+import cn.ky.jzk.service.RelationCommodityUserService;
 import cn.ky.jzk.service.RelationRoleUserService;
 import cn.ky.jzk.service.RoleService;
 import cn.ky.jzk.service.UserService;
@@ -27,6 +28,10 @@ public class UserController extends BaseController {
     @Qualifier("userServiceImpl")
     private UserService userService;
 
+    @Autowired
+    @Qualifier("relationCommodityUserServiceImpl")
+    private RelationCommodityUserService relationCommodityUserService;
+
     private User temp;
 
     // TODO 角色名重复问题
@@ -47,6 +52,7 @@ public class UserController extends BaseController {
         if (temp == null) {
             return getFailResult(404, "用户名不存在");
         }
+        relationCommodityUserService.deleteAll(userName);
         return getSuccessResult(temp);
     }
 

@@ -66,6 +66,7 @@
           </template>
         </el-table-column>
         <el-table-column label="姓名" prop="userNick" align="center" width="100px"/>
+        <el-table-column label="性别" prop="userGender" align="center" width="100px"/>
         <el-table-column label="联系电话" align="center">
           <template slot-scope="scope">
             <span>{{scope.row.userPhone === null ? '暂无信息' : scope.row.userPhone}}</span>
@@ -132,6 +133,7 @@
             :visible.sync="addDialogVisible"
             width="50%"
             @close="addDialogClosed"
+            style="margin-top: -100px"
     >
       <!--内容主题区域-->
       <el-form
@@ -149,6 +151,12 @@
         </el-form-item>
         <el-form-item label="姓名" prop="userNick">
           <el-input v-model="addForm.userNick" />
+        </el-form-item>
+        <el-form-item label="性别" prop="userGender">
+          <el-radio-group v-model="addForm.userGender" size="small">
+            <el-radio-button label="男"></el-radio-button>
+            <el-radio-button label="女"></el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="角色" prop="roleNameCn">
           <template>
@@ -169,6 +177,19 @@
         </el-form-item>
         <el-form-item label="电子邮箱" prop="userEmail">
           <el-input v-model="addForm.userEmail" />
+        </el-form-item>
+        <el-form-item label="密保问题" prop="userQuest">
+          <el-select v-model="addForm.userQuest" placeholder="请选择">
+            <el-option
+                    v-for="item in findOptions"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="密保答案" prop="userAnswer">
+          <el-input v-model="addForm.userAnswer" />
         </el-form-item>
       </el-form>
       <!--底部按钮区-->
@@ -200,6 +221,12 @@
         </el-form-item>
         <el-form-item label="姓名" prop="userNick">
           <el-input v-model="editForm.userNick" />
+        </el-form-item>
+        <el-form-item label="性别" prop="userGender">
+          <el-radio-group v-model="editForm.userGender" size="small">
+            <el-radio-button label="男"></el-radio-button>
+            <el-radio-button label="女"></el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="角色" prop="roleNameCn">
           <template>
@@ -265,6 +292,17 @@ export default {
       }
     }
     return {
+      findOptions: [{
+        value: '您的大学叫什么？'
+      }, {
+        value: '您的电子邮箱是？'
+      }, {
+        value: '您的生日是几月几日？'
+      }, {
+        value: '您最好的朋友叫什么？'
+      }, {
+        value: '您的职业是什么？'
+      }],
       // 开启加载
       loading: true,
       dialogLoading: true,
@@ -298,6 +336,7 @@ export default {
         userName: '',
         userPassword: '',
         userNick: '',
+        userGender: '',
         userPhone: '',
         userEmail: '',
         roleNameCn: ''
@@ -307,6 +346,7 @@ export default {
         userName: '',
         userPassword: '',
         userNick: '',
+        userGender: '',
         userPhone: '',
         userEmail: '',
         roleNameCn: ''
@@ -325,6 +365,9 @@ export default {
           { required: true, message: '请输入您的姓名', trigger: 'blur' },
           { min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur' }
         ],
+        userGender: [
+          { required: true, message: '请选择您的性别', trigger: 'blur' }
+        ],
         userPhone: [
           { validator: checkMobile, trigger: 'blur' }
         ],
@@ -333,6 +376,13 @@ export default {
         ],
         roleNameCn: [
           { required: true, message: '请选择用户角色类型', trigger: 'blur' }
+        ],
+        userQuest: [
+          { required: true, message: '请选择密保问题', trigger: 'blur' }
+        ],
+        userAnswer: [
+          { required: true, message: '请输入密保答案', trigger: 'blur' },
+          { min: 2, max: 20, message: '长度在2到20个字符', trigger: 'blur' }
         ]
       },
       editFormRules: {
@@ -344,6 +394,9 @@ export default {
         userNick: [
           { required: true, message: '请输入您的姓名', trigger: 'blur' },
           { min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur' }
+        ],
+        userGender: [
+          { required: true, message: '请选择您的性别', trigger: 'blur' }
         ],
         userPhone: [
           { validator: checkMobile, trigger: 'blur' }

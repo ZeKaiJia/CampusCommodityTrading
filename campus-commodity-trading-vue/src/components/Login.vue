@@ -70,7 +70,7 @@
             :visible.sync="addDialogVisible"
             width="50%"
             @close="addDialogClosed"
-            style="margin-top: -48px"
+            style="margin-top: -100px"
     >
       <!--内容主题区域-->
       <el-form
@@ -88,6 +88,12 @@
         </el-form-item>
         <el-form-item label="姓名" prop="userNick">
           <el-input v-model="addForm.userNick" />
+        </el-form-item>
+        <el-form-item label="性别" prop="userGender">
+          <el-radio-group v-model="addForm.userGender" size="small">
+            <el-radio-button label="男"></el-radio-button>
+            <el-radio-button label="女"></el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="我是" prop="roleNameCn">
           <template>
@@ -230,6 +236,7 @@ export default {
         userName: '',
         userPassword: '',
         userNick: '',
+        userGender: '',
         userPhone: '',
         userEmail: '',
         userQuest: '',
@@ -287,6 +294,9 @@ export default {
         userNick: [
           { required: true, message: '请输入您的姓名', trigger: 'blur' },
           { min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur' }
+        ],
+        userGender: [
+          { required: true, message: '请选择您的性别', trigger: 'blur'}
         ],
         userPhone: [
           { validator: checkMobile, trigger: 'blur' }
