@@ -6,18 +6,23 @@
 <mapper namespace="cn.ky.jzk.mapper.RelationCommodityUserMapper">
     <cache eviction="FIFO" readOnly="true" size="1024" flushInterval="30000"/>
     <insert id="insert">
-        INSERT INTO rel_user_commodity (userName, comId)
-        VALUE (#{userName}, #{comId})
+        INSERT INTO rel_user_commodity (userName, comId, number)
+        VALUE (#{userName}, #{comId}, #{number})
     </insert>
-    <delete id="delete">
+    <delete id="deleteById">
         DELETE FROM rel_user_commodity
         WHERE comId = #{comId}
     </delete>
-    <delete id="deleteAll">
+    <delete id="deleteByName">
         DELETE FROM rel_user_commodity
         WHERE userName = #{userName}
     </delete>
-    <select id="select" resultType="cn.ky.jzk.model.Commodity">
+    <delete id="deleteSingle">
+        DELETE FROM rel_user_commodity
+        WHERE userName = #{userName}
+        AND comId = #{comId}
+    </delete>
+    <select id="selectByName" resultType="cn.ky.jzk.model.Commodity">
         SELECT *
         FROM sys_commodity
         WHERE comId = (
@@ -25,5 +30,20 @@
             FROM rel_user_commodity
             WHERE userName = #{userName}
         )
+    </select>
+    <select id="selectById" resultType="cn.ky.jzk.model.Commodity">
+        SELECT *
+        FROM sys_user
+        WHERE userName = (
+            SELECT userName
+            FROM rel_user_commodity
+            WHERE comId = #{comId}
+        )
+    </select>
+    <select id="selectQuantity" resultType="integer">
+        SELECT sum(number)
+        FROM rel_user_commodity
+        WHERE userName = #{userName}
+        AND comId = #{comId}
     </select>
 </mapper>

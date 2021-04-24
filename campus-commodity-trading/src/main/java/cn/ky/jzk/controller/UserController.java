@@ -34,7 +34,6 @@ public class UserController extends BaseController {
 
     private User temp;
 
-    // TODO 角色名重复问题
     @PostMapping(value = "/insert")
     @ResponseBody
     public Response<User> insert(@RequestBody User user, @RequestParam String roleNameCn) {
@@ -52,7 +51,7 @@ public class UserController extends BaseController {
         if (temp == null) {
             return getFailResult(404, "用户名不存在");
         }
-        relationCommodityUserService.deleteAll(userName);
+        relationCommodityUserService.deleteByName(userName);
         return getSuccessResult(temp);
     }
 

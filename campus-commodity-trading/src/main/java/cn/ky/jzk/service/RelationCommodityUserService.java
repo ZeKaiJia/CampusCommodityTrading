@@ -10,11 +10,18 @@ import java.util.List;
  * @Date: 2021/4/24 16:02
  */
 public interface RelationCommodityUserService {
-    void insert(String userName, String comId);
+    void insert(String userName, String comId, Integer number);
 
-    List<Commodity> select(String userName);
+    List<Commodity> selectByName(String userName);
 
-    void delete(String comId);
+    List<Commodity> selectById(String comId);
 
-    void deleteAll(String userName);
+    Integer selectQuantity(String userName, String comId);
+
+    void deleteById(String comId);
+
+    void deleteByName(String userName);
+
+    void deleteSingle(String userName, String comId);
+
 }

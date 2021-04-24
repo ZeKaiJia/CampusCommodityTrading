@@ -14,11 +14,19 @@ import java.util.List;
 @Repository
 public interface RelationCommodityUserMapper {
 
-    void insert(@Param("userName") String userName, @Param("comId") String comId);
+    void insert(@Param("userName") String userName, @Param("comId") String comId, @Param("number") Integer number);
 
-    List<Commodity> select(@Param("userName") String userName);
+    List<Commodity> selectByName(@Param("userName") String userName);
 
-    void delete(@Param("comId") String comId);
+    List<Commodity> selectById(@Param("comId") String comId);
 
-    void deleteAll(@Param("userName") String userName);
+    Integer selectQuantity(@Param("userName") String userName, @Param("comId") String comId);
+
+    void deleteById(@Param("comId") String comId);
+
+    void deleteByName(@Param("userName") String userName);
+
+    void deleteSingle(@Param("userName") String userName, @Param("comId") String comId);
+
+
 }

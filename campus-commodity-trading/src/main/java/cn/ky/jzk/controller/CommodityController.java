@@ -33,23 +33,23 @@ public class CommodityController extends BaseController {
 
     @PostMapping(value = "/insert")
     @ResponseBody
-    public Response<Commodity> insert(@RequestBody Commodity commodity, @RequestParam String userName) {
+    public Response<Commodity> insert(@RequestBody Commodity commodity, @RequestParam String userName, @RequestParam Integer number) {
         temp = commodityService.insert(commodity);
         if (temp == null) {
             return getFailResult(404, "ID已存在");
         }
-        relationCommodityUserService.insert(userName, commodity.getComId());
+        relationCommodityUserService.insert(userName, commodity.getComId(), number);
         return getSuccessResult(temp);
     }
 
     @PostMapping(value = "/delete")
     @ResponseBody
-    public Response<Commodity> delete(@RequestParam String comId) {
+    public Response<Commodity> delete(@RequestParam String userName, @RequestParam String comId) {
         temp = commodityService.delete(comId);
         if (temp == null) {
             return getFailResult(404, "ID不存在");
         }
-        relationCommodityUserService.delete(comId);
+        relationCommodityUserService.deleteSingle(userName, comId);
         return getSuccessResult(temp);
     }
 
@@ -86,7 +86,7 @@ public class CommodityController extends BaseController {
     @GetMapping(value = "/selectUserCommodity")
     @ResponseBody
     public Response<List<Commodity>> selectUserCommodity(String userName) {
-        List<Commodity> res = relationCommodityUserService.select(userName);
+        List<Commodity> res = relationCommodityUserService.selectByName(userName);
         if (res.size() == 0) {
             getFailResult(404, "未找到数据");
         }

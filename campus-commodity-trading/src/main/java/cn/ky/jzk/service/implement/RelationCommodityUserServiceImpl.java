@@ -25,23 +25,47 @@ public class RelationCommodityUserServiceImpl implements RelationCommodityUserSe
     @Autowired
     private RelationCommodityUserMapper relationCommodityUserMapper;
 
+    List<Commodity> commodities;
+
+
     @Override
-    public void insert(String userName, String comId) {
-        relationCommodityUserMapper.insert(userName, comId);
+    public void insert(String userName, String comId, Integer number) {
+        Integer num =  relationCommodityUserMapper.selectQuantity(userName, comId);
+        if (num != 0) {
+            relationCommodityUserMapper.deleteSingle(userName, comId);
+            relationCommodityUserMapper.insert(userName, comId, num + number);
+        } else {
+            relationCommodityUserMapper.insert(userName, comId, number);
+        }
     }
 
     @Override
-    public List<Commodity> select(String userName) {
-        return relationCommodityUserMapper.select(userName);
+    public List<Commodity> selectByName(String userName) {
+        return relationCommodityUserMapper.selectByName(userName);
     }
 
     @Override
-    public void delete(String comId) {
-        relationCommodityUserMapper.delete(comId);
+    public List<Commodity> selectById(String comId) {
+        return relationCommodityUserMapper.selectById(comId);
     }
 
     @Override
-    public void deleteAll(String userName) {
-        relationCommodityUserMapper.deleteAll(userName);
+    public Integer selectQuantity(String userName, String comId) {
+        return relationCommodityUserMapper.selectQuantity(userName, comId);
+    }
+
+    @Override
+    public void deleteById(String comId) {
+        relationCommodityUserMapper.deleteById(comId);
+    }
+
+    @Override
+    public void deleteByName(String userName) {
+        relationCommodityUserMapper.deleteByName(userName);
+    }
+
+    @Override
+    public void deleteSingle(String userName, String comId) {
+        relationCommodityUserMapper.deleteSingle(userName, comId);
     }
 }
