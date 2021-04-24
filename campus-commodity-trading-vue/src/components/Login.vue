@@ -16,6 +16,7 @@
         :model="loginForm"
         :rules="loginFormRules"
         ref="loginFormRef"
+        class="form-item2"
       >
         <!--用户名-->
         <el-form-item class="form-item" prop="userName">
@@ -37,7 +38,7 @@
             type="password"
           />
         </el-form-item>
-        <el-form-item class="form-item form-item2" prop="verifycode">
+        <el-form-item class="form-item" prop="verifycode">
           <el-input
             v-model="loginForm.verifycode"
             placeholder="验证码"
@@ -57,8 +58,9 @@
           <el-button type="primary" @click="submitLoginForm" style="margin-right: 18px; width: 210px">登录</el-button>
           <el-button type="info" @click="resetLoginForm" style="margin-left: 18px">重置</el-button>
         </el-form-item>
-        <el-form-item style="justify-content: center; display: flex; margin-top: -16px">
-          <el-button type="text" :underline="false" @click="showAddDialog">还没有账号，点此注册</el-button>
+        <el-form-item style="justify-content: center; display: flex; align-items: center; margin-top: -16px">
+          <el-button type="text" :underline="false" @click="showAddDialog" style="margin-right: 84px">还没有账号，点此注册</el-button>
+          <el-button type="text" :underline="false" @click="showFindDialog">忘记密码</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -68,6 +70,7 @@
             :visible.sync="addDialogVisible"
             width="50%"
             @close="addDialogClosed"
+            style="margin-top: -48px"
     >
       <!--内容主题区域-->
       <el-form
@@ -106,11 +109,60 @@
         <el-form-item label="电子邮箱" prop="userEmail">
           <el-input v-model="addForm.userEmail" />
         </el-form-item>
+        <el-form-item label="密保问题" prop="userQuest">
+          <el-select v-model="addForm.userQuest" placeholder="请选择">
+            <el-option
+                    v-for="item in findOptions"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="密保答案" prop="userAnswer">
+          <el-input v-model="addForm.userAnswer" />
+        </el-form-item>
       </el-form>
       <!--底部按钮区-->
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addUser">添 加</el-button>
+      </span>
+    </el-dialog>
+    <!--找回密码的对话框-->
+    <el-dialog
+            title="找回密码"
+            :visible.sync="findDialogVisible"
+            width="50%"
+            @close="findDialogClosed"
+    >
+      <!--内容主题区域-->
+      <el-form
+              :model="findForm"
+              :rules="findFormRules"
+              ref="findFormRef"
+              label-width="100px"
+              v-loading="dialogLoading"
+      >
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="findForm.userName">
+            <el-button slot="append" icon="el-icon-search" @click="findQuest"></el-button>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="密保问题" prop="userQuest">
+          <el-input v-model="findForm.userQuest" disabled/>
+        </el-form-item>
+        <el-form-item label="密保答案" prop="userAnswer">
+          <el-input v-model="findForm.userAnswer" />
+        </el-form-item>
+        <el-form-item label="新的密码" prop="userPassword">
+          <el-input v-model="findForm.userPassword" />
+        </el-form-item>
+      </el-form>
+      <!--底部按钮区-->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="findDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="findPassword">修 改</el-button>
       </span>
     </el-dialog>
   </div>
@@ -151,10 +203,24 @@ export default {
       }
     }
     return {
+      disFindOptions: [],
+      findOptions: [{
+        value: '您的大学叫什么？'
+      }, {
+        value: '您的电子邮箱是？'
+      }, {
+        value: '您的生日是几月几日？'
+      }, {
+        value: '您最好的朋友叫什么？'
+      }, {
+        value: '您的职业是什么？'
+      }],
       options: [],
       dialogLoading: true,
       // 控制添加用户对话框的显示
       addDialogVisible: false,
+      // 控制找回密码对话框的显示
+      findDialogVisible: false,
       loginForm: {
         userName: '',
         userPassword: '',
@@ -166,21 +232,46 @@ export default {
         userNick: '',
         userPhone: '',
         userEmail: '',
+        userQuest: '',
+        userAnswer: '',
         roleNameCn: ''
+      },
+      findForm: {
+        userName: '',
+        userQuest: '',
+        userAnswer: '',
+        userPassword: '',
       },
       identifyCodes: '1234567890',
       identifyCode: '',
       loginFormRules: {
-        usrName: [
+        userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur' }
         ],
-        usrPassword: [
+        userPassword: [
           { required: true, message: '请输入用户密码', trigger: 'blur' },
           { min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur' }
         ],
         verifycode: [
           { required: true, trigger: 'blur', validator: validateVerifycode }
+        ]
+      },
+      findFormRules: {
+        userName: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur' }
+        ],
+        userQuest: [
+          { required: true, message: '请搜索该用户的密保问题' }
+        ],
+        userAnswer: [
+          { required: true, message: '请输入密保答案', trigger: 'blur' },
+          { min: 2, max: 20, message: '长度在2到20个字符', trigger: 'blur' }
+        ],
+        userPassword: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur' }
         ]
       },
       // 添加表单的验证规则对象
@@ -205,6 +296,13 @@ export default {
         ],
         roleNameCn: [
           { required: true, message: '请选择用户角色类型', trigger: 'blur' }
+        ],
+        userQuest: [
+          { required: true, message: '请选择密保问题', trigger: 'blur' }
+        ],
+        userAnswer: [
+          { required: true, message: '请输入密保答案', trigger: 'blur' },
+          { min: 2, max: 20, message: '长度在2到20个字符', trigger: 'blur' }
         ]
       }
     }
@@ -221,8 +319,51 @@ export default {
     this.makeCode(this.identifyCodes, 4)
   },
   methods: {
+    async findPassword() {
+      this.$refs.findFormRef.validate(async (valid) => {
+        if (!valid) {
+          return this.$message.error('请填写好正确的信息后修改！')
+        }
+        const {data: result} = await this.$http.get(`user/selectByName?userName=${this.findForm.userName}`)
+        const {data: role} = await this.$http.get(`role/selectUserRole?userName=${this.findForm.userName}`)
+        if (result.code !== 200 || role.code !== 200) {
+          this.findDialogVisible = false
+          return this.$message.error(checkError(result) + '！请重试')
+        } else {
+          if (result.data.userAnswer === this.findForm.userAnswer) {
+            const { data: res } = await this.$http.post(
+                    `user/update?roleNameCn=${role.data.roleNameCn}`,
+                    this.findForm
+            )
+            if (res.code !== 200) {
+              this.findDialogVisible = false
+              return this.$message.error('修改失败！')
+            } else {
+              this.findDialogVisible = false
+              return this.$message.success('修改成功！')
+            }
+          }
+        }
+      })
+    },
+    async findQuest() {
+      if (this.findForm.userName !== '' && this.findForm.userName !== null) {
+        const {data: result} = await this.$http.get(`user/selectByName?userName=${this.findForm.userName}`)
+        if (result.code !== 200 || result.data === null) {
+          return  this.$message.error('输入的信息无效！')
+        } else {
+          this.findForm.userQuest = result.data.userQuest
+        }
+      } else {
+        return this.$message.error('请输入用户名后查询密保问题！')
+      }
+    },
     showAddDialog () {
       this.addDialogVisible = true
+      this.dialogLoading = false
+    },
+    showFindDialog () {
+      this.findDialogVisible = true
       this.dialogLoading = false
     },
     // 获取角色列表
@@ -286,6 +427,10 @@ export default {
     // 监听添加用户对话框的关闭事件
     addDialogClosed() {
       this.$refs.addFormRef.resetFields()
+    },
+    // 监听找回密码对话框的关闭事件
+    findDialogClosed() {
+      this.$refs.findFormRef.resetFields()
     },
     // 点击按钮添加新用户
     addUser() {

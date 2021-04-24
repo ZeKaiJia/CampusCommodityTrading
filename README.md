@@ -16,3 +16,7 @@ models for user, role and commodity.I'll complete this module with more models.
 - 2021.4.20
 Finish 80% of the Welcome Page.The last content depend on other modules, so I will code them later.
 
+- 2020.4.24
+Support new function of find user's password by user's question and answer.
+Finish Login.vue ,Users.vue and Types.vue.
+

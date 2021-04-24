@@ -38,4 +38,14 @@ public class User {
      * The User email.
      */
     private String userEmail;
+    /**
+     * 密保
+     * The User quest.
+     */
+    private String userQuest;
+    /**
+     * 答案
+     * The User answer.
+     */
+    private String userAnswer;
 }
