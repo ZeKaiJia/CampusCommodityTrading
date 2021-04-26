@@ -22,10 +22,11 @@
                         :offset="index % 3 === 0 ? 0 : 3">
                     <el-card :body-style="{ padding: '0px' }" style="text-align: center; margin: 24px 0;">
                         <el-button type="danger" icon="el-icon-delete" circle
-                                   style="float: left; margin: 12px"></el-button>
+                                   style="float: left; margin: 12px" @click="removeCommodity(commodity.comId)"></el-button>
                         <el-button type="primary" icon="el-icon-edit" circle
                                    style="float: right; margin: 12px"></el-button>
                         <i class="el-icon-present"/>
+                        <el-row>编号 - {{commodity.comId}}</el-row>
                         <el-row>名称 - {{commodity.comName}}</el-row>
                         <el-row>数量 - {{commodity.comQuantity}}单位</el-row>
                         <el-row>存货 - {{commodity.comQuantityNow}}单位</el-row>
@@ -70,9 +71,9 @@
             </el-form>
             <!--底部按钮区-->
             <span slot="footer" class="dialog-footer">
-        <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addCommodity">发 布</el-button>
-      </span>
+                <el-button @click="addDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addCommodity">发 布</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -122,6 +123,30 @@
             this.getMyCommodity()
         },
         methods: {
+            // 点击按钮删除商品信息
+            async removeCommodity(comId) {
+                // 弹框询问
+                const confirmResult = await this.$confirm(
+                    '此操作将永久删除该商品, 是否继续?',
+                    '⚠️警告',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }
+                ).catch((err) => err)
+                // 取消操作返回cancel字符串
+                // 确认操作返回confirm字符串
+                if (confirmResult !== 'confirm') {
+                    return this.$message.info('已撤回删除操作')
+                }
+                const { data: res } = await this.$http.post(`commodity/delete?userName=${getCookie('ID')}&comId=${comId}`)
+                if (res.code !== 200) {
+                    return this.$message.error('删除商品失败' + checkError(res))
+                }
+                this.$message.success('删除商品成功')
+                await this.getMyCommodity()
+            },
             showAddDialog() {
                 this.addDialogVisible = true
                 this.dialogLoading = false
