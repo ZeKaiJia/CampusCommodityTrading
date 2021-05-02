@@ -19,4 +19,5 @@ Finish 80% of the Welcome Page.The last content depend on other modules, so I wi
 - 2020.4.24
 Support new function of find user's password by user's question and answer.
 Finish Login.vue ,Users.vue and Types.vue.
-jzkhhh
+
+jzkhh
