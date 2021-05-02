@@ -4,7 +4,7 @@
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/home' }" @click.native="changeMenu('/')">首页</el-breadcrumb-item>
             <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-            <el-breadcrumb-item>我的商品</el-breadcrumb-item>
+            <el-breadcrumb-item>购买商品</el-breadcrumb-item>
         </el-breadcrumb>
         <!--查询卡片区-->
         <el-card style="margin-top: 14px" v-loading="mainLoading">
@@ -121,7 +121,7 @@
     import {checkError, getCookie} from "../../plugins/utils";
 
     export default {
-        name: "MyCommodity",
+        name: "BuyCommodity",
         data() {
             return {
                 dialogLoading: true,
