@@ -6,6 +6,7 @@ import Welcome from '../components/Welcome'
 import Users from '../components/user/Users'
 import Self from '../components/user/Self'
 import MyCommodity from "../components/commodity/MyCommodity";
+import BuyCommodity from "../components/commodity/BuyCommodity";
 import Rights from '../components/power/Rights'
 import Types from '../components/power/Types'
 import Students from '../components/student/Students'
@@ -34,6 +35,7 @@ const router = new Router({
         { path: '/users', component: Users },
         { path: '/self', component: Self },
         { path: '/myCommodity', component: MyCommodity },
+        { path: '/buyCommodity', component: BuyCommodity },
         { path: '/rights', component: Rights },
         { path: '/types', component: Types },
         { path: '/students', component: Students },

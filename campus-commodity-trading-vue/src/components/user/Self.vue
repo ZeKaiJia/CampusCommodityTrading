@@ -212,16 +212,16 @@ export default {
       routeUrl: '/self',
       // 图片地址
       src: [
-        'http://s1.wailian.download/2020/07/25/10.jpg',
-        'http://s1.wailian.download/2020/07/25/9.jpg',
-        'http://s1.wailian.download/2020/07/25/8.jpg',
-        'http://s1.wailian.download/2020/07/25/48115bc5f6b28f420.jpg',
-        'http://s1.wailian.download/2020/07/25/17fa9bfce491ad355.jpg',
-        'http://s1.wailian.download/2020/07/25/340a681c7decd4737.jpg',
-        'http://s1.wailian.download/2020/07/25/2624999114ba2e4b2.jpg',
-        'http://s1.wailian.download/2020/07/25/77f2cb01e10ff9b38.jpg',
-        'http://s1.wailian.download/2020/07/25/555a8c4ec25caa5c0.jpg',
-        'http://s1.wailian.download/2020/07/25/6cc62a32fd0f389f4.jpg'
+        require('../../assets/img/headPic/1.png'),
+        require('../../assets/img/headPic/2.png'),
+        require('../../assets/img/headPic/3.png'),
+        require('../../assets/img/headPic/4.png'),
+        require('../../assets/img/headPic/5.png'),
+        require('../../assets/img/headPic/6.png'),
+        require('../../assets/img/headPic/7.png'),
+        require('../../assets/img/headPic/8.png'),
+        require('../../assets/img/headPic/9.png'),
+        require('../../assets/img/headPic/10.png')
       ],
       picSrc: '',
       // 开启加载

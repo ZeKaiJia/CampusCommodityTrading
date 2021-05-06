@@ -22,10 +22,11 @@
                         :offset="index % 3 === 0 ? 0 : 3">
                     <el-card :body-style="{ padding: '0px' }" style="text-align: center; margin: 24px 0;">
                         <el-button type="danger" icon="el-icon-delete" circle
-                                   style="float: left; margin: 12px"></el-button>
+                                   style="float: left; margin: 12px" @click="removeCommodity(commodity.comId)"></el-button>
                         <el-button type="primary" icon="el-icon-edit" circle
-                                   style="float: right; margin: 12px"></el-button>
+                                   style="float: right; margin: 12px" @click="showEditDialog(commodity.comId)"></el-button>
                         <i class="el-icon-present"/>
+                        <el-row>编号 - {{commodity.comId}}</el-row>
                         <el-row>名称 - {{commodity.comName}}</el-row>
                         <el-row>数量 - {{commodity.comQuantity}}单位</el-row>
                         <el-row>存货 - {{commodity.comQuantityNow}}单位</el-row>
@@ -70,9 +71,48 @@
             </el-form>
             <!--底部按钮区-->
             <span slot="footer" class="dialog-footer">
-        <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addCommodity">发 布</el-button>
-      </span>
+                <el-button @click="addDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addCommodity">发 布</el-button>
+            </span>
+        </el-dialog>
+        <!--修改商品的对话框-->
+        <el-dialog
+                title="修改商品"
+                :visible.sync="editDialogVisible"
+                width="50%"
+                @close="editDialogClosed"
+        >
+            <!--内容主题区域-->
+            <el-form
+                    :model="editForm"
+                    :rules="editFormRules"
+                    ref="editFormRef"
+                    label-width="100px"
+                    v-loading="dialogLoading"
+            >
+                <el-form-item label="商品号" prop="comId">
+                    <el-input v-model="editForm.comId" disabled/>
+                </el-form-item>
+                <el-form-item label="名称" prop="comName">
+                    <el-input v-model="editForm.comName"/>
+                </el-form-item>
+                <el-form-item label="数量" prop="comQuantityNow">
+                    <el-slider v-model="editForm.comQuantityNow" show-input :min="1" :max="100"
+                               style="margin-left: 10px"></el-slider>
+                </el-form-item>
+                <el-form-item label="单价" prop="comEachPrice">
+                    <el-input-number v-model="editForm.comEachPrice" :precision="1" :step="0.1" :min="0.1" :max="10000"></el-input-number>
+                    元
+                </el-form-item>
+                <el-form-item label="描述" prop="comDescription">
+                    <el-input v-model="editForm.comDescription"/>
+                </el-form-item>
+            </el-form>
+            <!--底部按钮区-->
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="editCommodity">修 改</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -86,6 +126,7 @@
             return {
                 dialogLoading: true,
                 addDialogVisible: false,
+                editDialogVisible: false,
                 addForm: {
                     comId: '',
                     comName: '',
@@ -94,12 +135,36 @@
                     comEachPrice: 1,
                     comDescription: ''
                 },
+                editForm: {
+                    comId: '',
+                    comName: '',
+                    comQuantity: '',
+                    comQuantityNow: '',
+                    comEachPrice: '',
+                    comDescription: ''
+                },
                 // 添加表单的验证规则对象
                 addFormRules: {
                     comId: [
                         {required: true, message: '请输入商品标号', trigger: 'blur'},
                         {min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur'}
                     ],
+                    comName: [
+                        {required: true, message: '请输入商品名称', trigger: 'blur'},
+                        {min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur'}
+                    ],
+                    comQuantity: [
+                        {required: true, message: '请确定商品数量', trigger: 'change'}
+                    ],
+                    comEachPrice: [
+                        {required: true, message: '请确定商品单价', trigger: 'change'}
+                    ],
+                    comDescription: [
+                        {required: true, message: '请输入商品描述', trigger: 'blur'}
+                    ]
+                },
+                // 修改表单的验证规则对象
+                editFormRules: {
                     comName: [
                         {required: true, message: '请输入商品名称', trigger: 'blur'},
                         {min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur'}
@@ -122,12 +187,71 @@
             this.getMyCommodity()
         },
         methods: {
+            // 点击按钮修改商品信息
+            async editCommodity() {
+                this.$refs.editFormRef.validate(async (valid) => {
+                    if (!valid) return this.$message.error('请填写正确的商品信息后再提交')
+                    this.dialogLoading = true
+                    const { data: res } = await this.$http.post(
+                        'commodity/update',
+                        this.editForm
+                    )
+                    this.dialogLoading = false
+                    if (res.code !== 200) {
+                        this.editDialogVisible = false
+                        return this.$message.error('修改商品失败' + checkError(res))
+                    } else {
+                        this.editDialogVisible = false
+                        this.$message.success('修改商品成功')
+                    }
+                    await this.getMyCommodity()
+                })
+            },
+            // 点击按钮删除商品信息
+            async removeCommodity(comId) {
+                // 弹框询问
+                const confirmResult = await this.$confirm(
+                    '此操作将永久删除该商品, 是否继续?',
+                    '⚠️警告',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }
+                ).catch((err) => err)
+                // 取消操作返回cancel字符串
+                // 确认操作返回confirm字符串
+                if (confirmResult !== 'confirm') {
+                    return this.$message.info('已撤回删除操作')
+                }
+                const { data: res } = await this.$http.post(`commodity/delete?userName=${getCookie('ID')}&comId=${comId}`)
+                if (res.code !== 200) {
+                    return this.$message.error('删除商品失败' + checkError(res))
+                }
+                this.$message.success('删除商品成功')
+                await this.getMyCommodity()
+            },
             showAddDialog() {
                 this.addDialogVisible = true
                 this.dialogLoading = false
             },
+            async showEditDialog(comId) {
+                this.dialogLoading = true
+                const { data: res } = await this.$http.get(
+                    `commodity/selectById?comId=${comId}`
+                )
+                if (res.code !== 200) {
+                    return this.$message.error('查询商品信息失败' + checkError(res))
+                }
+                this.editForm = res.data
+                this.editDialogVisible = true
+                this.dialogLoading = false
+            },
             addDialogClosed() {
                 this.$refs.addFormRef.resetFields()
+            },
+            editDialogClosed() {
+                this.$refs.editFormRef.resetFields()
             },
             // 面包屑导航切换
             changeMenu(activePath) {

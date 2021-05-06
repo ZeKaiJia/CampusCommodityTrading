@@ -498,7 +498,7 @@ export default {
       })
     },
     // 点击按钮修改用户信息
-    editUser() {
+    async editUser() {
       this.$refs.editFormRef.validate(async (valid) => {
         if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
         this.dialogLoading = true

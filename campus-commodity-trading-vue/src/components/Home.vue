@@ -142,8 +142,7 @@
     // 获取所有的菜单
     // TODO
     async getMenuList() {
-      const type = getCookie('type')
-      console.log(type)
+      getCookie('type')
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse

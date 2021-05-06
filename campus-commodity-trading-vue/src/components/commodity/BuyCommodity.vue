@@ -1,0 +1,399 @@
+<template>
+    <div>
+        <!--面包屑导航区-->
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item :to="{ path: '/home' }" @click.native="changeMenu('/')">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+            <el-breadcrumb-item>购买商品</el-breadcrumb-item>
+        </el-breadcrumb>
+        <!--查询卡片区-->
+        <el-card style="margin-top: 14px" v-loading="mainLoading">
+            <el-row :gutter="20">
+                <el-col :span="13" style="text-align: right">
+                    <div class="centerFont">二手商品库</div>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6" v-for="(commodity, index) in myCommodity" :key="commodity.comId"
+                        :offset="index % 3 === 0 ? 0 : 3">
+                    <el-card :body-style="{ padding: '0px' }" style="text-align: center; margin: 24px 0;">
+                        <el-button type="danger" icon="el-icon-warning-outline" circle
+                                   style="float: left; margin: 12px"
+                                   @click="checkCommodityUserInfo(commodity.comId)"></el-button>
+                        <el-button type="primary" icon="el-icon-shopping-cart-2" circle
+                                   style="float: right; margin: 12px"
+                                   @click="showBuyCommodityDialog(commodity.comId)"></el-button>
+                        <i class="el-icon-present"></i>
+                        <el-row>编号 - {{commodity.comId}}</el-row>
+                        <el-row>名称 - {{commodity.comName}}</el-row>
+                        <el-row>数量 - {{commodity.comQuantity}}单位</el-row>
+                        <el-row>存货 - {{commodity.comQuantityNow}}单位</el-row>
+                        <el-row>单价 - {{commodity.comEachPrice}}元</el-row>
+                        <el-row>描述 - {{commodity.comDescription}}</el-row>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-card>
+        <!--联系卖家的对话框-->
+        <el-dialog
+                title="联系卖家"
+                :visible.sync="callSalerDialogVisible"
+                width="30%"
+                center>
+            <el-row :gutter="20">
+                <el-col :span="11">
+                    <i class="el-icon-user centerIcon"></i>
+                </el-col>
+                <el-col :span="13" class="centerCol">
+                    <span>{{this.callInfo.userName}}</span>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="11">
+                    <i class="el-icon-phone-outline centerIcon"></i>
+                </el-col>
+                <el-col :span="10" class="centerCol">
+                    <span>{{this.callInfo.userPhone}}</span>
+                </el-col>
+                <el-col :span="3" class="centerCol">
+                    <a :data-clipboard-text="this.callInfo.userPhone" class="copy-phone">
+                        <el-button type="info" icon="el-icon-phone" circle style="float: right"></el-button>
+                    </a>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="11">
+                    <i class="el-icon-c-scale-to-original centerIcon"></i>
+                </el-col>
+                <el-col :span="10" class="centerCol">
+                    <span>{{this.callInfo.userEmail}}</span>
+                </el-col>
+                <el-col :span="3" class="centerCol">
+                    <a :data-clipboard-text="this.callInfo.userEmail" class="copy-email">
+                        <el-button type="info" icon="el-icon-message" circle style="float: right"></el-button>
+                    </a>
+                </el-col>
+            </el-row>
+            <!--<el-progress v-if="progressLoading !== 101" type="circle" :percentage="progressLoading" :stroke-width="12" :color="colors"></el-progress>-->
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="callSalerDialogVisible = false">返 回</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+                title="购买商品"
+                :visible.sync="buyCommodityDialogVisible"
+                width="50%"
+                @close="buyCommodityDialogClosed"
+        >
+            <el-steps :active="activeStep" finish-status="success" simple style="margin-top: 20px">
+                <el-step title="确认商品信息"></el-step>
+                <el-step title="填写个人信息"></el-step>
+                <el-step title="扫码支付购买"></el-step>
+            </el-steps>
+            <el-card style="margin-top: 12px; text-align: center; height: 270px">
+                <transition name="fade">
+                    <div v-if="activeStep === 0"
+                         style="position: absolute; left: 50%; transform: translate(-50%); margin-top: 8px">
+                        <i class="el-icon-present"></i>
+                        <el-row>编号 - {{buyCommodityPost.comInfo.comId}}</el-row>
+                        <el-row>名称 - {{buyCommodityPost.comInfo.comName}}</el-row>
+                        <el-row>数量 - {{buyCommodityPost.comInfo.comQuantity}}单位</el-row>
+                        <el-row>存货 - {{buyCommodityPost.comInfo.comQuantityNow}}单位</el-row>
+                        <el-row>单价 - {{buyCommodityPost.comInfo.comEachPrice}}元</el-row>
+                        <el-row>描述 - {{buyCommodityPost.comInfo.comDescription}}</el-row>
+                    </div>
+                </transition>
+                <transition name="fade">
+                    <div v-if="activeStep === 1" style="position: absolute; margin-top: 24px; width: 90%">
+                        <el-row :gutter="20">
+                            <el-form
+                                    :model="buyForm"
+                                    :rules="buyFormRules"
+                                    ref="buyFormRef"
+                                    label-width="100px"
+                            >
+                                <el-col :span="12">
+                                    <el-form-item label="商品号" prop="comId">
+                                        <el-input v-model="buyForm.comId"/>
+                                    </el-form-item>
+                                    <el-form-item label="名称" prop="comName">
+                                        <el-input v-model="buyForm.comName"/>
+                                    </el-form-item>
+                                    <el-form-item label="数量" prop="comQuantity">
+                                        <el-slider v-model="buyForm.comQuantity" show-input :min="1" :max="100"
+                                                   style="margin-left: 10px"></el-slider>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="单价" prop="comEachPrice">
+                                        <el-input-number v-model="buyForm.comEachPrice" :precision="1" :step="0.1"
+                                                         :min="0.1" :max="10000"></el-input-number>
+                                        元
+                                    </el-form-item>
+                                    <el-form-item label="描述" prop="comDescription">
+                                        <el-input v-model="buyForm.comDescription"/>
+                                    </el-form-item>
+                                </el-col>
+                            </el-form>
+                        </el-row>
+                    </div>
+                </transition>
+                <transition name="fade">
+                    <div v-if="activeStep === 2" id="qrcodeImg"></div>
+                </transition>
+            </el-card>
+            <!--底部按钮区-->
+            <span slot="footer" class="dialog-footer">
+        <el-button @click="buyCommodityPreStep">上 一 步</el-button>
+        <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep >= 2">购 买</el-button>
+        <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep < 2">下 一 步</el-button>
+      </span>
+        </el-dialog>
+    </div>
+</template>
+
+<script>
+    import {checkError, getCookie} from "../../plugins/utils";
+    import Clipboard from 'clipboard';
+    import QRCode from 'qrcodejs2'
+    export default {
+        name: "BuyCommodity",
+        data() {
+            const checkComId = (rule, value, callback) => {
+                const currentComId = this.buyCommodityPost.comInfo.comId
+                if (value !== currentComId || value === null) {
+                    return callback()
+                } else {
+                    callback(new Error('不能与原商品号重复'))
+                }
+            }
+            const checkQuantity = (rule, value, callback) => {
+                const currentQuantity = this.buyCommodityPost.comInfo.comQuantityNow
+                if (value <= currentQuantity || value === null) {
+                    return callback()
+                } else {
+                    callback(new Error('数量不得超过原有的商品'))
+                }
+            }
+            return {
+                activeStep: 0,
+                callSalerDialogVisible: false,
+                dialogLoading: true,
+                buyCommodityDialogVisible: false,
+                mainLoading: true,
+                myCommodity: [],
+                callInfo: [],
+                buyCommodityPost: {
+                    userName: getCookie('ID'),
+                    // 当前选中的商品信息
+                    comInfo: []
+                },
+                // 购买之后填写的商品信息
+                buyForm: {
+                    comId: '',
+                    comName: '',
+                    comQuantity: 1,
+                    comQuantityNow: 1,
+                    comEachPrice: 1,
+                    comDescription: ''
+                },
+                // 修改表单的验证规则对象
+                buyFormRules: {
+                    comId: [
+                        {required: true, message: '请输入商品号', trigger: 'blur'},
+                        {min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur'},
+                        { validator: checkComId, trigger: 'blur' }
+                    ],
+                    comName: [
+                        {required: true, message: '请输入商品名称', trigger: 'blur'},
+                        {min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur'}
+                    ],
+                    comQuantity: [
+                        {required: true, message: '请确定商品数量', trigger: 'change'},
+                        { validator: checkQuantity, trigger: 'change' }
+                    ],
+                    comEachPrice: [
+                        {required: true, message: '请确定商品单价', trigger: 'change'}
+                    ],
+                    comDescription: [
+                        {required: true, message: '请输入商品描述', trigger: 'blur'}
+                    ]
+                },
+                /*progressLoading: 0,
+                colors: [
+                    {color: '#f56c6c', percentage: 30},
+                    {color: '#e6a23c', percentage: 55},
+                    {color: '#5cb87a', percentage: 75},
+                    {color: '#1989fa', percentage: 90},
+                    {color: '#6f7ad3', percentage: 100}
+                ]*/
+            }
+        },
+        mounted() {
+            const clipboard1 = new Clipboard('.copy-phone');
+            const clipboard2 = new Clipboard('.copy-email');
+            clipboard1.on('success', e1 => {
+                this.$message.success('联系电话：' + e1.text + ' 已复制到剪贴板！');
+            });
+            clipboard2.on('success', e2 => {
+                this.$message.success('电子邮箱：' + e2.text + ' 已复制到剪贴板！');
+            });
+        },
+        created() {
+            this.getMyCommodity()
+        },
+        methods: {
+            async buy(){
+                this.buyForm.comQuantityNow = this.buyForm.comQuantity
+                const { data: res } = await this.$http.post(
+                    `commodity/insert?userName=${this.buyCommodityPost.userName}`,
+                    this.buyForm
+                )
+                if (res.code !== 200) {
+                    this.buyCommodityDialogVisible = false
+                    return this.$message.error('购买商品失败' + checkError(res))
+                } else {
+                    this.buyCommodityPost.comInfo.comQuantityNow = this.buyCommodityPost.comInfo.comQuantity - this.buyForm.comQuantity
+                    const { data: res2 } = await this.$http.post(
+                        'commodity/update?',
+                        this.buyCommodityPost.comInfo
+                    )
+                    if (res2.code !== 200) {
+                        this.buyCommodityDialogVisible = false
+                        return this.$message.error('购买商品失败' + checkError(res))
+                    } else {
+                        return this.$message.success('购买商品成功')
+                        //TODO
+                    }
+                }
+            },
+            qrcode() {
+                new QRCode('qrcodeImg', {
+                    width: 200,
+                    height: 200,
+                    text: 'HTTPS://QR.ALIPAY.COM/FKX04733UHFOJJN0AHTS3E',
+                    colorDark: '#000',
+                    colorLight: '#fff'
+                });
+            },
+            buyCommodityNextStep() {
+                if (this.activeStep === 1) {
+                    this.$refs.buyFormRef.validate(valid => {
+                        if (valid) {
+                            this.addStep()
+                            setTimeout(this.qrcode, 100)
+                        }
+                    })
+                } else if (this.activeStep === 2) {
+                    this.addStep()
+                    setTimeout(this.buy, 1000)
+                } else {
+                    this.addStep()
+                }
+            },
+            addStep() {
+                this.activeStep < 3 ? this.activeStep++ : this.activeStep
+            },
+            closeBuyCommodityDialogVisible() {
+                this.$message.success('购买成功，请到 商品管理 > 我的商品 中进行查看')
+                this.buyCommodityDialogVisible = false
+            },
+            buyCommodityPreStep() {
+                this.activeStep > 0 ? this.activeStep-- : this.activeStep
+                if (this.activeStep === 2) {
+                    setTimeout(this.qrcode, 100)
+                }
+            },
+            buyCommodityDialogClosed() {
+                this.$refs.buyFormRef.resetFields()
+            },
+            async showBuyCommodityDialog(comId) {
+                this.buyCommodityDialogVisible = true
+                const {data: res} = await this.$http.get(`commodity/selectById?comId=${comId}`)
+                this.buyCommodityPost.comInfo = res.data
+                this.activeStep = 0
+            },
+            async checkCommodityUserInfo(comId) {
+                const {data: res} = await this.$http.get(`commodity/selectCommodityUser?comId=${comId}`)
+                if (res.code !== 200) {
+                    return this.$message.error('查询用户信息错误' + checkError(res))
+                } else {
+                    this.callInfo = res.data
+                    this.callSalerDialogVisible = true
+                    /*setInterval(this.progress, 60)*/
+                }
+            },
+            /*progress() {
+                if (this.progressLoading < 101) {
+                    this.progressLoading++
+                } else {
+                    this.progressLoading = 101
+                }
+                console.log(this.progressLoading)
+            },*/
+            // 面包屑导航切换
+            changeMenu(activePath) {
+                this.information.$emit('activePath', activePath)
+            },
+            async getMyCommodity() {
+                const {data: res} = await this.$http.get(
+                    'commodity/select'
+                )
+                if (res.code !== 200) {
+                    return this.$message.error('查询商品信息失败' + checkError(res))
+                }
+                this.mainLoading = false
+                this.myCommodity = res.data
+            }
+        }
+    }
+</script>
+
+<style lang="less" scoped>
+    .centerFont {
+        font-weight: bold;
+        font-size: 28px;
+    }
+
+    i {
+        font-size: 100px;
+    }
+
+    .centerCol {
+        height: 100px;
+        display: flex;
+        align-items: center
+    }
+
+    .centerIcon {
+        float: right;
+        margin-right: 24px
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: all 1s;
+    }
+
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+        transform: translateX(-200px);
+    }
+    #qrcodeImg {
+        box-sizing: border-box;
+        display: inline-block;
+        padding: 8px;
+        background: #cccccc;
+        & > img {
+            display: inline-block !important;
+        }
+    }
+    /*
+        .fade-enter-to {
+            opacity: 1;
+            transform: translateX(350px);
+        }*/
+
+    /*.dialog {*/
+    /*    z-index: 3000 !important;*/
+    /*}*/
+</style>
