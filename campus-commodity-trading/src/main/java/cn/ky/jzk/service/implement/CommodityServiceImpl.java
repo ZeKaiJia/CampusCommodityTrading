@@ -1,11 +1,8 @@
 package cn.ky.jzk.service.implement;
 
 import cn.ky.jzk.mapper.CommodityMapper;
-import cn.ky.jzk.mapper.RoleMapper;
 import cn.ky.jzk.model.Commodity;
-import cn.ky.jzk.model.Role;
 import cn.ky.jzk.service.CommodityService;
-import cn.ky.jzk.service.RoleService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,5 +63,20 @@ public class CommodityServiceImpl implements CommodityService {
     @Override
     public Commodity selectById(String comId) {
         return commodityMapper.selectById(comId);
+    }
+
+    @Override
+    public List<Commodity> selectByName(String comName) {
+        return commodityMapper.selectByName(comName);
+    }
+
+    @Override
+    public List<Commodity> selectByPriceBetween(Double min, Double max) {
+        return commodityMapper.selectByPriceBetween(min, max);
+    }
+
+    @Override
+    public List<Commodity> selectByQuantityNow(Integer comQuantityNow) {
+        return commodityMapper.selectByQuantityNow(comQuantityNow);
     }
 }

@@ -1,11 +1,9 @@
 package cn.ky.jzk.controller;
 
 import cn.ky.jzk.model.Commodity;
-import cn.ky.jzk.model.Role;
 import cn.ky.jzk.model.User;
 import cn.ky.jzk.service.CommodityService;
 import cn.ky.jzk.service.RelationCommodityUserService;
-import cn.ky.jzk.service.RoleService;
 import cn.ky.jzk.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,6 +29,8 @@ public class CommodityController extends BaseController {
     private RelationCommodityUserService relationCommodityUserService;
 
     private Commodity temp;
+
+    List<Commodity> commodities;
 
     @PostMapping(value = "/insert")
     @ResponseBody
@@ -67,7 +67,7 @@ public class CommodityController extends BaseController {
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<Commodity>> select() {
-        List<Commodity> commodities = commodityService.select();
+        commodities = commodityService.select();
         if (commodities.size() == 0) {
             return getFailResult(404, "未找到数据");
         }
@@ -76,12 +76,42 @@ public class CommodityController extends BaseController {
 
     @GetMapping(value = "/selectById")
     @ResponseBody
-    public Response<Commodity> selectById(String comId) {
-        temp =  commodityService.selectById(comId);
+    public Response<Commodity> selectById(@RequestParam String comId) {
+        temp = commodityService.selectById(comId);
         if (temp == null) {
             getFailResult(404, "未找到数据");
         }
         return getSuccessResult(temp);
+    }
+
+    @GetMapping(value = "/selectByName")
+    @ResponseBody
+    public Response<List<Commodity>> selectByName(@RequestParam String comName) {
+        commodities = commodityService.selectByName(comName);
+        if (commodities.size() == 0) {
+            getFailResult(404, "未找到数据");
+        }
+        return getSuccessResult(commodities);
+    }
+
+    @GetMapping(value = "/selectByPriceBetween")
+    @ResponseBody
+    public Response<List<Commodity>> selectByPriceBetween(@RequestParam Double min, @RequestParam Double max) {
+        commodities =  commodityService.selectByPriceBetween(min, max);
+        if (commodities.size() == 0) {
+            getFailResult(404, "未找到数据");
+        }
+        return getSuccessResult(commodities);
+    }
+
+    @GetMapping(value = "/selectByQuantityNow")
+    @ResponseBody
+    public Response<List<Commodity>> selectByQuantityNow(@RequestParam Integer comQuantityNow) {
+        commodities =  commodityService.selectByQuantityNow(comQuantityNow);
+        if (commodities.size() == 0) {
+            getFailResult(404, "未找到数据");
+        }
+        return getSuccessResult(commodities);
     }
 
     @GetMapping(value = "/selectUserCommodity")

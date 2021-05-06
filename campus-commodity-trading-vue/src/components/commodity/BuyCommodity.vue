@@ -14,7 +14,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="6" v-for="(commodity, index) in myCommodity" :key="commodity.comId"
+                <el-col :span="6" v-for="(commodity, index) in AllCommodity" :key="commodity.comId"
                         :offset="index % 3 === 0 ? 0 : 3">
                     <el-card :body-style="{ padding: '0px' }" style="text-align: center; margin: 24px 0;">
                         <el-button type="danger" icon="el-icon-warning-outline" circle
@@ -38,43 +38,42 @@
         <el-dialog
                 title="联系卖家"
                 :visible.sync="callSalerDialogVisible"
-                width="30%"
+                width="50%"
                 center>
             <el-row :gutter="20">
-                <el-col :span="11">
+                <el-col :span="10">
                     <i class="el-icon-user centerIcon"></i>
                 </el-col>
-                <el-col :span="13" class="centerCol">
-                    <span>{{this.callInfo.userName}}</span>
+                <el-col :span="14" class="centerCol">
+                    <span>{{this.callInfo.userNick}}</span>
                 </el-col>
             </el-row>
             <el-row :gutter="20">
-                <el-col :span="11">
+                <el-col :span="10">
                     <i class="el-icon-phone-outline centerIcon"></i>
                 </el-col>
-                <el-col :span="10" class="centerCol">
+                <el-col :span="9" class="centerCol">
                     <span>{{this.callInfo.userPhone}}</span>
                 </el-col>
-                <el-col :span="3" class="centerCol">
+                <el-col :span="4" class="centerCol">
                     <a :data-clipboard-text="this.callInfo.userPhone" class="copy-phone">
                         <el-button type="info" icon="el-icon-phone" circle style="float: right"></el-button>
                     </a>
                 </el-col>
             </el-row>
             <el-row :gutter="20">
-                <el-col :span="11">
+                <el-col :span="10">
                     <i class="el-icon-c-scale-to-original centerIcon"></i>
                 </el-col>
-                <el-col :span="10" class="centerCol">
+                <el-col :span="9" class="centerCol">
                     <span>{{this.callInfo.userEmail}}</span>
                 </el-col>
-                <el-col :span="3" class="centerCol">
+                <el-col :span="4" class="centerCol">
                     <a :data-clipboard-text="this.callInfo.userEmail" class="copy-email">
                         <el-button type="info" icon="el-icon-message" circle style="float: right"></el-button>
                     </a>
                 </el-col>
             </el-row>
-            <!--<el-progress v-if="progressLoading !== 101" type="circle" :percentage="progressLoading" :stroke-width="12" :color="colors"></el-progress>-->
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="callSalerDialogVisible = false">返 回</el-button>
             </span>
@@ -82,7 +81,7 @@
         <el-dialog
                 title="购买商品"
                 :visible.sync="buyCommodityDialogVisible"
-                width="50%"
+                width="55%"
                 @close="buyCommodityDialogClosed"
         >
             <el-steps :active="activeStep" finish-status="success" simple style="margin-top: 20px">
@@ -110,7 +109,7 @@
                                     :model="buyForm"
                                     :rules="buyFormRules"
                                     ref="buyFormRef"
-                                    label-width="100px"
+                                    label-width="80px"
                             >
                                 <el-col :span="12">
                                     <el-form-item label="商品号" prop="comId">
@@ -138,17 +137,24 @@
                         </el-row>
                     </div>
                 </transition>
-                <transition name="fade">
+                <transition name="fade" style="position: absolute; left: 50%; transform: translate(-50%)">
                     <div v-if="activeStep === 2" id="qrcodeImg"></div>
+                </transition>
+                <transition name="fade">
+                    <div v-if="activeStep === 3" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -5%)">
+                        <el-progress type="circle" :percentage="progressLoading" :stroke-width="12" :color="colors"></el-progress>
+                    </div>
                 </transition>
             </el-card>
             <!--底部按钮区-->
             <span slot="footer" class="dialog-footer">
-        <el-button @click="buyCommodityPreStep">上 一 步</el-button>
-        <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep >= 2">购 买</el-button>
-        <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep < 2">下 一 步</el-button>
-      </span>
+                <el-button @click="buyCommodityPreStep" v-if="activeStep > 0 && activeStep < 3">上 一 步</el-button>
+                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 2">购 买</el-button>
+                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep < 2">下 一 步</el-button>
+            </span>
         </el-dialog>
+        <!--回到顶部-->
+        <el-backtop target=".el-main" :bottom="50">△</el-backtop>
     </div>
 </template>
 
@@ -156,6 +162,7 @@
     import {checkError, getCookie} from "../../plugins/utils";
     import Clipboard from 'clipboard';
     import QRCode from 'qrcodejs2'
+
     export default {
         name: "BuyCommodity",
         data() {
@@ -176,12 +183,14 @@
                 }
             }
             return {
+                clipboard1: '',
+                clipboard2: '',
                 activeStep: 0,
                 callSalerDialogVisible: false,
                 dialogLoading: true,
                 buyCommodityDialogVisible: false,
                 mainLoading: true,
-                myCommodity: [],
+                AllCommodity: [],
                 callInfo: [],
                 buyCommodityPost: {
                     userName: getCookie('ID'),
@@ -219,33 +228,44 @@
                         {required: true, message: '请输入商品描述', trigger: 'blur'}
                     ]
                 },
-                /*progressLoading: 0,
+                progressLoading: 0,
+                inter: '',
                 colors: [
                     {color: '#f56c6c', percentage: 30},
                     {color: '#e6a23c', percentage: 55},
                     {color: '#5cb87a', percentage: 75},
                     {color: '#1989fa', percentage: 90},
                     {color: '#6f7ad3', percentage: 100}
-                ]*/
+                ]
             }
         },
         mounted() {
-            const clipboard1 = new Clipboard('.copy-phone');
-            const clipboard2 = new Clipboard('.copy-email');
-            clipboard1.on('success', e1 => {
-                this.$message.success('联系电话：' + e1.text + ' 已复制到剪贴板！');
+            this.clipboard1 = new Clipboard('.copy-phone')
+            this.clipboard2 = new Clipboard('.copy-email')
+            this.clipboard1.on('success', e1 => {
+                this.$message.success('联系电话：' + e1.text + ' 已复制到剪贴板！')
             });
-            clipboard2.on('success', e2 => {
-                this.$message.success('电子邮箱：' + e2.text + ' 已复制到剪贴板！');
-            });
+            this.clipboard2.on('success', e2 => {
+                this.$message.success('电子邮箱：' + e2.text + ' 已复制到剪贴板！')
+            })
         },
         created() {
-            this.getMyCommodity()
+            this.getCommodity()
+        },
+        destroyed() {
+            this.clipboard1.destroy()
+            this.clipboard2.destroy()
         },
         methods: {
-            async buy(){
+            async buy() {
                 this.buyForm.comQuantityNow = this.buyForm.comQuantity
-                const { data: res } = await this.$http.post(
+                for (let i = 0; i < this.AllCommodity.length; i++) {
+                    if (this.buyForm.comId === this.AllCommodity[i].comId) {
+                        this.buyCommodityDialogVisible = false
+                        return this.$message.error('商品号重复，购买失败')
+                    }
+                }
+                const {data: res} = await this.$http.post(
                     `commodity/insert?userName=${this.buyCommodityPost.userName}`,
                     this.buyForm
                 )
@@ -253,7 +273,7 @@
                     this.buyCommodityDialogVisible = false
                     return this.$message.error('购买商品失败' + checkError(res))
                 } else {
-                    this.buyCommodityPost.comInfo.comQuantityNow = this.buyCommodityPost.comInfo.comQuantity - this.buyForm.comQuantity
+                    this.buyCommodityPost.comInfo.comQuantityNow -= this.buyForm.comQuantity
                     const { data: res2 } = await this.$http.post(
                         'commodity/update?',
                         this.buyCommodityPost.comInfo
@@ -262,8 +282,8 @@
                         this.buyCommodityDialogVisible = false
                         return this.$message.error('购买商品失败' + checkError(res))
                     } else {
-                        return this.$message.success('购买商品成功')
-                        //TODO
+                        this.buyCommodityDialogVisible = false
+                        await this.getCommodity()
                     }
                 }
             },
@@ -286,7 +306,8 @@
                     })
                 } else if (this.activeStep === 2) {
                     this.addStep()
-                    setTimeout(this.buy, 1000)
+                    this.inter = setInterval(this.progress, 60)
+                    setTimeout(this.buy, 7000)
                 } else {
                     this.addStep()
                 }
@@ -305,7 +326,13 @@
                 }
             },
             buyCommodityDialogClosed() {
-                this.$refs.buyFormRef.resetFields()
+                this.activeStep = 0
+                this.buyForm.comId = ''
+                this.buyForm.comName = ''
+                this.buyForm.comDescription = ''
+                this.buyForm.comEachPrice = 1
+                this.buyForm.comQuantity = 1
+                this.progressLoading = 0
             },
             async showBuyCommodityDialog(comId) {
                 this.buyCommodityDialogVisible = true
@@ -320,22 +347,21 @@
                 } else {
                     this.callInfo = res.data
                     this.callSalerDialogVisible = true
-                    /*setInterval(this.progress, 60)*/
                 }
             },
-            /*progress() {
-                if (this.progressLoading < 101) {
+            progress() {
+                if (this.progressLoading < 100) {
                     this.progressLoading++
                 } else {
-                    this.progressLoading = 101
+                    this.progressLoading = 100
+                    clearInterval(this.inter)
                 }
-                console.log(this.progressLoading)
-            },*/
+            },
             // 面包屑导航切换
             changeMenu(activePath) {
                 this.information.$emit('activePath', activePath)
             },
-            async getMyCommodity() {
+            async getCommodity() {
                 const {data: res} = await this.$http.get(
                     'commodity/select'
                 )
@@ -343,7 +369,7 @@
                     return this.$message.error('查询商品信息失败' + checkError(res))
                 }
                 this.mainLoading = false
-                this.myCommodity = res.data
+                this.AllCommodity = res.data
             }
         }
     }

@@ -1,7 +1,6 @@
 package cn.ky.jzk.service;
 
 import cn.ky.jzk.model.Commodity;
-import cn.ky.jzk.model.Role;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -21,4 +20,10 @@ public interface CommodityService {
     List<Commodity> select();
 
     Commodity selectById(String comId);
+
+    List<Commodity> selectByName(String comName);
+
+    List<Commodity> selectByPriceBetween(Double min, Double max);
+
+    List<Commodity> selectByQuantityNow(Integer comQuantityNow);
 }

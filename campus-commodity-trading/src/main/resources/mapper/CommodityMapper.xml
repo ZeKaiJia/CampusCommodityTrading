@@ -43,4 +43,20 @@
         FROM sys_commodity
         WHERE comId = #{comId}
     </select>
+    <select id="selectByName" resultType="cn.ky.jzk.model.Commodity">
+        SELECT *
+        FROM sys_commodity
+        WHERE comName like '%${comName}%'
+    </select>
+    <select id="selectByPriceBetween" resultType="cn.ky.jzk.model.Commodity">
+        SELECT *
+        FROM sys_commodity
+        WHERE comEachPrice &gt;= #{min}
+        AND comEachPrice &lt;= #{max}
+    </select>
+    <select id="selectByQuantityNow" resultType="cn.ky.jzk.model.Commodity">
+        SELECT *
+        FROM sys_commodity
+        WHERE comQuantityNow &lt;= #{comQuantityNow}
+    </select>
 </mapper>

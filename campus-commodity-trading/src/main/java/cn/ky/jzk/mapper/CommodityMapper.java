@@ -1,7 +1,6 @@
 package cn.ky.jzk.mapper;
 
 import cn.ky.jzk.model.Commodity;
-import cn.ky.jzk.model.Role;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +22,10 @@ public interface CommodityMapper {
     List<Commodity> select();
 
     Commodity selectById(@Param("comId") String comId);
+
+    List<Commodity> selectByName(@Param("comName") String comName);
+
+    List<Commodity> selectByPriceBetween(@Param("min") Double min, @Param("max") Double max);
+
+    List<Commodity> selectByQuantityNow(@Param("comQuantityNow") Integer comQuantityNow);
 }

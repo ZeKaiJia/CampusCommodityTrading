@@ -212,16 +212,16 @@ export default {
       routeUrl: '/self',
       // 图片地址
       src: [
-        require('../../assets/img/headPic/1.png'),
-        require('../../assets/img/headPic/2.png'),
-        require('../../assets/img/headPic/3.png'),
-        require('../../assets/img/headPic/4.png'),
-        require('../../assets/img/headPic/5.png'),
-        require('../../assets/img/headPic/6.png'),
-        require('../../assets/img/headPic/7.png'),
-        require('../../assets/img/headPic/8.png'),
-        require('../../assets/img/headPic/9.png'),
-        require('../../assets/img/headPic/10.png')
+        require('../../assets/img/headPic/woman1.png'),
+        require('../../assets/img/headPic/woman2.png'),
+        require('../../assets/img/headPic/woman3.png'),
+        require('../../assets/img/headPic/woman4.png'),
+        require('../../assets/img/headPic/woman5.png'),
+        require('../../assets/img/headPic/man1.png'),
+        require('../../assets/img/headPic/man2.png'),
+        require('../../assets/img/headPic/man3.png'),
+        require('../../assets/img/headPic/man4.png'),
+        require('../../assets/img/headPic/man5.png')
       ],
       picSrc: '',
       // 开启加载
