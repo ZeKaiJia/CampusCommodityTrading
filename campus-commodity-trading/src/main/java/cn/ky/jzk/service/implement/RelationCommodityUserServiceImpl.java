@@ -8,8 +8,6 @@ import cn.ky.jzk.model.Commodity;
 import cn.ky.jzk.model.Role;
 import cn.ky.jzk.model.User;
 import cn.ky.jzk.service.RelationCommodityUserService;
-import cn.ky.jzk.service.RelationRoleUserService;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -43,15 +41,8 @@ public class RelationCommodityUserServiceImpl implements RelationCommodityUserSe
 
 
     @Override
-    public void insert(String userName, String comId, Integer number) {
-        Integer num =  relationCommodityUserMapper.selectQuantity(userName, comId);
-        System.err.println(num);
-        if (num == null) {
-            relationCommodityUserMapper.insert(userName, comId, number);
-        } else {
-            relationCommodityUserMapper.deleteSingle(userName, comId);
-            relationCommodityUserMapper.insert(userName, comId, num + number);
-        }
+    public void insert(String userName, String comId) {
+        relationCommodityUserMapper.insert(userName, comId);
     }
 
     @Override
@@ -65,18 +56,10 @@ public class RelationCommodityUserServiceImpl implements RelationCommodityUserSe
     }
 
     @Override
-    public List<User> selectById(String comId) {
+    public User selectById(String comId) {
         users.clear();
-        List<String> res = relationCommodityUserMapper.selectById(comId);
-        for (String str : res) {
-            users.add(userMapper.selectByName(str));
-        }
-        return users;
-    }
-
-    @Override
-    public Integer selectQuantity(String userName, String comId) {
-        return relationCommodityUserMapper.selectQuantity(userName, comId);
+        String res = relationCommodityUserMapper.selectById(comId);
+        return userMapper.selectByName(res);
     }
 
     @Override

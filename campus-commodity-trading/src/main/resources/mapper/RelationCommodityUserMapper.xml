@@ -6,8 +6,8 @@
 <mapper namespace="cn.ky.jzk.mapper.RelationCommodityUserMapper">
     <cache eviction="FIFO" readOnly="true" size="1024" flushInterval="30000"/>
     <insert id="insert">
-        INSERT INTO rel_user_commodity (userName, comId, number)
-        VALUE (#{userName}, #{comId}, #{number})
+        INSERT INTO rel_user_commodity (userName, comId)
+        VALUE (#{userName}, #{comId})
     </insert>
     <delete id="deleteById">
         DELETE FROM rel_user_commodity
@@ -31,11 +31,5 @@
         SELECT userName
         FROM rel_user_commodity
         WHERE comId = #{comId}
-    </select>
-    <select id="selectQuantity" resultType="integer">
-        SELECT sum(number)
-        FROM rel_user_commodity
-        WHERE userName = #{userName}
-        AND comId = #{comId}
     </select>
 </mapper>

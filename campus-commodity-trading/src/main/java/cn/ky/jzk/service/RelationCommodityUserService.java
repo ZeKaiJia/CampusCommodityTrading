@@ -11,13 +11,11 @@ import java.util.List;
  * @Date: 2021/4/24 16:02
  */
 public interface RelationCommodityUserService {
-    void insert(String userName, String comId, Integer number);
+    void insert(String userName, String comId);
 
     List<Commodity> selectByName(String userName);
 
-    List<User> selectById(String comId);
-
-    Integer selectQuantity(String userName, String comId);
+    User selectById(String comId);
 
     void deleteById(String comId);
 

@@ -34,6 +34,11 @@ public class UserController extends BaseController {
 
     private User temp;
 
+    @GetMapping(value = "/hello")
+    public String hello() {
+        return "hello!";
+    }
+
     @PostMapping(value = "/insert")
     @ResponseBody
     public Response<User> insert(@RequestBody User user, @RequestParam String roleNameCn) {

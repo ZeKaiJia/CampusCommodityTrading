@@ -3,11 +3,11 @@
 
 # Vue
 */node_modules
+*/*.json
+*/*.lock
 
 # Java
 */target
 
 # Self
 .idea
-
-*/package-lock.json
