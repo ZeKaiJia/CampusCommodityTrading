@@ -2,6 +2,7 @@ package cn.ky.jzk.controller;
 
 import cn.ky.jzk.model.Commodity;
 import cn.ky.jzk.model.Role;
+import cn.ky.jzk.model.User;
 import cn.ky.jzk.service.CommodityService;
 import cn.ky.jzk.service.RelationCommodityUserService;
 import cn.ky.jzk.service.RoleService;
@@ -33,12 +34,12 @@ public class CommodityController extends BaseController {
 
     @PostMapping(value = "/insert")
     @ResponseBody
-    public Response<Commodity> insert(@RequestBody Commodity commodity, @RequestParam String userName, @RequestParam Integer number) {
+    public Response<Commodity> insert(@RequestBody Commodity commodity, @RequestParam String userName) {
         temp = commodityService.insert(commodity);
         if (temp == null) {
             return getFailResult(404, "ID已存在");
         }
-        relationCommodityUserService.insert(userName, commodity.getComId(), number);
+        relationCommodityUserService.insert(userName, commodity.getComId());
         return getSuccessResult(temp);
     }
 
@@ -88,6 +89,16 @@ public class CommodityController extends BaseController {
     public Response<List<Commodity>> selectUserCommodity(String userName) {
         List<Commodity> res = relationCommodityUserService.selectByName(userName);
         if (res.size() == 0) {
+            getFailResult(404, "未找到数据");
+        }
+        return getSuccessResult(res);
+    }
+
+    @GetMapping(value = "/selectCommodityUser")
+    @ResponseBody
+    public Response<User> selectCommodityUser(String comId) {
+        User res = relationCommodityUserService.selectById(comId);
+        if (res == null) {
             getFailResult(404, "未找到数据");
         }
         return getSuccessResult(res);
