@@ -96,8 +96,8 @@
                 <el-form-item label="名称" prop="comName">
                     <el-input v-model="editForm.comName"/>
                 </el-form-item>
-                <el-form-item label="数量" prop="comQuantity">
-                    <el-slider v-model="editForm.comQuantity" show-input :min="1" :max="100"
+                <el-form-item label="数量" prop="comQuantityNow">
+                    <el-slider v-model="editForm.comQuantityNow" show-input :min="1" :max="100"
                                style="margin-left: 10px"></el-slider>
                 </el-form-item>
                 <el-form-item label="单价" prop="comEachPrice">
@@ -154,10 +154,10 @@
                         {min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur'}
                     ],
                     comQuantity: [
-                        {required: true, message: '请确定商品数量', trigger: 'blur'}
+                        {required: true, message: '请确定商品数量', trigger: 'change'}
                     ],
                     comEachPrice: [
-                        {required: true, message: '请确定商品单价', trigger: 'blur'}
+                        {required: true, message: '请确定商品单价', trigger: 'change'}
                     ],
                     comDescription: [
                         {required: true, message: '请输入商品描述', trigger: 'blur'}

@@ -166,7 +166,7 @@
 </template>
 
 <script>
-  import {checkError} from '../../plugins/utils'
+  import {checkError, getCookie, setCookie} from '../../plugins/utils'
 
   export default {
     name: 'Types',
@@ -259,10 +259,22 @@
       this.information.$emit('activePath', this.routeUrl)
       this.getTypeList()
       setTimeout(() => {
-        this.infoDialogVisible = true
+        if (this.checkInfo() < 2) {
+          this.infoDialogVisible = true
+        }
       }, 1000)
     },
     methods: {
+      // 检查提示信息出现次数
+      checkInfo(){
+        let times = getCookie('times')
+        if (times === null || times === undefined || times === '') {
+          setCookie('times', 1)
+        } else {
+          setCookie('times', Number(times) + 1)
+        }
+        return times
+      },
       // 点击按钮删除用户信息
       async removeRole(roleId) {
         // 弹框询问
