@@ -8,14 +8,11 @@ import cn.ky.jzk.model.Commodity;
 import cn.ky.jzk.model.Role;
 import cn.ky.jzk.model.User;
 import cn.ky.jzk.service.RelationCommodityUserService;
-import cn.ky.jzk.service.RelationRoleUserService;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import sun.tools.jconsole.JConsole;
 
 import java.util.ArrayList;
 import java.util.List;

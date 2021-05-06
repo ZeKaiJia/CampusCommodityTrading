@@ -3,6 +3,8 @@
 
 # Vue
 */node_modules
+*/*.json
+*/*.lock
 
 # Java
 */target
