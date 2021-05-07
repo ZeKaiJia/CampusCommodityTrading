@@ -46,6 +46,12 @@ public class CommodityServiceImpl implements CommodityService {
     }
 
     @Override
+    public String deleteAllZero(String userName) {
+        commodityMapper.deleteAllZero(userName);
+        return "Success";
+    }
+
+    @Override
     public Commodity update(@NotNull Commodity commodity) {
         temp = commodityMapper.selectById(commodity.getComId());
         if (temp == null) {

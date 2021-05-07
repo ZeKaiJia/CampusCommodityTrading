@@ -9,7 +9,11 @@
         <!--查询卡片区-->
         <el-card style="margin-top: 14px" v-loading="mainLoading">
             <el-row :gutter="20">
-                <el-col :span="13" style="text-align: right">
+                <el-col :span="2">
+                    <el-button type="text" icon="el-icon-refresh" circle style="margin-left: 0; font-size: 32px; padding: 0"
+                               @click="removeZeroCommodity"></el-button>
+                </el-col>
+                <el-col :span="11" style="text-align: right">
                     <div class="centerFont">我的商品库</div>
                 </el-col>
                 <el-col :span="11">
@@ -48,7 +52,7 @@
                     :model="addForm"
                     :rules="addFormRules"
                     ref="addFormRef"
-                    label-width="100px"
+                    label-width="80px"
                     v-loading="dialogLoading"
             >
                 <el-form-item label="商品号" prop="comId">
@@ -87,7 +91,7 @@
                     :model="editForm"
                     :rules="editFormRules"
                     ref="editFormRef"
-                    label-width="100px"
+                    label-width="80px"
                     v-loading="dialogLoading"
             >
                 <el-form-item label="商品号" prop="comId">
@@ -96,8 +100,12 @@
                 <el-form-item label="名称" prop="comName">
                     <el-input v-model="editForm.comName"/>
                 </el-form-item>
-                <el-form-item label="数量" prop="comQuantityNow">
-                    <el-slider v-model="editForm.comQuantityNow" show-input :min="1" :max="100"
+                <el-form-item label="数量" prop="comQuantity">
+                    <el-slider v-model="editForm.comQuantity" show-input :min="1" :max="100"
+                               style="margin-left: 10px"></el-slider>
+                </el-form-item>
+                <el-form-item label="存货" prop="comQuantityNow">
+                    <el-slider v-model="editForm.comQuantityNow" show-input :min="0" :max="editForm.comQuantity"
                                style="margin-left: 10px"></el-slider>
                 </el-form-item>
                 <el-form-item label="单价" prop="comEachPrice">
@@ -172,6 +180,9 @@
                     comQuantity: [
                         {required: true, message: '请确定商品数量', trigger: 'blur'}
                     ],
+                    comQuantityNow: [
+                        {required: true, message: '请确定商品数量', trigger: 'blur'}
+                    ],
                     comEachPrice: [
                         {required: true, message: '请确定商品单价', trigger: 'blur'}
                     ],
@@ -187,6 +198,30 @@
             this.getMyCommodity()
         },
         methods: {
+            // 点击按钮销毁无存货商品
+            async removeZeroCommodity() {
+                // 弹框询问
+                const confirmResult = await this.$confirm(
+                    '此操作将永久删除所有您仓库中存货为0的商品, 是否继续?',
+                    '⚠️警告',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }
+                ).catch((err) => err)
+                // 取消操作返回cancel字符串
+                // 确认操作返回confirm字符串
+                if (confirmResult !== 'confirm') {
+                    return this.$message.info('已撤回删除操作')
+                }
+                const { data: res } = await this.$http.post(`commodity/deleteAllZero?userName=${getCookie('ID')}`)
+                if (res.code !== 200) {
+                    return this.$message.error('删除商品失败' + checkError(res))
+                }
+                this.$message.success('删除商品成功')
+                await this.getMyCommodity()
+            },
             // 点击按钮修改商品信息
             async editCommodity() {
                 this.$refs.editFormRef.validate(async (valid) => {
@@ -229,7 +264,7 @@
                     return this.$message.error('删除商品失败' + checkError(res))
                 }
                 this.$message.success('删除商品成功')
-                await this.getMyCommodity()
+                this.getMyCommodity()
             },
             showAddDialog() {
                 this.addDialogVisible = true

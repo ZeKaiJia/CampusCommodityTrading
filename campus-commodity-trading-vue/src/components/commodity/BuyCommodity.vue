@@ -282,7 +282,7 @@
                         this.buyCommodityDialogVisible = false
                         return this.$message.error('购买商品失败' + checkError(res))
                     } else {
-                        this.buyCommodityDialogVisible = false
+                        this.closeBuyCommodityDialogVisible()
                         await this.getCommodity()
                     }
                 }

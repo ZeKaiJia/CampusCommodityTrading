@@ -28,4 +28,6 @@ public interface CommodityMapper {
     List<Commodity> selectByPriceBetween(@Param("min") Double min, @Param("max") Double max);
 
     List<Commodity> selectByQuantityNow(@Param("comQuantityNow") Integer comQuantityNow);
+
+    void deleteAllZero(@Param("userName") String userName);
 }

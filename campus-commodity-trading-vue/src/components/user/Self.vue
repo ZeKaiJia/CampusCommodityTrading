@@ -10,7 +10,16 @@
     <el-card style="margin-top: 14px" v-loading="mainLoading">
       <el-row :gutter="20">
         <el-col :span="6">
-          <div class="centerFont">证件照</div>
+          <div class="centerFont">证件照
+            <el-button
+                    type="primary"
+                    icon="el-icon-upload2"
+                    size="mini"
+                    @click="showEditDialog()"
+                    style="margin-left: 12px;"
+                    round
+            />
+          </div>
         </el-col>
         <el-col :span="18">
           <div class="centerFont">基本信息

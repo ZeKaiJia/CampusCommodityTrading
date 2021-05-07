@@ -54,6 +54,16 @@ public class CommodityController extends BaseController {
         return getSuccessResult(temp);
     }
 
+    @PostMapping(value = "/deleteAllZero")
+    @ResponseBody
+    public Response<String> deleteAllZero(@RequestParam String userName) {
+        String str = commodityService.deleteAllZero(userName);
+        if (!"Success".equals(str)) {
+            return getFailResult(404, "不存在销毁商品");
+        }
+        return getSuccessResult(str);
+    }
+
     @PostMapping(value = "/update")
     @ResponseBody
     public Response<Commodity> update(@RequestBody Commodity commodity) {

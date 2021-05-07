@@ -15,6 +15,8 @@ public interface CommodityService {
 
     Commodity delete(String comId);
 
+    String deleteAllZero(String userName);
+
     Commodity update(@NotNull Commodity commodity);
 
     List<Commodity> select();

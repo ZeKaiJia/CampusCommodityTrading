@@ -13,22 +13,31 @@
         DELETE FROM sys_commodity
         WHERE comId = #{comId}
     </delete>
+    <delete id="deleteAllZero" parameterType="java.lang.String">
+        DELETE FROM sys_commodity
+        WHERE comQuantityNow = 0
+        AND comId IN (
+            SELECT comId
+            FROM rel_user_commodity
+            WHERE userName = #{userName}
+        )
+    </delete>
     <update id="update" parameterType="cn.ky.jzk.model.Commodity">
         UPDATE sys_commodity
         <set>
             <if test="comName != null and comName != ''">
                 comName = #{comName},
             </if>
-            <if test="comQuantity != null and comQuantity != ''">
+            <if test="comQuantity != null">
                 comQuantity = #{comQuantity},
             </if>
-            <if test="comQuantityNow != null and comQuantityNow != ''">
+            <if test="comQuantityNow != null">
                 comQuantityNow = #{comQuantityNow},
             </if>
-            <if test="comEachPrice != null and comEachPrice != ''">
+            <if test="comEachPrice != null">
                 comEachPrice = #{comEachPrice},
             </if>
-            <if test="comDescription != null and comDescription != ''">
+            <if test="comDescription != null">
                 comDescription = #{comDescription},
             </if>
         </set>
