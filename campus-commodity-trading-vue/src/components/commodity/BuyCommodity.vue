@@ -12,6 +12,53 @@
                 <el-col :span="13" style="text-align: right">
                     <div class="centerFont">二手商品库</div>
                 </el-col>
+                <el-col :span="11" style="text-align: right">
+                    <el-button v-if="!searchFlag" type="text" icon="el-icon-arrow-down" circle
+                               style="margin-top: 4px; font-size: 32px; padding: 0"
+                               @click="searchFlag = !searchFlag"></el-button>
+                    <el-button v-if="searchFlag" type="text" icon="el-icon-arrow-up" circle
+                               style="margin-top: 4px; font-size: 32px; padding: 0"
+                               @click="searchFlag = !searchFlag"></el-button>
+                </el-col>
+            </el-row>
+            <el-row v-if="searchFlag">
+                <el-card>
+                    <!--搜索与添加区域-->
+                    <el-form v-model="queryInfo" label-width="10px">
+                        <el-row :gutter="10">
+                            <el-col :span="6">
+                                <el-form-item prop="comId">
+                                    <el-input
+                                            v-model="queryInfo.comId"
+                                            placeholder="请输入商品号"
+                                            clearable>
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-form-item prop="comName">
+                                    <el-input
+                                            v-model="queryInfo.comName"
+                                            placeholder="请输入商品名"
+                                            clearable>
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="2" style="height: 38px; display: flex; justify-content: center; align-items: center; margin-left: 12px">
+                                <span>存货范围</span>
+                            </el-col>
+                            <el-col :span="2" style="height: 38px; display: flex; justify-content: center; align-items: center">
+                                {{queryInfo.value[0]}}~{{queryInfo.value[1]}}
+                            </el-col>
+                            <el-col :span="7">
+                                <el-slider v-model="queryInfo.value" range :max="100">
+                                </el-slider>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                        </el-row>
+                    </el-form>
+                </el-card>
             </el-row>
             <el-row>
                 <el-col :span="6" v-for="(commodity, index) in AllCommodity" :key="commodity.comId"
@@ -183,6 +230,16 @@
                 }
             }
             return {
+                // TODO
+                queryInfo: {
+                    comId: '',
+                    comName: '',
+                    value: [0, 100],
+                    min: 0,
+                    max: 0,
+                    comDescription: ''
+                },
+                searchFlag: false,
                 clipboard1: '',
                 clipboard2: '',
                 activeStep: 0,
