@@ -82,7 +82,17 @@ public class CommodityServiceImpl implements CommodityService {
     }
 
     @Override
+    public List<Commodity> selectByQuantityBetween(Integer min, Integer max) {
+        return commodityMapper.selectByQuantityBetween(min, max);
+    }
+
+    @Override
     public List<Commodity> selectByQuantityNow(Integer comQuantityNow) {
         return commodityMapper.selectByQuantityNow(comQuantityNow);
+    }
+
+    @Override
+    public List<Commodity> selectByAnyParam(String comId, String comName, Double minPrice, Double maxPrice, Integer minQuantity, Integer maxQuantity, String comDescription) {
+        return commodityMapper.selectByAnyParam(comId, comName, minPrice, maxPrice, minQuantity, maxQuantity, comDescription);
     }
 }

@@ -27,5 +27,10 @@ public interface CommodityService {
 
     List<Commodity> selectByPriceBetween(Double min, Double max);
 
+    List<Commodity> selectByQuantityBetween(Integer min, Integer max);
+
     List<Commodity> selectByQuantityNow(Integer comQuantityNow);
+
+    List<Commodity> selectByAnyParam(String comId, String comName, Double minPrice, Double maxPrice,
+                                     Integer minQuantity, Integer maxQuantity, String comDescription);
 }

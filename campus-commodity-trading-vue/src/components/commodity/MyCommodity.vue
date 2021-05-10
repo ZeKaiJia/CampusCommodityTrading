@@ -95,7 +95,7 @@
                                style="margin-left: 10px"></el-slider>
                 </el-form-item>
                 <el-form-item label="单价" prop="comEachPrice">
-                    <el-input-number v-model="addForm.comEachPrice" :precision="1" :step="0.1" :min="0.1" :max="10000"></el-input-number>
+                    <el-input-number v-model="addForm.comEachPrice" :precision="1" :step="0.1" :min="0.1" :max="1000"></el-input-number>
                 元
                 </el-form-item>
                 <el-form-item label="描述" prop="comDescription">
@@ -138,7 +138,7 @@
                                style="margin-left: 10px"></el-slider>
                 </el-form-item>
                 <el-form-item label="单价" prop="comEachPrice">
-                    <el-input-number v-model="editForm.comEachPrice" :precision="1" :step="0.1" :min="0.1" :max="10000"></el-input-number>
+                    <el-input-number v-model="editForm.comEachPrice" :precision="1" :step="0.1" :min="0.1" :max="1000"></el-input-number>
                     元
                 </el-form-item>
                 <el-form-item label="描述" prop="comDescription">

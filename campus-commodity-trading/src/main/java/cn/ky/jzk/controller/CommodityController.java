@@ -124,6 +124,16 @@ public class CommodityController extends BaseController {
         return getSuccessResult(commodities);
     }
 
+    @GetMapping(value = "/selectByQuantityBetween")
+    @ResponseBody
+    public Response<List<Commodity>> selectByQuantityBetween(@RequestParam Integer min, @RequestParam Integer max) {
+        commodities =  commodityService.selectByQuantityBetween(min, max);
+        if (commodities.size() == 0) {
+            getFailResult(404, "未找到数据");
+        }
+        return getSuccessResult(commodities);
+    }
+
     @GetMapping(value = "/selectUserCommodity")
     @ResponseBody
     public Response<List<Commodity>> selectUserCommodity(String userName) {
@@ -142,5 +152,18 @@ public class CommodityController extends BaseController {
             getFailResult(404, "未找到数据");
         }
         return getSuccessResult(res);
+    }
+
+    @GetMapping(value = "/selectByAnyParam")
+    @ResponseBody
+    public Response<List<Commodity>> selectByAnyParam(@RequestParam String comId, @RequestParam String comName,
+                                                      @RequestParam Double minPrice, @RequestParam Double maxPrice,
+                                                      @RequestParam Integer minQuantity, @RequestParam Integer maxQuantity,
+                                                      @RequestParam String comDescription) {
+        commodities =  commodityService.selectByAnyParam(comId, comName.replace(" ", ""), minPrice, maxPrice, minQuantity, maxQuantity, comDescription);
+        if (commodities.size() == 0) {
+            getFailResult(404, "未找到数据");
+        }
+        return getSuccessResult(commodities);
     }
 }

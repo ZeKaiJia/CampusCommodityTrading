@@ -71,4 +71,28 @@
         FROM sys_commodity
         WHERE comQuantityNow &lt;= #{comQuantityNow}
     </select>
+    <select id="selectByQuantityBetween" resultType="cn.ky.jzk.model.Commodity">
+        SELECT *
+        FROM sys_commodity
+        WHERE comQuantityNow &gt;= #{min}
+        AND comQuantityNow &lt;= #{max}
+    </select>
+    <select id="selectByAnyParam" resultType="cn.ky.jzk.model.Commodity">
+        SELECT *
+        FROM sys_commodity
+        WHERE 1=1
+        <if test="comId != null and comId != ''">
+            AND comId like concat('%', '${comId}', '%')
+        </if>
+        <if test="comName != null and comName != ''">
+            AND comName like concat('%', '${comName}', '%')
+        </if>
+        AND comEachPrice &gt;= #{minPrice}
+        AND comEachPrice &lt;= #{maxPrice}
+        AND comQuantityNow &gt;= #{minQuantity}
+        AND comQuantityNow &lt;= #{maxQuantity}
+        <if test="comDescription != null and comDescription != ''">
+            AND comDescription like concat('%', '${comDescription}', '%')
+        </if>
+    </select>
 </mapper>

@@ -48,14 +48,46 @@
                                 <span>存货范围</span>
                             </el-col>
                             <el-col :span="2" style="height: 38px; display: flex; justify-content: center; align-items: center">
-                                {{queryInfo.value[0]}}~{{queryInfo.value[1]}}
+                                {{queryInfo.quantity[0]}}~{{queryInfo.quantity[1]}}
                             </el-col>
                             <el-col :span="7">
-                                <el-slider v-model="queryInfo.value" range :max="100">
+                                <el-slider v-model="queryInfo.quantity" range :max="100">
                                 </el-slider>
                             </el-col>
                         </el-row>
                         <el-row :gutter="10">
+                            <el-col :span="2"
+                                    style="height: 38px; display: flex; justify-content: center; align-items: center; margin-left: 12px">
+                                <span>单价范围</span>
+                            </el-col>
+                            <el-col :span="2"
+                                    style="height: 38px; display: flex; justify-content: center; align-items: center">
+                                {{queryInfo.price[0]}}~{{queryInfo.price[1]}}
+                            </el-col>
+                            <el-col :span="9">
+                                <el-slider v-model="queryInfo.price" range :max="1000" :min="1">
+                                </el-slider>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-form-item prop="comDescription">
+                                    <el-input
+                                            v-model="queryInfo.comDescription"
+                                            placeholder="请输入描述"
+                                            clearable
+                                            style="margin-left: 24px"
+                                    >
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="3">
+                                <el-button type="primary" @click="selectCommodity()" style="float: right;">搜索商品
+                                </el-button>
+                            </el-col>
+                            <el-col :span="1">
+                                <el-button type="text" icon="el-icon-refresh" circle
+                                           style="font-size: 32px; padding-top: 4px; margin-left: 12px"
+                                           @click="getCommodity"></el-button>
+                            </el-col>
                         </el-row>
                     </el-form>
                 </el-card>
@@ -265,7 +297,8 @@
                 queryInfo: {
                     comId: '',
                     comName: '',
-                    value: [0, 100],
+                    quantity: [0, 100],
+                    price: [1, 10000],
                     min: 0,
                     max: 0,
                     comDescription: ''
@@ -457,7 +490,29 @@
             changeMenu(activePath) {
                 this.information.$emit('activePath', activePath)
             },
+            async selectCommodity() {
+                const {data: res} = await this.$http.get(
+                    `commodity/selectByAnyParam?comId=${this.queryInfo.comId}&comName=${this.queryInfo.comName}
+                    &minPrice=${this.queryInfo.price[0]}&maxPrice=${this.queryInfo.price[1]}
+                    &minQuantity=${this.queryInfo.quantity[0]}&maxQuantity=${this.queryInfo.quantity[1]}
+                    &comDescription=${this.queryInfo.comDescription}`
+                )
+                if (res.code !== 200) {
+                    return this.$message.error('查询商品信息失败' + checkError(res))
+                }
+                if (res.data.length === 0) {
+                    return this.$message.error('没有找到符合要求的商品')
+                }
+                this.mainLoading = false
+                this.AllCommodity = res.data
+                return this.$message.success('查询商品成功!')
+            },
             async getCommodity() {
+                this.queryInfo.comId = ''
+                this.queryInfo.comName = ''
+                this.queryInfo.price = [0 , 1000]
+                this.queryInfo.quantity = [1, 100]
+                this.queryInfo.comDescription = ''
                 const {data: res} = await this.$http.get(
                     'commodity/select'
                 )
