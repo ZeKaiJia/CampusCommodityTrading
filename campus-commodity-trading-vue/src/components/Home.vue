@@ -10,7 +10,7 @@
         <div style="margin-right: 24px">
           <span style="cursor: default;">{{this.showUser}}</span>
           <div>
-            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+            <el-avatar :src="this.avatarUrl"/>
           </div>
           <el-button type="info" @click="logout">退出</el-button>
         </div>
@@ -77,11 +77,12 @@
 </template>
 
 <script>
-  import {clearCookie, getCookie} from '../plugins/utils'
+  import {checkError, clearCookie, getCookie} from '../plugins/utils'
 
   export default {
     data() {
       return {
+        avatarUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
         showUser: '',
         menuList: [
           {
@@ -124,6 +125,7 @@
     }
   },
   created() {
+    this.getAvatar()
     this.getMenuList()
     this.showUser = getCookie('user')
     this.information.$on('activePath', path => {
@@ -132,6 +134,18 @@
   },
   name: 'Home',
   methods: {
+    // 查找头像
+    async getAvatar() {
+      const name = getCookie('ID')
+      const { data: res } = await this.$http.get(`user/selectByName?userName=${name}`)
+      if (res.code !== 200) {
+        return this.$message.error('获取头像信息失败!' + checkError(res))
+      } else {
+        if (res.data.userAvatar !== '' && res.data.userAvatar !== null) {
+          this.avatarUrl = res.data.userAvatar
+        }
+      }
+    },
     async logout() {
       window.sessionStorage.clear()
       clearCookie('type')

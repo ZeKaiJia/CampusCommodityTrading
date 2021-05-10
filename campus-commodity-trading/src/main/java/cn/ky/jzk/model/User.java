@@ -53,4 +53,9 @@ public class User {
      * The User answer.
      */
     private String userAnswer;
+    /**
+     * 用户头像
+     * The User answer.
+     */
+    private String userAvatar;
 }

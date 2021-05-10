@@ -11,14 +11,22 @@
       <el-row :gutter="20">
         <el-col :span="6">
           <div class="centerFont">证件照
-            <el-button
-                    type="primary"
-                    icon="el-icon-upload2"
-                    size="mini"
-                    @click="showEditDialog()"
-                    style="margin-left: 12px;"
-                    round
-            />
+            <el-upload
+                    :on-change="handleChange"
+                    class="upload-demo"
+                    action=""
+                    :show-file-list="false"
+                    :http-request="updateAvatar"
+                    accept="image/jpeg,image/png,image/jpg"
+                    :file-list="fileList"
+            >
+              <el-button
+                      type="primary"
+                      icon="el-icon-upload2"
+                      size="mini"
+                      round
+              />
+            </el-upload>
           </div>
         </el-col>
         <el-col :span="18">
@@ -151,27 +159,28 @@
 
 <script>
   import {checkError, getCookie} from '../../plugins/utils'
-export default {
-  name: 'Self',
-  data() {
-    // 验证邮箱
-    const checkEmail = (rule, value, callback) => {
-      const regEmail = /^([a-zA-z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-      if (regEmail.test(value) || value === null) {
-        return callback()
-      } else {
-        callback(new Error('请输入合法的邮箱'))
+
+  export default {
+    name: 'Self',
+    data() {
+      // 验证邮箱
+      const checkEmail = (rule, value, callback) => {
+        const regEmail = /^([a-zA-z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
+        if (regEmail.test(value) || value === null) {
+          return callback()
+        } else {
+          callback(new Error('请输入合法的邮箱'))
+        }
       }
-    }
-    // 验证密码
-    const checkPass = (rule, value, callback) => {
-      if (value !== '********') {
-        return callback()
-      } else {
-        callback(new Error('请输入正确的密码'))
+      // 验证密码
+      const checkPass = (rule, value, callback) => {
+        if (value !== '********') {
+          return callback()
+        } else {
+          callback(new Error('请输入正确的密码'))
+        }
       }
-    }
-    // 验证手机号
+      // 验证手机号
     const checkMobile = (rule, value, callback) => {
       const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
       if (regMobile.test(value) || value === null) {
@@ -181,6 +190,10 @@ export default {
       }
     }
     return {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      fileList: [],
       dialogLoading: true,
       editDialogVisible: false,
       // 修改用户的表单数据
@@ -191,7 +204,8 @@ export default {
         userGender: '',
         userPhone: '',
         userEmail: '',
-        roleNameCn: ''
+        roleNameCn: '',
+        userAvatar: ''
       },
       editFormRules: {
         userPassword: [
@@ -243,15 +257,51 @@ export default {
     this.getAllInfo()
   },
   methods: {
+    handleChange(file, fileList) {
+      this.fileList = fileList
+    },
+    async updateAvatar() {
+      this.loading = true
+      const param = new FormData()
+      this.fileList.forEach(
+              // eslint-disable-next-line no-unused-vars
+              (val, index) => {
+                param.append("userAvatar", val.raw)
+              }
+      )
+      const {data: res} = await this.$http.post(
+              '/gitee/saveImg',
+              param
+      )
+      if (res.code !== 200) {
+        return this.$message.error('文件大小不能超过1M且只能上传一张')
+      } else {
+        this.editForm.userAvatar = "https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/" + res.data.resultImgUrl.split('/').pop()
+        this.editForm.userName = getCookie('ID')
+        const {data: role} = await this.$http.get(
+                `role/selectById?roleId=${getCookie('type')}`
+        )
+        const {data: res2} = await this.$http.post(
+                `user/update?roleNameCn=${role.data.roleNameCn}`,
+                this.editForm
+        )
+        if (res2.code !== 200) {
+          return this.$message.error('更新头像失败')
+        }
+      }
+      this.loading = false
+      this.getAllInfo()
+      return this.$message.success('上传头像成功')
+    },
     // 点击按钮修改用户信息
     editUser() {
       this.$refs.editFormRef.validate(async (valid) => {
         if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
         this.dialogLoading = true
-        const { data: role } = await this.$http.get(
+        const {data: role} = await this.$http.get(
                 `role/selectById?roleId=${getCookie('type')}`
         )
-        const { data: res } = await this.$http.post(
+        const {data: res} = await this.$http.post(
                 `user/update?roleNameCn=${role.data.roleNameCn}`,
                 this.editForm
         )
@@ -303,17 +353,21 @@ export default {
     },
     // 获取图片地址
     loadPic(gender) {
-      // 获取上次查询的证件照
-      const prePicSrc = this.picSrc
-      // 判断性别获取地址
-      if (gender === '男') {
-        this.picSrc = this.src[Math.floor(Math.random() * 5) + 5]
+      if (this.myInfo[0].userAvatar !== '' && this.myInfo[0].userAvatar !== null) {
+        this.picSrc = this.myInfo[0].userAvatar
       } else {
-        this.picSrc = this.src[Math.floor(Math.random() * 5)]
-      }
-      // 如果图片地址不相同则开启加载
-      if (prePicSrc !== this.picSrc) {
-        this.loading = true
+        // 获取上次查询的证件照
+        const prePicSrc = this.picSrc
+        // 判断性别获取地址
+        if (gender === '男') {
+          this.picSrc = this.src[Math.floor(Math.random() * 5) + 5]
+        } else {
+          this.picSrc = this.src[Math.floor(Math.random() * 5)]
+        }
+        // 如果图片地址不相同则开启加载
+        if (prePicSrc !== this.picSrc) {
+          this.loading = true
+        }
       }
     },
     // 图片加载成功
@@ -337,5 +391,9 @@ export default {
     font-weight: bold;
     font-size: 20px;
     text-align: center;
+  }
+  .upload-demo {
+    width: 50px !important;
+    display: inline-block;
   }
 </style>
