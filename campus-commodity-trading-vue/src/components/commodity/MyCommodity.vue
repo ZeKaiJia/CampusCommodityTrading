@@ -277,8 +277,7 @@
                 return this.$message.success('上传图片成功')
             },
             handleChange(file, fileList) {
-                console.log(fileList)
-                this.fileList = fileList
+                this.fileList = fileList.slice(-1)
             },
             // 点击按钮销毁无存货商品
             async removeZeroCommodity() {

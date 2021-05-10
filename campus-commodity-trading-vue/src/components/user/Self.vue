@@ -258,7 +258,7 @@
   },
   methods: {
     handleChange(file, fileList) {
-      this.fileList = fileList
+      this.fileList = fileList.slice(-1)
     },
     async updateAvatar() {
       this.loading = true

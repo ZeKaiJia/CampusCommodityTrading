@@ -53,7 +53,7 @@
           </template>
         </el-table-column>
         <el-table-column label="用户名" prop="userName" align="center"/>
-        <el-table-column label="密码" align="center">
+        <el-table-column label="密码" align="center" width="140px">
           <template slot-scope="scope">
             <span>{{showPassword ?
               (scope.row.userName === checkPassUser ? scope.row.userPassword + ' '  : '******** ')
@@ -66,8 +66,8 @@
           </template>
         </el-table-column>
         <el-table-column label="姓名" prop="userNick" align="center" width="100px"/>
-        <el-table-column label="性别" prop="userGender" align="center" width="100px"/>
-        <el-table-column label="联系电话" align="center">
+        <el-table-column label="性别" prop="userGender" align="center" width="60px"/>
+        <el-table-column label="联系电话" align="center" width="130px">
           <template slot-scope="scope">
             <span>{{scope.row.userPhone === null ? '暂无信息' : scope.row.userPhone}}</span>
           </template>
