@@ -26,10 +26,39 @@
                         :offset="index % 3 === 0 ? 0 : 3">
                     <el-card :body-style="{ padding: '0px' }" style="text-align: center; margin: 24px 0;">
                         <el-button type="danger" icon="el-icon-delete" circle
-                                   style="float: left; margin: 12px" @click="removeCommodity(commodity.comId)"></el-button>
+                                   style="float: left; margin: 12px"
+                                   @click="removeCommodity(commodity.comId)"></el-button>
                         <el-button type="primary" icon="el-icon-edit" circle
-                                   style="float: right; margin: 12px" @click="showEditDialog(commodity.comId)"></el-button>
-                        <i class="el-icon-present"/>
+                                   style="float: right; margin: 12px"
+                                   @click="showEditDialog(commodity.comId)"></el-button>
+                        <el-upload
+                                :on-change="handleChange"
+                                class="upload-demo"
+                                action=""
+                                :show-file-list="false"
+                                :http-request="updatePicture"
+                                accept="image/jpeg,image/png,image/jpg"
+                                :file-list="fileList"
+                                @click.native="getCurrentId(commodity.comId)"
+                        >
+                            <i v-if="commodity.comPicture === '' || commodity.comPicture === null"
+                               class="el-icon-present"/>
+                            <el-image
+                                    v-if="commodity.comPicture !== '' && commodity.comPicture !== null"
+                                    v-loading="loading"
+                                    style="width: 6.5vw; height: 6.5vw; min-width: 94px; min-height: 94px"
+                                    :src="commodity.comPicture"
+                                    fit="cover"
+                                    @load="loadSuccess"
+                                    @error="loadError"
+                            >
+                                <div slot="error" class="image-slot"
+                                     style="display: flex; justify-content: center; align-items: center; height: 100%; flex-flow: column">
+                                    <span class="el-icon-picture-outline" style="width: 48px; height: 48px; font-size: 48px"/>
+                                    <span style="margin-top: 12px">加载失败</span>
+                                </div>
+                            </el-image>
+                        </el-upload>
                         <el-row>编号 - {{commodity.comId}}</el-row>
                         <el-row>名称 - {{commodity.comName}}</el-row>
                         <el-row>数量 - {{commodity.comQuantity}}单位</el-row>
@@ -132,6 +161,12 @@
         name: "MyCommodity",
         data() {
             return {
+                currentComId: '',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                loading: false,
+                fileList: [],
                 dialogLoading: true,
                 addDialogVisible: false,
                 editDialogVisible: false,
@@ -149,7 +184,8 @@
                     comQuantity: '',
                     comQuantityNow: '',
                     comEachPrice: '',
-                    comDescription: ''
+                    comDescription: '',
+                    comPicture: ''
                 },
                 // 添加表单的验证规则对象
                 addFormRules: {
@@ -198,6 +234,52 @@
             this.getMyCommodity()
         },
         methods: {
+            // 图片加载成功
+            loadSuccess() {
+                this.loading = false
+            },
+            // 图片加载失败
+            loadError() {
+                this.loading = false
+            },
+            getCurrentId(comId) {
+                this.currentComId = comId
+            },
+            async updatePicture() {
+                this.loading = true
+                const param = new FormData()
+                this.fileList.forEach(
+                    // eslint-disable-next-line no-unused-vars
+                    (val, index) => {
+                        param.append("fileImg", val.raw)
+                    }
+                )
+                const {data: res} = await this.$http.post(
+                    '/gitee/saveImg',
+                    param
+                )
+                if (res.code !== 200) {
+                    return this.$message.error('文件大小不能超过1M且只能上传一张')
+                } else {
+                    this.editForm.comDescription = ''
+                    this.editForm.comId = this.currentComId
+                    this.editForm.comPicture = "https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/" + res.data.resultImgUrl.split('/').pop()
+                    const {data: res2} = await this.$http.post(
+                        'commodity/update',
+                        this.editForm
+                    )
+                    if (res2.code !== 200) {
+                        return this.$message.error('更新图片失败')
+                    }
+                }
+                this.loading = false
+                this.getMyCommodity()
+                return this.$message.success('上传图片成功')
+            },
+            handleChange(file, fileList) {
+                console.log(fileList)
+                this.fileList = fileList
+            },
             // 点击按钮销毁无存货商品
             async removeZeroCommodity() {
                 // 弹框询问

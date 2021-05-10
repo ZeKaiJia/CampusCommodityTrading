@@ -42,4 +42,9 @@ public class Commodity {
      * The Commodity Description.
      */
     private String comDescription;
+    /**
+     * 图片
+     * The Commodity Description.
+     */
+    private String comPicture;
 }

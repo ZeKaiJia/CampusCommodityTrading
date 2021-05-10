@@ -70,7 +70,22 @@
                         <el-button type="primary" icon="el-icon-shopping-cart-2" circle
                                    style="float: right; margin: 12px"
                                    @click="showBuyCommodityDialog(commodity.comId)"></el-button>
-                        <i class="el-icon-present"></i>
+                        <el-image
+                                v-if="commodity.comPicture !== '' && commodity.comPicture !== null"
+                                v-loading="loading"
+                                style="width: 6.5vw; height: 6.5vw; min-width: 94px; min-height: 94px"
+                                :src="commodity.comPicture"
+                                fit="cover"
+                                @load="loadSuccess"
+                                @error="loadError"
+                        >
+                            <div slot="error" class="image-slot"
+                                 style="display: flex; justify-content: center; align-items: center; height: 100%; flex-flow: column">
+                                <span class="el-icon-picture-outline" style="width: 48px; height: 48px; font-size: 48px"/>
+                                <span style="margin-top: 12px">加载失败</span>
+                            </div>
+                        </el-image>
+                        <i v-if="commodity.comPicture === '' || commodity.comPicture === null" class="el-icon-present"></i>
                         <el-row>编号 - {{commodity.comId}}</el-row>
                         <el-row>名称 - {{commodity.comName}}</el-row>
                         <el-row>数量 - {{commodity.comQuantity}}单位</el-row>
@@ -140,7 +155,22 @@
                 <transition name="fade">
                     <div v-if="activeStep === 0"
                          style="position: absolute; left: 50%; transform: translate(-50%); margin-top: 8px">
-                        <i class="el-icon-present"></i>
+                        <i v-if="buyCommodityPost.comInfo.comPicture === '' || buyCommodityPost.comInfo.comPicture === null" class="el-icon-present"></i>
+                        <el-image
+                                v-if="buyCommodityPost.comInfo.comPicture !== '' && buyCommodityPost.comInfo.comPicture !== null"
+                                v-loading="loading"
+                                style="width: 6.5vw; height: 6.5vw; min-width: 94px; min-height: 94px"
+                                :src="buyCommodityPost.comInfo.comPicture"
+                                fit="cover"
+                                @load="loadSuccess"
+                                @error="loadError"
+                        >
+                            <div slot="error" class="image-slot"
+                                 style="display: flex; justify-content: center; align-items: center; height: 100%; flex-flow: column">
+                                <span class="el-icon-picture-outline" style="width: 48px; height: 48px; font-size: 48px"/>
+                                <span style="margin-top: 12px">加载失败</span>
+                            </div>
+                        </el-image>
                         <el-row>编号 - {{buyCommodityPost.comInfo.comId}}</el-row>
                         <el-row>名称 - {{buyCommodityPost.comInfo.comName}}</el-row>
                         <el-row>数量 - {{buyCommodityPost.comInfo.comQuantity}}单位</el-row>
@@ -230,6 +260,7 @@
                 }
             }
             return {
+                loading: false,
                 // TODO
                 queryInfo: {
                     comId: '',
@@ -314,6 +345,14 @@
             this.clipboard2.destroy()
         },
         methods: {
+            // 图片加载成功
+            loadSuccess() {
+                this.loading = false
+            },
+            // 图片加载失败
+            loadError() {
+                this.loading = false
+            },
             async buy() {
                 this.buyForm.comQuantityNow = this.buyForm.comQuantity
                 for (let i = 0; i < this.AllCommodity.length; i++) {

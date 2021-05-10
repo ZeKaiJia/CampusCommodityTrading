@@ -266,7 +266,7 @@
       this.fileList.forEach(
               // eslint-disable-next-line no-unused-vars
               (val, index) => {
-                param.append("userAvatar", val.raw)
+                param.append("fileImg", val.raw)
               }
       )
       const {data: res} = await this.$http.post(

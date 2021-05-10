@@ -27,11 +27,11 @@ public class GiteeImgController extends BaseController {
 
     @RequestMapping("saveImg")
     @ResponseBody
-    public Response<Map<String, Object>> saveImg(@RequestParam(value = "userAvatar", required = true) MultipartFile userAvatar) throws Exception {
+    public Response<Map<String, Object>> saveImg(@RequestParam(value = "fileImg", required = true) MultipartFile fileImg) throws Exception {
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
-        String trueFileName = userAvatar.getOriginalFilename();
+        String trueFileName = fileImg.getOriginalFilename();
 
         assert trueFileName != null;
         String suffix = trueFileName.substring(trueFileName.lastIndexOf("."));
@@ -39,7 +39,7 @@ public class GiteeImgController extends BaseController {
         String fileName = System.currentTimeMillis() + suffix;
 
 
-        String paramImgFile = Base64.encode(userAvatar.getBytes());
+        String paramImgFile = Base64.encode(fileImg.getBytes());
 
         //转存到gitee
         Map<String, Object> paramMap = new HashMap<>();
