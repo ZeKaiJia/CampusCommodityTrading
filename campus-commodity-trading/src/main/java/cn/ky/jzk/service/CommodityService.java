@@ -19,6 +19,8 @@ public interface CommodityService {
 
     Commodity update(@NotNull Commodity commodity);
 
+    Commodity updateRate(String comId, Double rate);
+
     List<Commodity> select();
 
     Commodity selectById(String comId);

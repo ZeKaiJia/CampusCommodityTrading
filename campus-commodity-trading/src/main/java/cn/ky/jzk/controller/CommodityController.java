@@ -74,6 +74,16 @@ public class CommodityController extends BaseController {
         return getSuccessResult(temp);
     }
 
+    @PostMapping(value = "/updateRate")
+    @ResponseBody
+    public Response<Commodity> updateRate(@RequestParam String comId, @RequestParam Double rate) {
+        temp = commodityService.updateRate(comId, rate);
+        if (temp == null) {
+            return getFailResult(404, "数据错误");
+        }
+        return getSuccessResult(temp);
+    }
+
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<Commodity>> select() {

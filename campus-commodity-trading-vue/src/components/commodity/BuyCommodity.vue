@@ -105,7 +105,7 @@
                         <el-image
                                 v-if="commodity.comPicture !== '' && commodity.comPicture !== null"
                                 v-loading="loading"
-                                style="width: 6.5vw; height: 6.5vw; min-width: 94px; min-height: 94px"
+                                style="width: 6.5vw; height: 6.5vw; min-width: 100px; min-height: 101px"
                                 :src="commodity.comPicture"
                                 fit="cover"
                                 @load="loadSuccess"
@@ -113,11 +113,22 @@
                         >
                             <div slot="error" class="image-slot"
                                  style="display: flex; justify-content: center; align-items: center; height: 100%; flex-flow: column">
-                                <span class="el-icon-picture-outline" style="width: 48px; height: 48px; font-size: 48px"/>
+                                <span class="el-icon-picture-outline"
+                                      style="width: 48px; height: 48px; font-size: 48px"/>
                                 <span style="margin-top: 12px">加载失败</span>
                             </div>
                         </el-image>
-                        <i v-if="commodity.comPicture === '' || commodity.comPicture === null" class="el-icon-present"></i>
+                        <i v-if="commodity.comPicture === '' || commodity.comPicture === null"
+                           class="el-icon-present"></i>
+                        <el-rate
+                                v-if="commodity.comRate !== 0"
+                                v-model="commodity.comRate"
+                                :icon-classes="iconClasses"
+                                void-icon-class="el-icon-star-off"
+                                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                                disabled show-score>
+                        </el-rate>
+                        <el-row v-if="commodity.comRate === 0">暂无评价</el-row>
                         <el-row>编号 - {{commodity.comId}}</el-row>
                         <el-row>名称 - {{commodity.comName}}</el-row>
                         <el-row>数量 - {{commodity.comQuantity}}单位</el-row>
@@ -175,13 +186,14 @@
         <el-dialog
                 title="购买商品"
                 :visible.sync="buyCommodityDialogVisible"
-                width="55%"
+                width="70%"
                 @close="buyCommodityDialogClosed"
         >
             <el-steps :active="activeStep" finish-status="success" simple style="margin-top: 20px">
                 <el-step title="确认商品信息"></el-step>
                 <el-step title="填写个人信息"></el-step>
                 <el-step title="扫码支付购买"></el-step>
+                <el-step title="收货发布评价"></el-step>
             </el-steps>
             <el-card style="margin-top: 12px; text-align: center; height: 270px">
                 <transition name="fade">
@@ -250,16 +262,29 @@
                     <div v-if="activeStep === 2" id="qrcodeImg"></div>
                 </transition>
                 <transition name="fade">
-                    <div v-if="activeStep === 3" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -5%)">
-                        <el-progress type="circle" :percentage="progressLoading" :stroke-width="12" :color="colors"></el-progress>
+                    <div v-if="activeStep === 3"
+                         style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -20%)">
+                        <el-progress v-if="progressLoading !== 101" type="circle" :percentage="progressLoading"
+                                     :stroke-width="12" :color="colors"></el-progress>
+                        <div v-if="progressLoading === 101">
+                            发布您的评价，您的好评是给予卖家最大的支持
+                            <el-rate
+                                    v-model="rate"
+                                    :icon-classes="iconClasses"
+                                    void-icon-class="el-icon-star-off"
+                                    :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                                    show-score>
+                            </el-rate>
+                        </div>
                     </div>
                 </transition>
             </el-card>
             <!--底部按钮区-->
             <span slot="footer" class="dialog-footer">
                 <el-button @click="buyCommodityPreStep" v-if="activeStep > 0 && activeStep < 3">上 一 步</el-button>
-                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 2">购 买</el-button>
                 <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep < 2">下 一 步</el-button>
+                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 2">购 买</el-button>
+                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 3">发 布</el-button>
             </span>
         </el-dialog>
         <!--回到顶部-->
@@ -292,6 +317,8 @@
                 }
             }
             return {
+                rate: null,
+                iconClasses: ['el-icon-heavy-rain', 'el-icon-cloudy-and-sunny', 'el-icon-sunny'],
                 loading: false,
                 // TODO
                 queryInfo: {
@@ -378,6 +405,24 @@
             this.clipboard2.destroy()
         },
         methods: {
+            async updateRate() {
+                if (this.rate === null) {
+                    this.$message.error('请填写评价!')
+                } else {
+                    const {data: res} = await this.$http.post(
+                        `commodity/updateRate?comId=${this.buyCommodityPost.comInfo.comId}&rate=${this.rate}`
+                    )
+                    await this.getCommodity()
+                    this.rate = null
+                    if (res.code !== 200) {
+                        this.buyCommodityDialogVisible = false
+                        return this.$message.error('发布评价失败!')
+                    } else {
+                        this.closeBuyCommodityDialogVisible()
+                        return this.$message.success('发布评价成功!')
+                    }
+                }
+            },
             // 图片加载成功
             loadSuccess() {
                 this.loading = false
@@ -410,9 +455,6 @@
                     if (res2.code !== 200) {
                         this.buyCommodityDialogVisible = false
                         return this.$message.error('购买商品失败' + checkError(res))
-                    } else {
-                        this.closeBuyCommodityDialogVisible()
-                        await this.getCommodity()
                     }
                 }
             },
@@ -437,12 +479,14 @@
                     this.addStep()
                     this.inter = setInterval(this.progress, 60)
                     setTimeout(this.buy, 7000)
+                } else if (this.activeStep === 3) {
+                    this.updateRate()
                 } else {
                     this.addStep()
                 }
             },
             addStep() {
-                this.activeStep < 3 ? this.activeStep++ : this.activeStep
+                this.activeStep < 4 ? this.activeStep++ : this.activeStep
             },
             closeBuyCommodityDialogVisible() {
                 this.$message.success('购买成功，请到 商品管理 > 我的商品 中进行查看')
@@ -479,10 +523,10 @@
                 }
             },
             progress() {
-                if (this.progressLoading < 100) {
+                if (this.progressLoading < 101) {
                     this.progressLoading++
                 } else {
-                    this.progressLoading = 100
+                    this.progressLoading = 101
                     clearInterval(this.inter)
                 }
             },

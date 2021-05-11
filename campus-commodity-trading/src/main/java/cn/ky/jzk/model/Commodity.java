@@ -43,8 +43,18 @@ public class Commodity {
      */
     private String comDescription;
     /**
+     * 评价
+     * The Commodity Rate.
+     */
+    private Double comRate;
+    /**
+     * 评价数量
+     * The Commodity Sale Count.
+     */
+    private Integer comRateCount;
+    /**
      * 图片
-     * The Commodity Description.
+     * The Commodity Picture.
      */
     private String comPicture;
 }

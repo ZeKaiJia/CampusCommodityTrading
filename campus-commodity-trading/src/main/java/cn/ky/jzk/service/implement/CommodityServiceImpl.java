@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -59,6 +60,20 @@ public class CommodityServiceImpl implements CommodityService {
         }
         commodityMapper.update(commodity);
         return commodity;
+    }
+
+    @Override
+    public Commodity updateRate(String comId, Double rate) {
+        temp = commodityMapper.selectById(comId);
+        if (temp == null) {
+            return null;
+        }
+        Double comRate = (temp.getComRate() * 1.0 * temp.getComRateCount() + rate);
+        temp.setComRateCount(temp.getComRateCount() + 1);
+        BigDecimal bg = new BigDecimal(comRate * 1.0 / temp.getComRateCount());
+        comRate = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        commodityMapper.updateRate(comId, comRate, temp.getComRateCount());
+        return commodityMapper.selectById(comId);
     }
 
     @Override

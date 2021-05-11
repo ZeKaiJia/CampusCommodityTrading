@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 10/05/2021 21:57:46
+ Date: 11/05/2021 23:18:56
 */
 
 SET NAMES utf8mb4;
@@ -30,16 +30,16 @@ CREATE TABLE `rel_user_commodity` (
   KEY `id` (`comId`),
   CONSTRAINT `id` FOREIGN KEY (`comId`) REFERENCES `sys_commodity` (`comId`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `name` FOREIGN KEY (`userName`) REFERENCES `sys_user` (`userName`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of rel_user_commodity
 -- ----------------------------
 BEGIN;
-INSERT INTO `rel_user_commodity` VALUES (1, 'SH001', 'Xb18620208');
 INSERT INTO `rel_user_commodity` VALUES (2, 'SH002', 'Xb18620208');
 INSERT INTO `rel_user_commodity` VALUES (3, 'SH003', 'Xb18620208');
 INSERT INTO `rel_user_commodity` VALUES (15, 'SH004', 'Xb18620208');
+INSERT INTO `rel_user_commodity` VALUES (32, 'SH001', 'Xb18620208');
 COMMIT;
 
 -- ----------------------------
@@ -78,7 +78,9 @@ CREATE TABLE `sys_commodity` (
   `comQuantityNow` int NOT NULL COMMENT '当前数量',
   `comEachPrice` double NOT NULL COMMENT '单价',
   `comDescription` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '描述',
-  `comPicture` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '图片',
+  `comRateCount` int NOT NULL COMMENT '评价次数',
+  `comRate` double NOT NULL COMMENT '评价',
+  `comPicture` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`comId`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -86,10 +88,10 @@ CREATE TABLE `sys_commodity` (
 -- Records of sys_commodity
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_commodity` VALUES ('SH001', '扫把', 1, 1, 10, '一把破旧的扫把', 'https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/1620647417984.png');
-INSERT INTO `sys_commodity` VALUES ('SH002', '拖把', 2, 2, 20, '一把破旧的拖把', 'https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/1620647602176.png');
-INSERT INTO `sys_commodity` VALUES ('SH003', '帽子', 3, 3, 30, '一顶破旧的帽子', 'https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/1620654043454.png');
-INSERT INTO `sys_commodity` VALUES ('SH004', '靴子', 4, 4, 4, '一双破旧的靴子', 'https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/1620654880844.png');
+INSERT INTO `sys_commodity` VALUES ('SH001', '扫把', 1, 1, 10, '一把破旧的扫把', 1, 1, 'https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/1620647426805.png');
+INSERT INTO `sys_commodity` VALUES ('SH002', '拖把', 2, 2, 20, '一把破旧的拖把', 1, 3, 'https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/1620647602176.png');
+INSERT INTO `sys_commodity` VALUES ('SH003', '帽子', 3, 3, 30, '一顶破旧的帽子', 1, 4, 'https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/1620654043454.png');
+INSERT INTO `sys_commodity` VALUES ('SH004', '靴子', 4, 3, 40, '一双破旧的靴子', 4, 3.75, 'https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/1620654880844.png');
 COMMIT;
 
 -- ----------------------------

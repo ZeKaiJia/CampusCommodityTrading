@@ -59,6 +59,15 @@
                                 </div>
                             </el-image>
                         </el-upload>
+                        <el-rate
+                                v-if="commodity.comRate !== 0"
+                                v-model="commodity.comRate"
+                                :icon-classes="iconClasses"
+                                void-icon-class="el-icon-star-off"
+                                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                                disabled show-score>
+                        </el-rate>
+                        <el-row v-if="commodity.comRate === 0">暂无评价</el-row>
                         <el-row>编号 - {{commodity.comId}}</el-row>
                         <el-row>名称 - {{commodity.comName}}</el-row>
                         <el-row>数量 - {{commodity.comQuantity}}单位</el-row>
@@ -161,6 +170,7 @@
         name: "MyCommodity",
         data() {
             return {
+                iconClasses: ['el-icon-heavy-rain', 'el-icon-cloudy-and-sunny', 'el-icon-sunny'],
                 currentComId: '',
                 headers: {
                     'Content-Type': 'multipart/form-data'
