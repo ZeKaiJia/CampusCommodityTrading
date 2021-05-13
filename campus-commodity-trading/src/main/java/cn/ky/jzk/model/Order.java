@@ -21,6 +21,11 @@ public class Order {
      */
     private Integer id;
     /**
+     * 交易商品
+     * The User name.
+     */
+    private String orderComId;
+    /**
      * 卖家账号
      * The User name.
      */

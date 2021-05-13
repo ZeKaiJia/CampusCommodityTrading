@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author: Kevin
@@ -33,6 +34,8 @@ public class UserController extends BaseController {
     private RelationCommodityUserService relationCommodityUserService;
 
     private User temp;
+
+    List<User> temps;
 
     @GetMapping(value = "/hello")
     public String hello() {
@@ -73,11 +76,11 @@ public class UserController extends BaseController {
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<User>> select() {
-        List<User> users = userService.select();
-        if (users.size() == 0) {
+        temps = userService.select();
+        if (temps.size() == 0) {
             return getFailResult(404, "未找到数据");
         }
-        return getSuccessResult(users);
+        return getSuccessResult(temps);
     }
 
     @GetMapping(value = "/selectByName")

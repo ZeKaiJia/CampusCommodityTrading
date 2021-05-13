@@ -2,7 +2,7 @@ server:
   port: 14001
 logging:
   level:
-    root: WARN
+    root: INFO
     io.swagger.models.parameters.AbstractSerializableParameter: ERROR
 ################### Spring DataSource Configuration ##########################
 spring:

@@ -31,6 +31,8 @@ public class RoleController extends BaseController {
 
     private Role temp;
 
+    List<Role> temps;
+
     @PostMapping(value = "/insert")
     @ResponseBody
     public Response<Role> insert(@RequestBody Role role) {
@@ -64,11 +66,11 @@ public class RoleController extends BaseController {
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<Role>> select() {
-        List<Role> roles = roleService.select();
-        if (roles.size() == 0) {
+        temps = roleService.select();
+        if (temps.size() == 0) {
             return getFailResult(404, "未找到数据");
         }
-        return getSuccessResult(roles);
+        return getSuccessResult(temps);
     }
 
     @GetMapping(value = "/selectUserRole")
