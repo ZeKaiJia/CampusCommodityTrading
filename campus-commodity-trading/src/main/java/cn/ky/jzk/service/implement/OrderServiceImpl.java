@@ -73,11 +73,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> select() {
-        return orderMapper.select();
+        temps = orderMapper.select();
+        if (temps.size() == 0) {
+            return null;
+        }
+        return temps;
     }
 
     @Override
     public List<Order> selectByAnyParam(Integer id, String orderComId, String orderSalerName, String orderBuyerName, Integer orderStatus) {
-        return orderMapper.selectByAnyParam(id, orderComId, orderSalerName, orderBuyerName, orderStatus);
+        temps = orderMapper.selectByAnyParam(id, orderComId, orderSalerName, orderBuyerName, orderStatus);
+        if (temps.size() == 0) {
+            return null;
+        }
+        return temps;
     }
 }

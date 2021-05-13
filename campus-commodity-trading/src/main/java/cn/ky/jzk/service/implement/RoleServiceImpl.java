@@ -26,6 +26,8 @@ public class RoleServiceImpl implements RoleService {
 
     private Role temp;
 
+    private List<Role> temps;
+
     @Override
     public Role insert(@NotNull Role role) {
         temp = roleMapper.selectById(role.getRoleId());
@@ -58,7 +60,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> select() {
-        return roleMapper.select();
+        temps = roleMapper.select();
+        if (temps.size() == 0) {
+            return null;
+        }
+        return temps;
     }
 
     @Override

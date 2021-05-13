@@ -35,6 +35,8 @@ public class UserServiceImpl implements UserService {
 
     private User temp;
 
+    private List<User> temps;
+
     @Override
     public User insert(@NotNull User user, String roleNameCn) {
         temp = userMapper.selectByName(user.getUserName());
@@ -72,7 +74,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> select() {
-        return userMapper.select();
+        temps = userMapper.select();
+        if (temps.size() == 0) {
+            return null;
+        }
+        return temps;
     }
 
     @Override

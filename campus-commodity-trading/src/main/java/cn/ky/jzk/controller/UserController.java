@@ -37,19 +37,11 @@ public class UserController extends BaseController {
 
     List<User> temps;
 
-    @GetMapping(value = "/hello")
-    public String hello() {
-        return "hello!";
-    }
-
     @PostMapping(value = "/insert")
     @ResponseBody
     public Response<User> insert(@RequestBody User user, @RequestParam String roleNameCn) {
         temp = userService.insert(user, roleNameCn);
-        if (temp == null) {
-            return getFailResult(404, "用户名已存在");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "用户已存在");
     }
 
     @PostMapping(value = "/delete")
@@ -67,39 +59,27 @@ public class UserController extends BaseController {
     @ResponseBody
     public Response<User> update(@RequestBody User user, @RequestParam String roleNameCn) {
         temp = userService.update(user, roleNameCn);
-        if (temp == null) {
-            return getFailResult(404, "数据错误");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "数据错误");
     }
 
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<User>> select() {
         temps = userService.select();
-        if (temps.size() == 0) {
-            return getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temps);
+        return dataAnalyse(temps, 404, "未找到数据");
     }
 
     @GetMapping(value = "/selectByName")
     @ResponseBody
     public Response<User> selectByName(@RequestParam String userName) {
         temp =  userService.selectByName(userName);
-        if (temp == null) {
-            getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "未找到数据");
     }
 
     @PostMapping(value = "/login")
     @ResponseBody
     public Response<User> login(@RequestBody User user) {
         temp = userService.login(user.getUserName(), user.getUserPassword());
-        if (temp == null) {
-            return getFailResult(404, "登录失败");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "登陆失败");
     }
 }

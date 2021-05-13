@@ -35,9 +35,9 @@ public class RelationCommodityUserServiceImpl implements RelationCommodityUserSe
     private UserMapper userMapper;
 
 
-    List<Commodity> commodities = new ArrayList<Commodity>();
+    List<Commodity> commodities;
 
-    List<User> users = new ArrayList<User>();
+    List<User> users;
 
 
     @Override
@@ -52,13 +52,18 @@ public class RelationCommodityUserServiceImpl implements RelationCommodityUserSe
         for (String str : res) {
             commodities.add(commodityMapper.selectById(str));
         }
+        if (commodities.size() == 0) {
+            return null;
+        }
         return commodities;
     }
 
     @Override
     public User selectById(String comId) {
-        users.clear();
         String res = relationCommodityUserMapper.selectById(comId);
+        if (res == null && "".equals(res)) {
+            return null;
+        }
         return userMapper.selectByName(res);
     }
 

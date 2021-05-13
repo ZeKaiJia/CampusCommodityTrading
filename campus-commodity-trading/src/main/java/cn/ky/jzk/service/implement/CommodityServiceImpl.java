@@ -26,6 +26,8 @@ public class CommodityServiceImpl implements CommodityService {
 
     private Commodity temp;
 
+    private List<Commodity> temps;
+
     @Override
     public Commodity insert(@NotNull Commodity commodity) {
         temp = commodityMapper.selectById(commodity.getComId());
@@ -78,7 +80,11 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Override
     public List<Commodity> select() {
-        return commodityMapper.select();
+        temps = commodityMapper.select();
+        if (temps.size() == 0) {
+            return null;
+        }
+        return temps;
     }
 
     @Override
@@ -88,26 +94,46 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Override
     public List<Commodity> selectByName(String comName) {
-        return commodityMapper.selectByName(comName);
+        temps = commodityMapper.selectByName(comName);
+        if (temps.size() == 0) {
+            return null;
+        }
+        return temps;
     }
 
     @Override
     public List<Commodity> selectByPriceBetween(Double min, Double max) {
-        return commodityMapper.selectByPriceBetween(min, max);
+        temps = commodityMapper.selectByPriceBetween(min, max);
+        if (temps.size() == 0) {
+            return null;
+        }
+        return temps;
     }
 
     @Override
     public List<Commodity> selectByQuantityBetween(Integer min, Integer max) {
-        return commodityMapper.selectByQuantityBetween(min, max);
+        temps = commodityMapper.selectByQuantityBetween(min, max);
+        if (temps.size() == 0) {
+            return null;
+        }
+        return temps;
     }
 
     @Override
     public List<Commodity> selectByQuantityNow(Integer comQuantityNow) {
-        return commodityMapper.selectByQuantityNow(comQuantityNow);
+        temps = commodityMapper.selectByQuantityNow(comQuantityNow);
+        if (temps.size() == 0) {
+            return null;
+        }
+        return temps;
     }
 
     @Override
     public List<Commodity> selectByAnyParam(String comId, String comName, Double minPrice, Double maxPrice, Integer minQuantity, Integer maxQuantity, String comDescription) {
-        return commodityMapper.selectByAnyParam(comId, comName, minPrice, maxPrice, minQuantity, maxQuantity, comDescription);
+        temps = commodityMapper.selectByAnyParam(comId, comName, minPrice, maxPrice, minQuantity, maxQuantity, comDescription);
+        if (temps.size() == 0) {
+            return null;
+        }
+        return temps;
     }
 }

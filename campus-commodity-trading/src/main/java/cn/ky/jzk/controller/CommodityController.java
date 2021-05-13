@@ -68,90 +68,63 @@ public class CommodityController extends BaseController {
     @ResponseBody
     public Response<Commodity> update(@RequestBody Commodity commodity) {
         temp = commodityService.update(commodity);
-        if (temp == null) {
-            return getFailResult(404, "数据错误");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "数据错误");
     }
 
     @PostMapping(value = "/updateRate")
     @ResponseBody
     public Response<Commodity> updateRate(@RequestParam String comId, @RequestParam Double rate) {
         temp = commodityService.updateRate(comId, rate);
-        if (temp == null) {
-            return getFailResult(404, "数据错误");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "数据错误");
     }
 
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<Commodity>> select() {
         temps = commodityService.select();
-        if (temps.size() == 0) {
-            return getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temps);
+        return dataAnalyse(temps, 404, "未找到数据");
     }
 
     @GetMapping(value = "/selectById")
     @ResponseBody
     public Response<Commodity> selectById(@RequestParam String comId) {
         temp = commodityService.selectById(comId);
-        if (temp == null) {
-            getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "未找到数据");
     }
 
     @GetMapping(value = "/selectByName")
     @ResponseBody
     public Response<List<Commodity>> selectByName(@RequestParam String comName) {
         temps = commodityService.selectByName(comName);
-        if (temps.size() == 0) {
-            getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temps);
+        return dataAnalyse(temps, 404, "未找到数据");
     }
 
     @GetMapping(value = "/selectByPriceBetween")
     @ResponseBody
     public Response<List<Commodity>> selectByPriceBetween(@RequestParam Double min, @RequestParam Double max) {
         temps =  commodityService.selectByPriceBetween(min, max);
-        if (temps.size() == 0) {
-            getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temps);
+        return dataAnalyse(temps, 404, "未找到数据");
     }
 
     @GetMapping(value = "/selectByQuantityNow")
     @ResponseBody
     public Response<List<Commodity>> selectByQuantityNow(@RequestParam Integer comQuantityNow) {
         temps =  commodityService.selectByQuantityNow(comQuantityNow);
-        if (temps.size() == 0) {
-            getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temps);
+        return dataAnalyse(temps, 404, "未找到数据");
     }
 
     @GetMapping(value = "/selectByQuantityBetween")
     @ResponseBody
     public Response<List<Commodity>> selectByQuantityBetween(@RequestParam Integer min, @RequestParam Integer max) {
         temps =  commodityService.selectByQuantityBetween(min, max);
-        if (temps.size() == 0) {
-            getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temps);
+        return dataAnalyse(temps, 404, "未找到数据");
     }
 
     @GetMapping(value = "/selectUserCommodity")
     @ResponseBody
     public Response<List<Commodity>> selectUserCommodity(String userName) {
         List<Commodity> res = relationCommodityUserService.selectByName(userName);
-        if (res.size() == 0) {
-            getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(res);
+        return dataAnalyse(temps, 404, "未找到数据");
     }
 
     @GetMapping(value = "/selectCommodityUser")

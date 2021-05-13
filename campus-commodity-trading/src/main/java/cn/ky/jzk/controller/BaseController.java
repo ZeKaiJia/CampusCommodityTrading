@@ -100,4 +100,12 @@ public abstract class BaseController {
     protected long getCurrentUserId() {
         return 1L;
     }
+
+    protected <T> Response<T> dataAnalyse(T data, Integer code, String message) {
+        if (data == null) {
+            return getFailResult(code, message);
+        } else {
+            return getSuccessResult(data);
+        }
+    }
 }

@@ -26,7 +26,7 @@ public class RelationRoleUserServiceImpl implements RelationRoleUserService {
             relationRoleUserMapper.insert(userName, roleId);
             return "关联用户角色成功";
         } catch (Exception e) {
-            return "关联用户角色失败";
+            return null;
         }
     }
 
@@ -36,7 +36,7 @@ public class RelationRoleUserServiceImpl implements RelationRoleUserService {
             relationRoleUserMapper.update(userName, roleId);
             return "修改用户角色成功";
         } catch (Exception e) {
-            return "关联用户角色失败";
+            return null;
         }
     }
 

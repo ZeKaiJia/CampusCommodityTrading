@@ -37,59 +37,41 @@ public class RoleController extends BaseController {
     @ResponseBody
     public Response<Role> insert(@RequestBody Role role) {
         temp = roleService.insert(role);
-        if (temp == null) {
-            return getFailResult(404, "ID已存在");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "ID已存在");
     }
 
     @PostMapping(value = "/delete")
     @ResponseBody
     public Response<Role> delete(@RequestParam String roleId) {
         temp = roleService.delete(roleId);
-        if (temp == null) {
-            return getFailResult(404, "ID不存在");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "ID不存在");
     }
 
     @PostMapping(value = "/update")
     @ResponseBody
     public Response<Role> update(@RequestBody Role role) {
         temp = roleService.update(role);
-        if (temp == null) {
-            return getFailResult(404, "数据错误");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "数据错误");
     }
 
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<Role>> select() {
         temps = roleService.select();
-        if (temps.size() == 0) {
-            return getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temps);
+        return dataAnalyse(temps, 404, "未找到数据");
     }
 
     @GetMapping(value = "/selectUserRole")
     @ResponseBody
     public Response<Role> selectUserRole(@RequestParam String userName) {
         temp = relationRoleUserService.selectUserRole(userName);
-        if (temp == null) {
-            return getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "未找到数据");
     }
 
     @GetMapping(value = "/selectById")
     @ResponseBody
     public Response<Role> selectById(@RequestParam String roleId) {
         temp =  roleService.selectById(roleId);
-        if (temp == null) {
-            getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temp);
+        return dataAnalyse(temp, 404, "未找到数据");
     }
 }
