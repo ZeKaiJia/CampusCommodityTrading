@@ -1,8 +1,6 @@
 package cn.ky.jzk.mapper;
 
 import cn.ky.jzk.model.Order;
-import cn.ky.jzk.model.User;
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +22,7 @@ public interface OrderMapper {
     List<Order> select();
 
     List<Order> selectByAnyParam(@Param("id") Integer id, @Param("orderComId") String orderComId,
+                                 @Param("orderNewId") String orderNewId,
                                  @Param("orderSalerName") String orderSalerName,
                                  @Param("orderBuyerName") String orderBuyerName,
                                  @Param("orderStatus") Integer orderStatus);

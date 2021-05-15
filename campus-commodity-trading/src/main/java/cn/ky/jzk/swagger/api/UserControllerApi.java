@@ -1,15 +1,9 @@
 package cn.ky.jzk.swagger.api;
 
-import cn.ky.jzk.model.Commodity;
 import cn.ky.jzk.model.User;
 import cn.ky.jzk.vo.Response;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,19 +13,19 @@ public interface UserControllerApi {
     @ApiImplicitParams({
             @ApiImplicitParam(value = "角色中文名", example = "管理员", name = "roleNameCn", required = true, paramType = "query", dataType = "string")
     })
-    Response<User> insert(@RequestBody User user, @RequestParam String roleNameCn);
+    Response<User> insert(User user, @ApiParam String roleNameCn);
 
     @ApiOperation(value = "删除用户", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户名", example = "Xb18620208", name = "userName", required = true, paramType = "query", dataType = "string")
     })
-    Response<User> delete(@RequestParam String userName);
+    Response<User> delete(@ApiParam String userName);
 
     @ApiOperation(value = "更新用户信息", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户名", example = "Xb18620208", name = "userName", required = true, paramType = "query", dataType = "string")
     })
-    Response<User> update(@RequestBody User user, @RequestParam String roleNameCn);
+    Response<User> update(User user, @ApiParam String roleNameCn);
 
     @ApiOperation(value = "查询全体用户", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     public Response<List<User>> select();
@@ -40,8 +34,8 @@ public interface UserControllerApi {
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户名", example = "Xb18620208", name = "userName", required = true, paramType = "query", dataType = "string")
     })
-    Response<User> selectByName(@RequestParam String userName);
+    Response<User> selectByName(@ApiParam String userName);
 
     @ApiOperation(value = "用户登陆", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
-    Response<User> login(@RequestBody User user);
+    Response<User> login(User user);
 }

@@ -6,8 +6,8 @@
 <mapper namespace="cn.ky.jzk.mapper.OrderMapper">
     <cache eviction="FIFO" readOnly="true" size="1024" flushInterval="30000"/>
     <insert id="insert" parameterType="cn.ky.jzk.model.Order">
-        INSERT INTO sys_order (orderComId, orderSalerName, orderBuyerName, orderCreateTime, orderStatus)
-        VALUE (#{orderComId}, #{orderSalerName}, #{orderBuyerName}, #{orderCreateTime}, 1)
+        INSERT INTO sys_order (orderComId, orderNewId, orderSalerName, orderBuyerName, orderCreateTime, orderStatus)
+        VALUE (#{orderComId}, #{orderNewId}, #{orderSalerName}, #{orderBuyerName}, #{orderCreateTime}, 1)
     </insert>
     <delete id="delete">
         DELETE FROM sys_order
@@ -41,6 +41,9 @@
         </if>
         <if test="orderComId != null and orderComId != ''">
             AND orderComId = #{orderComId}
+        </if>
+        <if test="orderNewId != null and orderNewId != ''">
+            AND orderNewId = #{orderNewId}
         </if>
         <if test="orderSalerName != null and orderSalerName != ''">
             AND orderSalerName = #{orderSalerName}

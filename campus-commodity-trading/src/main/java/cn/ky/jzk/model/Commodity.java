@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "商品实体类")
+@ApiModel(value = "商品实体类", description = "商品实体类")
 public class Commodity {
     /**
      * 商品号

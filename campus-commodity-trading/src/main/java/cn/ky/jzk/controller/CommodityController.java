@@ -34,6 +34,7 @@ public class CommodityController extends BaseController implements CommodityCont
 
     List<Commodity> temps;
 
+    @Override
     @PostMapping(value = "/insert")
     @ResponseBody
     public Response<Commodity> insert(@RequestBody Commodity commodity, @RequestParam String userName) {
@@ -45,6 +46,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return getSuccessResult(temp);
     }
 
+    @Override
     @PostMapping(value = "/delete")
     @ResponseBody
     public Response<Commodity> delete(@RequestParam String userName, @RequestParam String comId) {
@@ -56,6 +58,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return getSuccessResult(temp);
     }
 
+    @Override
     @PostMapping(value = "/deleteAllZero")
     @ResponseBody
     public Response<String> deleteAllZero(@RequestParam String userName) {
@@ -66,6 +69,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return getSuccessResult(str);
     }
 
+    @Override
     @PostMapping(value = "/update")
     @ResponseBody
     public Response<Commodity> update(@RequestBody Commodity commodity) {
@@ -73,6 +77,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return dataAnalyse(temp, 404, "数据错误");
     }
 
+    @Override
     @PostMapping(value = "/updateRate")
     @ResponseBody
     public Response<Commodity> updateRate(@RequestParam String comId, @RequestParam Double rate) {
@@ -80,6 +85,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return dataAnalyse(temp, 404, "数据错误");
     }
 
+    @Override
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<Commodity>> select() {
@@ -87,6 +93,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return dataAnalyse(temps, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectById")
     @ResponseBody
     public Response<Commodity> selectById(@RequestParam String comId) {
@@ -94,6 +101,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return dataAnalyse(temp, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectByName")
     @ResponseBody
     public Response<List<Commodity>> selectByName(@RequestParam String comName) {
@@ -101,6 +109,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return dataAnalyse(temps, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectByPriceBetween")
     @ResponseBody
     public Response<List<Commodity>> selectByPriceBetween(@RequestParam Double min, @RequestParam Double max) {
@@ -108,6 +117,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return dataAnalyse(temps, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectByQuantityNow")
     @ResponseBody
     public Response<List<Commodity>> selectByQuantityNow(@RequestParam Integer comQuantityNow) {
@@ -115,6 +125,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return dataAnalyse(temps, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectByQuantityBetween")
     @ResponseBody
     public Response<List<Commodity>> selectByQuantityBetween(@RequestParam Integer min, @RequestParam Integer max) {
@@ -122,6 +133,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return dataAnalyse(temps, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectUserCommodity")
     @ResponseBody
     public Response<List<Commodity>> selectUserCommodity(String userName) {
@@ -129,6 +141,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return dataAnalyse(temps, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectCommodityUser")
     @ResponseBody
     public Response<User> selectCommodityUser(String comId) {
@@ -139,6 +152,7 @@ public class CommodityController extends BaseController implements CommodityCont
         return getSuccessResult(res);
     }
 
+    @Override
     @GetMapping(value = "/selectByAnyParam")
     @ResponseBody
     public Response<List<Commodity>> selectByAnyParam(@RequestParam String comId, @RequestParam String comName,

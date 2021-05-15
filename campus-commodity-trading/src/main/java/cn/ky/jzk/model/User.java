@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "用户实体类")
+@ApiModel(value = "用户实体类", description = "用户实体类")
 public class User {
     /**
      * 用户名

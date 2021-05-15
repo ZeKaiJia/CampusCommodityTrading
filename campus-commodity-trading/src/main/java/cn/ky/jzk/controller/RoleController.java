@@ -1,6 +1,5 @@
 package cn.ky.jzk.controller;
 
-import cn.ky.jzk.mapper.RelationRoleUserMapper;
 import cn.ky.jzk.model.Role;
 import cn.ky.jzk.service.RelationRoleUserService;
 import cn.ky.jzk.service.RoleService;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -34,6 +32,7 @@ public class RoleController extends BaseController implements RoleControllerApi 
 
     List<Role> temps;
 
+    @Override
     @PostMapping(value = "/insert")
     @ResponseBody
     public Response<Role> insert(@RequestBody Role role) {
@@ -41,6 +40,7 @@ public class RoleController extends BaseController implements RoleControllerApi 
         return dataAnalyse(temp, 404, "ID已存在");
     }
 
+    @Override
     @PostMapping(value = "/delete")
     @ResponseBody
     public Response<Role> delete(@RequestParam String roleId) {
@@ -48,6 +48,7 @@ public class RoleController extends BaseController implements RoleControllerApi 
         return dataAnalyse(temp, 404, "ID不存在");
     }
 
+    @Override
     @PostMapping(value = "/update")
     @ResponseBody
     public Response<Role> update(@RequestBody Role role) {
@@ -55,6 +56,7 @@ public class RoleController extends BaseController implements RoleControllerApi 
         return dataAnalyse(temp, 404, "数据错误");
     }
 
+    @Override
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<Role>> select() {
@@ -62,6 +64,7 @@ public class RoleController extends BaseController implements RoleControllerApi 
         return dataAnalyse(temps, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectUserRole")
     @ResponseBody
     public Response<Role> selectUserRole(@RequestParam String userName) {
@@ -69,6 +72,7 @@ public class RoleController extends BaseController implements RoleControllerApi 
         return dataAnalyse(temp, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectById")
     @ResponseBody
     public Response<Role> selectById(@RequestParam String roleId) {

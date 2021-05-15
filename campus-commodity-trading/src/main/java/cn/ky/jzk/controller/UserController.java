@@ -1,11 +1,7 @@
 package cn.ky.jzk.controller;
 
-import cn.ky.jzk.mapper.RelationRoleUserMapper;
-import cn.ky.jzk.model.Role;
 import cn.ky.jzk.model.User;
 import cn.ky.jzk.service.RelationCommodityUserService;
-import cn.ky.jzk.service.RelationRoleUserService;
-import cn.ky.jzk.service.RoleService;
 import cn.ky.jzk.service.UserService;
 import cn.ky.jzk.swagger.api.UserControllerApi;
 import cn.ky.jzk.vo.Response;
@@ -13,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @Author: Kevin
@@ -38,6 +32,7 @@ public class UserController extends BaseController implements UserControllerApi 
 
     List<User> temps;
 
+    @Override
     @PostMapping(value = "/insert")
     @ResponseBody
     public Response<User> insert(@RequestBody User user, @RequestParam String roleNameCn) {
@@ -45,6 +40,7 @@ public class UserController extends BaseController implements UserControllerApi 
         return dataAnalyse(temp, 404, "用户已存在");
     }
 
+    @Override
     @PostMapping(value = "/delete")
     @ResponseBody
     public Response<User> delete(@RequestParam String userName) {
@@ -56,6 +52,7 @@ public class UserController extends BaseController implements UserControllerApi 
         return getSuccessResult(temp);
     }
 
+    @Override
     @PostMapping(value = "/update")
     @ResponseBody
     public Response<User> update(@RequestBody User user, @RequestParam String roleNameCn) {
@@ -63,6 +60,7 @@ public class UserController extends BaseController implements UserControllerApi 
         return dataAnalyse(temp, 404, "数据错误");
     }
 
+    @Override
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<User>> select() {
@@ -70,6 +68,7 @@ public class UserController extends BaseController implements UserControllerApi 
         return dataAnalyse(temps, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectByName")
     @ResponseBody
     public Response<User> selectByName(@RequestParam String userName) {
@@ -77,6 +76,7 @@ public class UserController extends BaseController implements UserControllerApi 
         return dataAnalyse(temp, 404, "未找到数据");
     }
 
+    @Override
     @PostMapping(value = "/login")
     @ResponseBody
     public Response<User> login(@RequestBody User user) {

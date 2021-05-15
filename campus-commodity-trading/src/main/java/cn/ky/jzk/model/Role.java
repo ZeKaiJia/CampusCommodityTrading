@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "角色实体类")
+@ApiModel(value = "角色实体类", description = "角色实体类")
 public class Role {
     /**
      * 角色号

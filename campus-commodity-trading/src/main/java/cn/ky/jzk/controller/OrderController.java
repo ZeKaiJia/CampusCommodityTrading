@@ -27,6 +27,7 @@ public class OrderController extends BaseController implements OrderControllerAp
 
     List<Order> temps;
 
+    @Override
     @PostMapping(value = "/insert")
     @ResponseBody
     public Response<Order> insert(@RequestBody Order order) {
@@ -34,6 +35,7 @@ public class OrderController extends BaseController implements OrderControllerAp
         return dataAnalyse(temp, 404, "ID已存在");
     }
 
+    @Override
     @PostMapping(value = "/delete")
     @ResponseBody
     public Response<Order> delete(@RequestParam Integer id) {
@@ -41,7 +43,7 @@ public class OrderController extends BaseController implements OrderControllerAp
         return dataAnalyse(temp, 404, "ID不存在");
     }
 
-
+    @Override
     @PostMapping(value = "/update")
     @ResponseBody
     public Response<Order> update(@RequestBody Order order) {
@@ -49,6 +51,7 @@ public class OrderController extends BaseController implements OrderControllerAp
         return dataAnalyse(temp, 404, "数据错误");
     }
 
+    @Override
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<Order>> select() {
@@ -56,12 +59,13 @@ public class OrderController extends BaseController implements OrderControllerAp
         return dataAnalyse(temps, 404, "未找到数据");
     }
 
+    @Override
     @GetMapping(value = "/selectByAnyParam")
     @ResponseBody
     public Response<List<Order>> selectByAnyParam(@RequestParam Integer id, @RequestParam String orderComId,
-                                                  @RequestParam String orderSalerName, @RequestParam String orderBuyerName,
-                                                  @RequestParam Integer orderStatus) {
-        temps =  orderService.selectByAnyParam(id, orderComId, orderSalerName, orderBuyerName, orderStatus);
+                                                  @RequestParam String orderNewId, @RequestParam String orderSalerName,
+                                                  @RequestParam String orderBuyerName, @RequestParam Integer orderStatus) {
+        temps =  orderService.selectByAnyParam(id, orderComId, orderNewId, orderSalerName, orderBuyerName, orderStatus);
         return dataAnalyse(temps, 404, "未找到数据");
     }
 }

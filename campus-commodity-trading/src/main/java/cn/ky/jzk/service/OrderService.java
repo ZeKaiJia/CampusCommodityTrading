@@ -1,8 +1,6 @@
 package cn.ky.jzk.service;
 
 import cn.ky.jzk.model.Order;
-import cn.ky.jzk.model.User;
-import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -21,6 +19,6 @@ public interface OrderService {
 
     List<Order> select();
 
-    List<Order> selectByAnyParam(Integer id, String orderComId, String orderSalerName,
+    List<Order> selectByAnyParam(Integer id, String orderComId, String orderNewId, String orderSalerName,
                            String orderBuyerName, Integer orderStatus);
 }

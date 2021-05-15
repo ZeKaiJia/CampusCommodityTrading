@@ -1,32 +1,41 @@
 package cn.ky.jzk.vo;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 自定义响应体类
  * Response
  * @author kevin
  * @param <T> the type parameter
  */
+@ApiModel(value = "响应封装实体类", description = "响应封装实体类")
 public class Response<T> {
     /**
      * 是否成功
      */
+    @ApiModelProperty(value="是否成功", example = "true", required = true)
     private Boolean success;
     /**
      * 状态码
      */
+    @ApiModelProperty(value="状态码", example = "200", required = true)
     private Integer code;
     /**
      * 反馈信息
      */
+    @ApiModelProperty(value="反馈信息", example = "用户未登录", required = true)
     private String message;
     /**
      * 时间戳
      */
+    @ApiModelProperty(value="时间戳", example = "1621074167413", required = true)
     private Long timestamp;
     /**
      * 实体模板类数据
      */
+    @ApiModelProperty(value="实体模板类数据", example = "无示例", required = true)
     private T data;
 
 

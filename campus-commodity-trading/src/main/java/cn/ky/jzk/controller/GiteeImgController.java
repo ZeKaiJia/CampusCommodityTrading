@@ -26,6 +26,7 @@ public class GiteeImgController extends BaseController implements GiteeImgContro
 
     public final static String MESSAGE_STATUS = "status";
 
+    @Override
     @RequestMapping("saveImg")
     @ResponseBody
     public Response<Map<String, Object>> saveImg(@RequestParam(value = "fileImg", required = true) MultipartFile fileImg) throws Exception {
@@ -64,6 +65,7 @@ public class GiteeImgController extends BaseController implements GiteeImgContro
         }
     }
 
+    @Override
     @RequestMapping("refreshPage")
     @ResponseBody
     public Response<Map<String, Object>> refreshPage() throws Exception {

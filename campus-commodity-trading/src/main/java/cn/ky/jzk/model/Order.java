@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "订单实体类")
+@ApiModel(value = "订单实体类", description = "订单实体类")
 public class Order {
     /**
      * 序号
@@ -30,6 +30,12 @@ public class Order {
      */
     @ApiModelProperty(value="交易商品", example = "SH001", required = true)
     private String orderComId;
+    /**
+     * 新商品号
+     * The User name.
+     */
+    @ApiModelProperty(value="新商品号", example = "SH100", required = true)
+    private String orderNewId;
     /**
      * 卖家账号
      * The User name.

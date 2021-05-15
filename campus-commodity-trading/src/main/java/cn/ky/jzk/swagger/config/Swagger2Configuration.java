@@ -21,7 +21,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class Swagger2Configuration {
 
-    //api接口包扫描路径
     public static final String SWAGGER_SCAN_BASE_PACKAGE = "cn.ky.jzk.controller";
 
     public static final String VERSION = "1.0.0";
@@ -32,16 +31,17 @@ public class Swagger2Configuration {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage(SWAGGER_SCAN_BASE_PACKAGE))
-                .paths(PathSelectors.any()) // 可以根据url路径设置哪些请求加入文档，忽略哪些请求
-                .build();
+                .paths(PathSelectors.any())
+                .build()
+                .groupName("开放接口分组");
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("校园二手商品交易平台") //设置文档的标题
-                .description("校园二手商品交易平台 API 接口文档") // 设置文档的描述
-                .version(VERSION) // 设置文档的版本信息-> 1.0.0 Version information
-                .termsOfServiceUrl("https://www.apache.org/licenses/LICENSE-2.0.html") // 设置文档的License信息->1.3 License information
+                .title("校园二手商品交易平台")
+                .description("校园二手商品交易平台 API 接口文档")
+                .version(VERSION)
+                .termsOfServiceUrl("https://www.apache.org/licenses/LICENSE-2.0.html")
                 .build();
     }
 }
