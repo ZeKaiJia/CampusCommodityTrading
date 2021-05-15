@@ -9,4 +9,10 @@ public interface GlobalConstant {
 
     // 订单接受状态常量
     Integer RECIEVE_ORDER_STATUS = 3;
+
+    // 数据库处理成功
+    String SQL_SUCCESS = "Success";
+
+    // 请求处理成功
+    String REQUEST_SUCCESS = "Success!";
 }

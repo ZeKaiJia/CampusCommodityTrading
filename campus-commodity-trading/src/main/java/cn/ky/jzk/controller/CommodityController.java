@@ -4,6 +4,7 @@ import cn.ky.jzk.model.Commodity;
 import cn.ky.jzk.model.User;
 import cn.ky.jzk.service.CommodityService;
 import cn.ky.jzk.service.RelationCommodityUserService;
+import cn.ky.jzk.util.GlobalConstant;
 import cn.ky.jzk.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,7 +59,7 @@ public class CommodityController extends BaseController {
     @ResponseBody
     public Response<String> deleteAllZero(@RequestParam String userName) {
         String str = commodityService.deleteAllZero(userName);
-        if (!"Success".equals(str)) {
+        if (!GlobalConstant.SQL_SUCCESS.equals(str)) {
             return getFailResult(404, "不存在销毁商品");
         }
         return getSuccessResult(str);
@@ -123,7 +124,7 @@ public class CommodityController extends BaseController {
     @GetMapping(value = "/selectUserCommodity")
     @ResponseBody
     public Response<List<Commodity>> selectUserCommodity(String userName) {
-        List<Commodity> res = relationCommodityUserService.selectByName(userName);
+        temps = relationCommodityUserService.selectByName(userName);
         return dataAnalyse(temps, 404, "未找到数据");
     }
 
@@ -144,9 +145,6 @@ public class CommodityController extends BaseController {
                                                       @RequestParam Integer minQuantity, @RequestParam Integer maxQuantity,
                                                       @RequestParam String comDescription) {
         temps =  commodityService.selectByAnyParam(comId, comName.replace(" ", ""), minPrice, maxPrice, minQuantity, maxQuantity, comDescription);
-        if (temps.size() == 0) {
-            getFailResult(404, "未找到数据");
-        }
-        return getSuccessResult(temps);
+        return dataAnalyse(temps, 404, "未找到数据");
     }
 }

@@ -47,7 +47,7 @@ public class RelationCommodityUserServiceImpl implements RelationCommodityUserSe
 
     @Override
     public List<Commodity> selectByName(String userName) {
-        commodities.clear();
+        commodities = new ArrayList<Commodity>();
         List<String> res = relationCommodityUserMapper.selectByName(userName);
         for (String str : res) {
             commodities.add(commodityMapper.selectById(str));

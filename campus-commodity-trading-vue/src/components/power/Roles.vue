@@ -155,7 +155,7 @@
       :visible.sync="infoDialogVisible"
       width="35%"
     >
-      <li style="color: darkred">请不要删除所有管理员权限</li>
+      <li style="color: darkred">请不要删除所有管理员角色</li>
       <li>修改完权限后的用户重新登录即可生效</li>
       <li>anno为匿名权限，任何人都可以访问，无需添加</li>
       <span slot="footer" class="dialog-footer">
@@ -169,7 +169,7 @@
   import {checkError, getCookie, setCookie} from '../../plugins/utils'
 
   export default {
-    name: 'Types',
+    name: 'Roles',
     data() {
       // eslint-disable-next-line no-unused-vars
       const generateData = _ => {

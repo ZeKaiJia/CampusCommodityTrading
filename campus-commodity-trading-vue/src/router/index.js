@@ -8,7 +8,7 @@ import Self from '../components/user/Self'
 import MyCommodity from "../components/commodity/MyCommodity";
 import BuyCommodity from "../components/commodity/BuyCommodity";
 import Rights from '../components/power/Rights'
-import Types from '../components/power/Types'
+import Roles from '../components/power/Roles'
 import Students from '../components/student/Students'
 import Subjects from '../components/subject/Subjects'
 import Scores from '../components/score/Scores'
@@ -37,7 +37,7 @@ const router = new Router({
         { path: '/myCommodity', component: MyCommodity },
         { path: '/buyCommodity', component: BuyCommodity },
         { path: '/rights', component: Rights },
-        { path: '/types', component: Types },
+        { path: '/roles', component: Roles },
         { path: '/students', component: Students },
         { path: '/subjects', component: Subjects },
         { path: '/scores', component: Scores },

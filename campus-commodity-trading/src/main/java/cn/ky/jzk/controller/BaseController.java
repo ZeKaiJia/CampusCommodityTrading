@@ -1,6 +1,7 @@
 package cn.ky.jzk.controller;
 
 import cn.ky.jzk.util.DateUtil;
+import cn.ky.jzk.util.GlobalConstant;
 import cn.ky.jzk.vo.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +86,7 @@ public abstract class BaseController {
     protected <T> Response<T> getSuccessResult(T data) {
         return new Response<T>()
                 .setCode(200)
-                .setMessage("Success!")
+                .setMessage(GlobalConstant.REQUEST_SUCCESS)
                 .setSuccess(true)
                 .setData(data)
                 .setTimestamp(DateUtil.currentSecond());

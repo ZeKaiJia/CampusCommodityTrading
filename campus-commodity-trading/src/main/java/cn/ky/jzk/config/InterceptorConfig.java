@@ -1,5 +1,6 @@
-package cn.ky.jzk.util;
+package cn.ky.jzk.config;
 
+import cn.ky.jzk.util.CorsUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;

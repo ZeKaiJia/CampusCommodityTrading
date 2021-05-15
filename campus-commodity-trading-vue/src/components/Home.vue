@@ -96,7 +96,7 @@
           {
             id: 2,
             authName: '角色管理',
-            children: [{id: 21, authName: '角色列表', path: 'types'}]
+            children: [{id: 21, authName: '角色列表', path: 'roles'}]
           },
           {
             id: 3,
