@@ -4,6 +4,7 @@ import cn.ky.jzk.model.Commodity;
 import cn.ky.jzk.model.User;
 import cn.ky.jzk.service.CommodityService;
 import cn.ky.jzk.service.RelationCommodityUserService;
+import cn.ky.jzk.swagger.api.CommodityControllerApi;
 import cn.ky.jzk.util.GlobalConstant;
 import cn.ky.jzk.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.List;
 @CrossOrigin
 @RestController()
 @RequestMapping("/commodity/")
-public class CommodityController extends BaseController {
+public class CommodityController extends BaseController implements CommodityControllerApi {
 
     @Autowired
     @Qualifier("commodityServiceImpl")

@@ -7,6 +7,7 @@ import cn.ky.jzk.service.RelationCommodityUserService;
 import cn.ky.jzk.service.RelationRoleUserService;
 import cn.ky.jzk.service.RoleService;
 import cn.ky.jzk.service.UserService;
+import cn.ky.jzk.swagger.api.UserControllerApi;
 import cn.ky.jzk.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,7 +24,7 @@ import java.util.Optional;
 @CrossOrigin()
 @RestController()
 @RequestMapping("/user/")
-public class UserController extends BaseController {
+public class UserController extends BaseController implements UserControllerApi {
 
     @Autowired
     @Qualifier("userServiceImpl")

@@ -4,6 +4,7 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import cn.ky.jzk.swagger.api.GiteeImgControllerApi;
 import cn.ky.jzk.util.GiteeImgBedConstant;
 import cn.ky.jzk.vo.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/gitee")
-public class GiteeImgController extends BaseController {
+public class GiteeImgController extends BaseController implements GiteeImgControllerApi {
     public final static String MESSAGE_COMMIT = "commit";
 
     public final static String MESSAGE_STATUS = "status";

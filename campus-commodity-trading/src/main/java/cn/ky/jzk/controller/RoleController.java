@@ -4,6 +4,7 @@ import cn.ky.jzk.mapper.RelationRoleUserMapper;
 import cn.ky.jzk.model.Role;
 import cn.ky.jzk.service.RelationRoleUserService;
 import cn.ky.jzk.service.RoleService;
+import cn.ky.jzk.swagger.api.RoleControllerApi;
 import cn.ky.jzk.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,7 +20,7 @@ import java.util.List;
 @CrossOrigin
 @RestController()
 @RequestMapping("/role/")
-public class RoleController extends BaseController {
+public class RoleController extends BaseController implements RoleControllerApi {
 
     @Autowired
     @Qualifier("roleServiceImpl")

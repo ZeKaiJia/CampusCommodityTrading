@@ -1,4 +1,4 @@
-package cn.ky.jzk.config;
+package cn.ky.jzk.swagger.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +41,7 @@ public class Swagger2Configuration {
                 .title("校园二手商品交易平台") //设置文档的标题
                 .description("校园二手商品交易平台 API 接口文档") // 设置文档的描述
                 .version(VERSION) // 设置文档的版本信息-> 1.0.0 Version information
-                .termsOfServiceUrl("http://www.baidu.com") // 设置文档的License信息->1.3 License information
+                .termsOfServiceUrl("https://www.apache.org/licenses/LICENSE-2.0.html") // 设置文档的License信息->1.3 License information
                 .build();
     }
 }

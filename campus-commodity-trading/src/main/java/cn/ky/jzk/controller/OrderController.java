@@ -2,6 +2,7 @@ package cn.ky.jzk.controller;
 
 import cn.ky.jzk.model.Order;
 import cn.ky.jzk.service.OrderService;
+import cn.ky.jzk.swagger.api.OrderControllerApi;
 import cn.ky.jzk.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +17,7 @@ import java.util.List;
 @CrossOrigin
 @RestController()
 @RequestMapping("/order/")
-public class OrderController extends BaseController {
+public class OrderController extends BaseController implements OrderControllerApi {
 
     @Autowired
     @Qualifier("orderServiceImpl")
