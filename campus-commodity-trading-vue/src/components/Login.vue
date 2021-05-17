@@ -237,8 +237,8 @@ export default {
         userPassword: '',
         userNick: '',
         userGender: '',
-        userPhone: '',
-        userEmail: '',
+        userPhone: null,
+        userEmail: null,
         userQuest: '',
         userAnswer: '',
         roleNameCn: ''
@@ -342,7 +342,7 @@ export default {
         } else {
           if (result.data.userAnswer === this.findForm.userAnswer) {
             const { data: res } = await this.$http.post(
-                    `user/update?roleNameCn=${role.data.roleNameCn}`,
+                    `user/update?roleNameCn=${role.data.roleNameCn}&status=2`,
                     this.findForm
             )
             if (res.code !== 200) {
@@ -448,7 +448,7 @@ export default {
         if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
         this.dialogLoading = true
         const { data: res } = await this.$http.post(
-                `user/insert?roleNameCn=${this.addForm.roleNameCn}`,
+                `user/insert?roleNameCn=${this.addForm.roleNameCn}&status=3`,
                 this.addForm
         )
         this.dialogLoading = false

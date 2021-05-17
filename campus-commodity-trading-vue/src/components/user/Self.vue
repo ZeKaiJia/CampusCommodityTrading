@@ -282,7 +282,7 @@
                 `role/selectById?roleId=${getCookie('type')}`
         )
         const {data: res2} = await this.$http.post(
-                `user/update?roleNameCn=${role.data.roleNameCn}`,
+                `user/update?roleNameCn=${role.data.roleNameCn}&status=0`,
                 this.editForm
         )
         if (res2.code !== 200) {
@@ -302,7 +302,7 @@
                 `role/selectById?roleId=${getCookie('type')}`
         )
         const {data: res} = await this.$http.post(
-                `user/update?roleNameCn=${role.data.roleNameCn}`,
+                `user/update?roleNameCn=${role.data.roleNameCn}&status=0`,
                 this.editForm
         )
         this.dialogLoading = false

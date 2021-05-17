@@ -11,11 +11,11 @@ import java.util.List;
  */
 public interface UserService {
 
-    User insert(@NotNull User user, String roleNameCn);
+    User insert(@NotNull User user, String roleNameCn, Integer status);
 
     User delete(String userName);
 
-    User update(@NotNull User user, String roleNameCn);
+    User update(@NotNull User user, String roleNameCn, Integer status);
 
     List<User> select();
 

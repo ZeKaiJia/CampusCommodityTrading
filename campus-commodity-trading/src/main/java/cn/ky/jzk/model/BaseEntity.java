@@ -51,4 +51,16 @@ public abstract class BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "备注", required = false)
     protected String remark;
+    /**
+     * 自定义字段a
+     * The Custom A.
+     */
+    @ApiModelProperty(value = "自定义字段a", required = false)
+    protected String customa;
+    /**
+     * 自定义字段b
+     * The Custom B.
+     */
+    @ApiModelProperty(value = "自定义字段b", required = false)
+    protected String customb;
 }

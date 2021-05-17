@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "用户实体类", description = "用户实体类")
-public class User {
+public class User extends BaseEntity {
     /**
      * 用户名
      * The User name.
@@ -68,8 +68,15 @@ public class User {
     private String userAnswer;
     /**
      * 用户头像
-     * The User answer.
+     * The User Avatar.
      */
     @ApiModelProperty(value="用户头像", example = "https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/1620647285178.jpg", required = false)
     private String userAvatar;
+
+    /**
+     * 最近登录时间
+     * The User Last Login.
+     */
+    @ApiModelProperty(value="最近登录时间", example = "1621074167413", required = false)
+    private long userLastLogin;
 }

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "角色实体类", description = "角色实体类")
-public class Role {
+public class Role extends BaseEntity{
     /**
      * 角色号
      * The Role ID.

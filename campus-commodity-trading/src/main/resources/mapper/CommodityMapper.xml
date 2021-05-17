@@ -6,8 +6,11 @@
 <mapper namespace="cn.ky.jzk.mapper.CommodityMapper">
     <cache eviction="FIFO" readOnly="true" size="1024" flushInterval="30000"/>
     <insert id="insert" parameterType="cn.ky.jzk.model.Commodity">
-        INSERT INTO sys_commodity (comId, comName, comQuantity, comQuantityNow, comEachPrice, comDescription, comPicture, comRate, comRateCount)
-        VALUE (#{comId}, #{comName}, #{comQuantity}, #{comQuantityNow}, #{comEachPrice}, #{comDescription}, '', 0, 0)
+        INSERT INTO sys_commodity (comId, comName, comQuantity, comQuantityNow, comEachPrice, comDescription,
+                                   comPicture, comRate, comRateCount, utcCreate, utcModify, modifyBy, valid,
+                                   remark, customa, customb)
+        VALUE (#{comId}, #{comName}, #{comQuantity}, #{comQuantityNow}, #{comEachPrice}, #{comDescription},
+               '', 0, 0, #{utcCreate}, #{utcModify}, #{modifyBy}, 1, #{remark}, #{customa}, #{customb})
     </insert>
     <delete id="delete" parameterType="java.lang.String">
         DELETE FROM sys_commodity
@@ -43,9 +46,31 @@
             <if test="comPicture != null and comPicture != ''">
                 comPicture = #{comPicture},
             </if>
+            <if test="utcCreate != null and utcCreate != ''">
+                utcCreate = #{utcCreate},
+            </if>
+            <if test="utcModify != null and utcModify != ''">
+                utcModify = #{utcModify},
+            </if>
+            <if test="modifyBy != null and modifyBy != ''">
+                modifyBy = #{modifyBy},
+            </if>
+            <if test="valid != null">
+                valid = #{valid},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="customa != null and customa != ''">
+                customa = #{customa},
+            </if>
+            <if test="customb != null and customb != ''">
+                customb = #{customb},
+            </if>
         </set>
         WHERE comId = #{comId}
     </update>
+    <!--评价不会触发修改历史记录-->
     <update id="updateRate">
         UPDATE sys_commodity
         <set>

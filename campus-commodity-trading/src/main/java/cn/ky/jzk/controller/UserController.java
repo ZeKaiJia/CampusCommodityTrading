@@ -35,8 +35,9 @@ public class UserController extends BaseController implements UserControllerApi 
     @Override
     @PostMapping(value = "/insert")
     @ResponseBody
-    public Response<User> insert(@RequestBody User user, @RequestParam String roleNameCn) {
-        temp = userService.insert(user, roleNameCn);
+    public Response<User> insert(@RequestBody User user, @RequestParam String roleNameCn,
+                                 @RequestParam Integer status) {
+        temp = userService.insert(user, roleNameCn, status);
         return dataAnalyse(temp, 404, "用户已存在");
     }
 
@@ -55,8 +56,9 @@ public class UserController extends BaseController implements UserControllerApi 
     @Override
     @PostMapping(value = "/update")
     @ResponseBody
-    public Response<User> update(@RequestBody User user, @RequestParam String roleNameCn) {
-        temp = userService.update(user, roleNameCn);
+    public Response<User> update(@RequestBody User user, @RequestParam String roleNameCn,
+                                 @RequestParam Integer status) {
+        temp = userService.update(user, roleNameCn, status);
         return dataAnalyse(temp, 404, "数据错误");
     }
 

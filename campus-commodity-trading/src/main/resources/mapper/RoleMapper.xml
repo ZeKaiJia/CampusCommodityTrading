@@ -6,8 +6,10 @@
 <mapper namespace="cn.ky.jzk.mapper.RoleMapper">
     <cache eviction="FIFO" readOnly="true" size="1024" flushInterval="30000"/>
     <insert id="insert" parameterType="cn.ky.jzk.model.Role">
-        INSERT INTO sys_role (roleId, roleNameCn, roleNameEn, roleDescription)
-        VALUE (#{roleId}, #{roleNameCn}, #{roleNameEn}, #{roleDescription})
+        INSERT INTO sys_role (roleId, roleNameCn, roleNameEn, roleDescription, utcCreate,
+                              utcModify, modifyBy, valid, remark, customa, customb)
+        VALUE (#{roleId}, #{roleNameCn}, #{roleNameEn}, #{roleDescription}, #{utcCreate},
+               #{utcModify}, #{modifyBy}, 1, #{remark}, #{customa}, #{customb})
     </insert>
     <delete id="delete" parameterType="java.lang.String">
         DELETE FROM sys_role
@@ -24,6 +26,27 @@
             </if>
             <if test="roleDescription != null and roleDescription != ''">
                 roleDescription = #{roleDescription},
+            </if>
+            <if test="utcCreate != null and utcCreate != ''">
+                utcCreate = #{utcCreate},
+            </if>
+            <if test="utcModify != null and utcModify != ''">
+                utcModify = #{utcModify},
+            </if>
+            <if test="modifyBy != null and modifyBy != ''">
+                modifyBy = #{modifyBy},
+            </if>
+            <if test="valid != null">
+                valid = #{valid},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="customa != null and customa != ''">
+                customa = #{customa},
+            </if>
+            <if test="customb != null and customb != ''">
+                customb = #{customb},
             </if>
         </set>
         WHERE roleId = #{roleId}

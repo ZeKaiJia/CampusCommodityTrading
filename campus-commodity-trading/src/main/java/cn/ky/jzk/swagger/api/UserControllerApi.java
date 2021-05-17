@@ -11,9 +11,10 @@ import java.util.List;
 public interface UserControllerApi {
     @ApiOperation(value = "添加用户", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "角色中文名", example = "管理员", name = "roleNameCn", required = true, paramType = "query", dataType = "string")
+            @ApiImplicitParam(value = "角色中文名", example = "管理员", name = "roleNameCn", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(value = "状态", example = "1", name = "status", required = true, paramType = "query", dataType = "string")
     })
-    Response<User> insert(User user, @ApiParam String roleNameCn);
+    Response<User> insert(User user, @ApiParam String roleNameCn, @ApiParam Integer status);
 
     @ApiOperation(value = "删除用户", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     @ApiImplicitParams({
@@ -23,9 +24,10 @@ public interface UserControllerApi {
 
     @ApiOperation(value = "更新用户信息", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "用户名", example = "Xb18620208", name = "userName", required = true, paramType = "query", dataType = "string")
+            @ApiImplicitParam(value = "用户名", example = "Xb18620208", name = "userName", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(value = "状态0:普通更新2:忘记密码更新", example = "1", name = "status", required = true, paramType = "query", dataType = "string")
     })
-    Response<User> update(User user, @ApiParam String roleNameCn);
+    Response<User> update(User user, @ApiParam String roleNameCn, @ApiParam Integer status);
 
     @ApiOperation(value = "查询全体用户", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     public Response<List<User>> select();

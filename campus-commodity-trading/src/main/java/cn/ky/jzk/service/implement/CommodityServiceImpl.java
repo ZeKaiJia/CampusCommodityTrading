@@ -2,6 +2,7 @@ package cn.ky.jzk.service.implement;
 
 import cn.ky.jzk.mapper.CommodityMapper;
 import cn.ky.jzk.model.Commodity;
+import cn.ky.jzk.service.AbstractService;
 import cn.ky.jzk.service.CommodityService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
-public class CommodityServiceImpl implements CommodityService {
+public class CommodityServiceImpl extends AbstractService implements CommodityService {
 
     @Autowired
     private CommodityMapper commodityMapper;
@@ -34,7 +35,7 @@ public class CommodityServiceImpl implements CommodityService {
         if (temp != null) {
             return null;
         }
-        commodityMapper.insert(commodity);
+        commodityMapper.insert(packageInfo(request, commodity, 1));
         return commodity;
     }
 
@@ -60,7 +61,7 @@ public class CommodityServiceImpl implements CommodityService {
         if (temp == null) {
             return null;
         }
-        commodityMapper.update(commodity);
+        commodityMapper.update(packageInfo(request, commodity, 0));
         return commodity;
     }
 

@@ -337,8 +337,8 @@ export default {
         userPassword: '',
         userNick: '',
         userGender: '',
-        userPhone: '',
-        userEmail: '',
+        userPhone: null,
+        userEmail: null,
         roleNameCn: ''
       },
       // 修改用户的表单数据
@@ -483,7 +483,7 @@ export default {
         if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
         this.dialogLoading = true
         const { data: res } = await this.$http.post(
-          `user/insert?roleNameCn=${this.addForm.roleNameCn}`,
+          `user/insert?roleNameCn=${this.addForm.roleNameCn}&status=1`,
           this.addForm
         )
         this.dialogLoading = false
@@ -503,7 +503,7 @@ export default {
         if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
         this.dialogLoading = true
         const { data: res } = await this.$http.post(
-          `user/update?roleNameCn=${this.editForm.roleNameCn}`,
+          `user/update?roleNameCn=${this.editForm.roleNameCn}&status=0`,
           this.editForm
         )
         this.dialogLoading = false

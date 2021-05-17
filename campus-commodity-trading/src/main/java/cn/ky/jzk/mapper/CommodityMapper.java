@@ -19,7 +19,7 @@ public interface CommodityMapper {
 
     void update(Commodity commodity);
 
-    void updateRate(@Param("comId") String comId, @Param("comRate") Double comRate, @Param("comSaleCount") Integer comRateCount);
+    void updateRate(@Param("comId") String comId, @Param("comRate") Double comRate, @Param("comRateCount") Integer comRateCount);
 
     List<Commodity> select();
 

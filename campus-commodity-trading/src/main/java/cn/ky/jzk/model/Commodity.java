@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "商品实体类", description = "商品实体类")
-public class Commodity {
+public class Commodity extends BaseEntity {
     /**
      * 商品号
      * The Commodity ID.

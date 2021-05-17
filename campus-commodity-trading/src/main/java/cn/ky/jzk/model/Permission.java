@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "权限实体类", description = "权限实体类")
-public class Permission {
+public class Permission extends BaseEntity {
     /**
      * 序号
      * The Permission ID.

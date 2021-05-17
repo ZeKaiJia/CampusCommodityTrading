@@ -1,6 +1,5 @@
 package cn.ky.jzk.mapper;
 
-import cn.ky.jzk.model.Role;
 import cn.ky.jzk.model.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -24,5 +23,5 @@ public interface UserMapper {
 
     User selectByName(@Param("userName") String userName);
 
-    User login(@Param("userName") String userName, @Param("userPassword") String userPassword);
+    void login(User user);
 }

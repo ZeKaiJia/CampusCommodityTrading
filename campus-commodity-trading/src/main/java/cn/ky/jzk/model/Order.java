@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "订单实体类", description = "订单实体类")
-public class Order {
+public class Order extends BaseEntity {
     /**
      * 序号
      * The User nick.

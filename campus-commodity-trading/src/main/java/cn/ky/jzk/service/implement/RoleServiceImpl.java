@@ -2,6 +2,7 @@ package cn.ky.jzk.service.implement;
 
 import cn.ky.jzk.mapper.RoleMapper;
 import cn.ky.jzk.model.Role;
+import cn.ky.jzk.service.AbstractService;
 import cn.ky.jzk.service.RoleService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl extends AbstractService implements RoleService {
 
     @Autowired
     private RoleMapper roleMapper;
@@ -34,7 +34,7 @@ public class RoleServiceImpl implements RoleService {
         if (temp != null) {
             return null;
         }
-        roleMapper.insert(role);
+        roleMapper.insert(packageInfo(request, role, 1));
         return role;
     }
 
@@ -54,7 +54,7 @@ public class RoleServiceImpl implements RoleService {
         if (temp == null) {
             return null;
         }
-        roleMapper.update(role);
+        roleMapper.update(packageInfo(request, role, 0));
         return role;
     }
 

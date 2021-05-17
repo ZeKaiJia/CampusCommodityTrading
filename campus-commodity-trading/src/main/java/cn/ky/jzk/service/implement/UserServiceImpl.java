@@ -5,7 +5,9 @@ import cn.ky.jzk.mapper.RoleMapper;
 import cn.ky.jzk.mapper.UserMapper;
 import cn.ky.jzk.model.Role;
 import cn.ky.jzk.model.User;
+import cn.ky.jzk.service.AbstractService;
 import cn.ky.jzk.service.UserService;
+import cn.ky.jzk.util.DateUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ import java.util.List;
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl  extends AbstractService implements UserService {
 
     @Autowired
     private UserMapper userMapper;
@@ -38,13 +39,13 @@ public class UserServiceImpl implements UserService {
     private List<User> temps;
 
     @Override
-    public User insert(@NotNull User user, String roleNameCn) {
+    public User insert(@NotNull User user, String roleNameCn, Integer status) {
         temp = userMapper.selectByName(user.getUserName());
         Role role = roleMapper.selectByNameCn(roleNameCn);
         if (temp != null) {
             return null;
         }
-        userMapper.insert(user);
+        userMapper.insert(packageInfo(request, user, status));
         relationRoleUserMapper.insert(user.getUserName(), role.getRoleId());
         return user;
     }
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(@NotNull User user, String roleNameCn) {
+    public User update(@NotNull User user, String roleNameCn, Integer status) {
         temp = userMapper.selectByName(user.getUserName());
         Role role = roleMapper.selectByNameCn(roleNameCn);
         if (temp == null) {
@@ -68,7 +69,10 @@ public class UserServiceImpl implements UserService {
         }
         relationRoleUserMapper.delete(user.getUserName());
         relationRoleUserMapper.insert(user.getUserName(), role.getRoleId());
-        userMapper.update(user);
+        if (status == 2) {
+            user = temp;
+        }
+        userMapper.update(packageInfo(request, user, status));
         return user;
     }
 
@@ -88,10 +92,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String userName, String userPassword) {
-        temp = userMapper.login(userName, userPassword);
-        if (temp == null) {
+        temp = userMapper.selectByName(userName);
+        if (temp == null || !temp.getUserPassword().equals(userPassword)) {
             return null;
         }
+        temp.setUtcModify(DateUtil.currentSecond());
+        userMapper.login(temp);
         return temp;
     }
 }
