@@ -86,33 +86,44 @@
     <select id="select" resultType="cn.ky.jzk.model.Commodity">
         SELECT *
         FROM sys_commodity
+        WHERE valid = 1
     </select>
     <select id="selectById" resultType="cn.ky.jzk.model.Commodity">
         SELECT *
         FROM sys_commodity
         WHERE comId = #{comId}
     </select>
+    <select id="selectValidId" resultType="cn.ky.jzk.model.Commodity">
+        SELECT *
+        FROM sys_commodity
+        WHERE comId = #{comId}
+        AND valid = 1
+    </select>
     <select id="selectByName" resultType="cn.ky.jzk.model.Commodity">
         SELECT *
         FROM sys_commodity
         WHERE comName like '%${comName}%'
+        AND valid = 1
     </select>
     <select id="selectByPriceBetween" resultType="cn.ky.jzk.model.Commodity">
         SELECT *
         FROM sys_commodity
         WHERE comEachPrice &gt;= #{min}
         AND comEachPrice &lt;= #{max}
+        AND valid = 1
     </select>
     <select id="selectByQuantityNow" resultType="cn.ky.jzk.model.Commodity">
         SELECT *
         FROM sys_commodity
         WHERE comQuantityNow &lt;= #{comQuantityNow}
+        AND valid = 1
     </select>
     <select id="selectByQuantityBetween" resultType="cn.ky.jzk.model.Commodity">
         SELECT *
         FROM sys_commodity
         WHERE comQuantityNow &gt;= #{min}
         AND comQuantityNow &lt;= #{max}
+        AND valid = 1
     </select>
     <select id="selectByAnyParam" resultType="cn.ky.jzk.model.Commodity">
         SELECT *
@@ -128,6 +139,7 @@
         AND comEachPrice &lt;= #{maxPrice}
         AND comQuantityNow &gt;= #{minQuantity}
         AND comQuantityNow &lt;= #{maxQuantity}
+        AND valid = 1
         <if test="comDescription != null and comDescription != ''">
             AND comDescription like concat('%', '${comDescription}', '%')
         </if>

@@ -25,6 +25,8 @@ public interface CommodityMapper {
 
     Commodity selectById(@Param("comId") String comId);
 
+    Commodity selectValidId(@Param("comId") String comId);
+
     List<Commodity> selectByName(@Param("comName") String comName);
 
     List<Commodity> selectByPriceBetween(@Param("min") Double min, @Param("max") Double max);

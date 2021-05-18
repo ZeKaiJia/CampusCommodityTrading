@@ -65,7 +65,7 @@ public class Order extends BaseEntity {
      * The User phone.
      */
     @ApiModelProperty(value="收货时间", example = "1621074167413", required = false)
-    private long orderRecieveTime;
+    private long orderReceiveTime;
     /**
      * 订单状态
      * The User email.

@@ -284,7 +284,7 @@
                 <el-button @click="buyCommodityPreStep" v-if="activeStep > 0 && activeStep < 3">上 一 步</el-button>
                 <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep < 2">下 一 步</el-button>
                 <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 2">购 买</el-button>
-                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 3">发 布</el-button>
+                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 3" disabled>发 布</el-button>
             </span>
         </el-dialog>
         <!--回到顶部-->
@@ -352,7 +352,16 @@
                     comQuantity: 1,
                     comQuantityNow: 1,
                     comEachPrice: 1,
-                    comDescription: ''
+                    comDescription: '',
+                    valid: 0
+                },
+                // 创建新订单信息
+                orderForm: {
+                    orderComId: '',
+                    orderNewId: '',
+                    orderSalerName: '',
+                    orderBuyerName: '',
+                    orderStatus: 1
                 },
                 // 修改表单的验证规则对象
                 buyFormRules: {
@@ -431,6 +440,7 @@
             loadError() {
                 this.loading = false
             },
+            // TODO
             async buy() {
                 this.buyForm.comQuantityNow = this.buyForm.comQuantity
                 for (let i = 0; i < this.AllCommodity.length; i++) {
@@ -439,19 +449,41 @@
                         return this.$message.error('商品号重复，购买失败')
                     }
                 }
-                const {data: res} = await this.$http.post(
+                const {data: commodityInsert} = await this.$http.post(
                     `commodity/insert?userName=${this.buyCommodityPost.userName}`,
                     this.buyForm
+                )
+                const {data: commodityUpdate} = await this.$http.post(
+                    `commodity/update?userName=${this.buyCommodityPost.userName}`,
+                    this.buyForm
+                )
+                if (commodityInsert.code !== 200 || commodityUpdate.code !== 200) {
+                    this.buyCommodityDialogVisible = false
+                    return this.$message.error('购买商品失败' + checkError(res))
+                }
+                this.orderForm.orderComId = this.buyCommodityPost.comInfo.comId
+                this.orderForm.orderNewId = this.buyForm.comId
+                this.orderForm.orderBuyerName = getCookie('ID')
+                const {data: result} = await this.$http.get(`commodity/selectCommodityUser?comId=${this.orderForm.orderComId}`)
+                if (result.code !== 200) {
+                    return this.$message.error('查询用户信息错误' + checkError(res))
+                } else {
+                    this.callInfo = result.data
+                }
+                this.orderForm.orderSalerName = this.callInfo.userName
+                const {data: res} = await this.$http.post(
+                    `order/insert`,
+                    this.orderForm
                 )
                 if (res.code !== 200) {
                     this.buyCommodityDialogVisible = false
                     return this.$message.error('购买商品失败' + checkError(res))
                 } else {
                     this.buyCommodityPost.comInfo.comQuantityNow -= this.buyForm.comQuantity
-                    const { data: res2 } = await this.$http.post(
-                        'commodity/update?',
-                        this.buyCommodityPost.comInfo
-                    )
+                        const { data: res2 } = await this.$http.post(
+                            'commodity/update?',
+                            this.buyCommodityPost.comInfo
+                        )
                     if (res2.code !== 200) {
                         this.buyCommodityDialogVisible = false
                         return this.$message.error('购买商品失败' + checkError(res))

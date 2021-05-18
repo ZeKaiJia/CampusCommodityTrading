@@ -391,7 +391,12 @@
                     return this.$message.error('查询用户信息失败' + checkError(res))
                 }
                 this.mainLoading = false
-                this.myCommodity = res.data
+                // 按Id排序
+                this.myCommodity = res.data.filter(n => n).sort(
+                    function (a, b) {
+                        return a.comId > b.comId ? 1 : -1
+                    }
+                )
             },
             async addCommodity() {
                 this.$refs.addFormRef.validate(async (valid) => {

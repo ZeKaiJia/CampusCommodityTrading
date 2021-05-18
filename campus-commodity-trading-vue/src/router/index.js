@@ -18,6 +18,7 @@ import Statuses from '../components/status/Statuses'
 import NotFound404 from '../components/NotFound404'
 import Docs from '../components/doc/Docs'
 import { getCookie } from '../plugins/utils'
+import Orders from "../components/order/Orders";
 Vue.use(Router)
 
 // eslint-disable-next-line no-undef
@@ -44,7 +45,8 @@ const router = new Router({
         { path: '/stuTranscripts', component: StuTranscripts },
         { path: '/subTranscripts', component: SubTranscripts },
         { path: '/statuses', component: Statuses },
-        { path: '/docs', component: Docs }
+        { path: '/docs', component: Docs },
+        { path: '/orders', component: Orders }
       ]
     }
   ]

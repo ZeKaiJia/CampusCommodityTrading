@@ -2,17 +2,16 @@ package cn.ky.jzk.service.implement;
 
 import cn.ky.jzk.mapper.OrderMapper;
 import cn.ky.jzk.model.Order;
+import cn.ky.jzk.service.AbstractService;
 import cn.ky.jzk.service.OrderService;
 import cn.ky.jzk.util.DateUtil;
 import cn.ky.jzk.util.GlobalConstant;
-import org.aspectj.weaver.ast.Or;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.unit.DataUnit;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ import java.util.List;
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
-public class OrderServiceImpl implements OrderService {
+public class OrderServiceImpl extends AbstractService implements OrderService {
     @Autowired
     OrderMapper orderMapper;
 
@@ -35,10 +34,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order insert(@NotNull Order order) {
-        if (order.getOrderStatus() == GlobalConstant.CREATE_ORDER_STATUS) {
+        if (order.getOrderStatus().equals(GlobalConstant.CREATE_ORDER_STATUS)) {
             order.setOrderCreateTime(DateUtil.currentSecond());
         }
-        orderMapper.insert(order);
+        orderMapper.insert(packageInfo(request, order, 1));
         return order;
     }
 
@@ -63,11 +62,11 @@ public class OrderServiceImpl implements OrderService {
         } else if (order.getOrderStatus() == GlobalConstant.TRANSPORT_ORDER_STATUS) {
             order.setOrderTransportTime(DateUtil.currentSecond());
         } else if (order.getOrderStatus() == GlobalConstant.RECIEVE_ORDER_STATUS) {
-            order.setOrderRecieveTime(DateUtil.currentSecond());
+            order.setOrderReceiveTime(DateUtil.currentSecond());
         } else {
             return null;
         }
-        orderMapper.update(order);
+        orderMapper.update(packageInfo(request, order, 0));
         return order;
     }
 

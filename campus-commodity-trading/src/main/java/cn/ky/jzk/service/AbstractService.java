@@ -1,6 +1,7 @@
 package cn.ky.jzk.service;
 
 import cn.ky.jzk.model.Commodity;
+import cn.ky.jzk.model.Order;
 import cn.ky.jzk.model.Role;
 import cn.ky.jzk.model.User;
 import cn.ky.jzk.util.DateUtil;
@@ -115,5 +116,15 @@ public abstract class AbstractService {
             commodity.setUtcCreate(commodity.getUtcModify());
         }
         return commodity;
+    }
+
+    protected static Order packageInfo(HttpServletRequest request, Order order, Integer status) {
+        order.setUtcModify(Long.parseLong(getInfo(request).get("utcModify")));
+        order.setModifyBy(getInfo(request).get("modifyBy"));
+        // 状态为1时为新建数据
+        if (status == 1) {
+            order.setUtcCreate(order.getUtcModify());
+        }
+        return order;
     }
 }

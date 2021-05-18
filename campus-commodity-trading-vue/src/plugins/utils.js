@@ -1,5 +1,8 @@
 // 时间戳转精确日期
 function timestampToTime(timestamp) {
+  if (timestamp === null || timestamp === 0) {
+    return null
+  }
   const date = new Date(timestamp)
   const Y = date.getFullYear() + '-'
   const M =
@@ -24,6 +27,9 @@ function timestampToTime(timestamp) {
 }
 // 时间戳转年月日
 function easyTimestamp(timestamp) {
+  if (timestamp === null || timestamp === 0) {
+    return null
+  }
   const date = new Date(timestamp)
   const Y = date.getFullYear() + '-'
   const M =

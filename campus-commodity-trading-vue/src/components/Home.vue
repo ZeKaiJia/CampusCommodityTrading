@@ -10,7 +10,7 @@
         <div style="margin-right: 24px">
           <span style="cursor: default;">{{this.showUser}}</span>
           <div>
-            <el-avatar :src="this.avatarUrl"/>
+            <el-avatar :src="avatarUrl"/>
           </div>
           <el-button type="info" @click="logout">退出</el-button>
         </div>
@@ -104,6 +104,20 @@
             children: [
               {id: 31, authName: '我的商品', path: 'myCommodity'},
               {id: 32, authName: '购买商品', path: 'buyCommodity'}
+            ]
+          },
+          {
+            id: 4,
+            authName: '订单查询',
+            children: [
+              {id: 41, authName: '我的订单', path: 'orders'}
+            ]
+          },
+          {
+            id: 5,
+            authName: '接口文档',
+            children: [
+              {id: 51, authName: 'API文档', path: 'docs'}
             ]
           }
         ],
