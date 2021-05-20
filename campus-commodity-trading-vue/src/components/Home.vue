@@ -5,7 +5,7 @@
       <div class="top-head">
         <div>
           <i class="el-icon-s-goods"/>
-          <span style="cursor: default;">校园二手商品交易平台</span>
+          <span style="cursor: default;">运管平台</span>
         </div>
         <div style="margin-right: 24px">
           <span style="cursor: default;">{{this.showUser}}</span>

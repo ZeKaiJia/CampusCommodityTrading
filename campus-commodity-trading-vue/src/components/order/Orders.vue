@@ -102,6 +102,7 @@
                 icon="el-icon-truck"
                 size="mini"
                 @click="removeUserByName(scope.row.userName)"
+                v-if="userRole.roleNameEn === 'admin' || userRole.roleNameEn === 'saler'"
                 round
               />
             </el-tooltip>
@@ -119,6 +120,7 @@
                       icon="el-icon-map-location"
                       size="mini"
                       @click="removeUserByName(scope.row.userName)"
+                      v-if="userRole.roleNameEn === 'admin' || userRole.roleNameEn === 'buyer'"
                       round
               />
             </el-tooltip>

@@ -1,9 +1,6 @@
 package cn.ky.jzk.service;
 
-import cn.ky.jzk.model.Commodity;
-import cn.ky.jzk.model.Order;
-import cn.ky.jzk.model.Role;
-import cn.ky.jzk.model.User;
+import cn.ky.jzk.model.*;
 import cn.ky.jzk.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,5 +123,15 @@ public abstract class AbstractService {
             order.setUtcCreate(order.getUtcModify());
         }
         return order;
+    }
+
+    protected static Address packageInfo(HttpServletRequest request, Address address, Integer status) {
+        address.setUtcModify(Long.parseLong(getInfo(request).get("utcModify")));
+        address.setModifyBy(getInfo(request).get("modifyBy"));
+        // 状态为1时为新建数据
+        if (status == 1) {
+            address.setUtcCreate(address.getUtcModify());
+        }
+        return address;
     }
 }

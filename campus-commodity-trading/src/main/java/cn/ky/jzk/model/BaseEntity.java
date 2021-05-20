@@ -37,13 +37,13 @@ public abstract class BaseEntity implements Serializable {
      * 修改人
      * The Modify by.
      */
-    @ApiModelProperty(value = "修改人", required = true)
+    @ApiModelProperty(value = "修改人", required = true, example = "Xb18620208")
     protected String modifyBy;
     /**
      * 是否有效
      * The Valid.
      */
-    @ApiModelProperty(value = "是否有效", required = true)
+    @ApiModelProperty(value = "是否有效", required = true, example = "true")
     protected Boolean valid;
     /**
      * 备注
