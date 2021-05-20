@@ -48,6 +48,14 @@ public class AddressController extends BaseController implements AddressControll
     }
 
     @Override
+    @PostMapping(value = "/deleteByName")
+    @ResponseBody
+    public Response<String> deleteByName(@RequestParam String username) {
+        addressService.deleteByName(username);
+        return dataAnalyse("Success", 404, "删除失败");
+    }
+
+    @Override
     @PostMapping(value = "/update")
     @ResponseBody
     public Response<String> update(@RequestBody Address address) {

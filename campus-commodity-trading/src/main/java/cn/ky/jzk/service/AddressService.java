@@ -15,6 +15,8 @@ public interface AddressService {
 
     void delete(Integer id);
 
+    void deleteByName(String userName);
+
     void update(Address address);
 
     List<Address> select();

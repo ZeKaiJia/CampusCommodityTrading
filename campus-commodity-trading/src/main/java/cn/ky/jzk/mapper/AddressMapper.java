@@ -18,6 +18,8 @@ public interface AddressMapper {
 
     void delete(@Param("id") Integer id);
 
+    void deleteByName(@Param("userName") String userName);
+
     void update(Address address);
 
     List<Address> select();

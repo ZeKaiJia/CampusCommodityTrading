@@ -19,6 +19,12 @@ public interface AddressControllerApi {
     })
     Response<String> delete(@ApiParam Integer id);
 
+    @ApiOperation(value = "按用户名删除地址", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户名", example = "Xb18620208", name = "userName", required = true, paramType = "query", dataType = "string")
+    })
+    Response<String> deleteByName(@ApiParam String userName);
+
 
     @ApiOperation(value = "更新地址", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     Response<String> update(Address address);

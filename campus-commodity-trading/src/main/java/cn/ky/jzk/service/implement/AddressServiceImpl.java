@@ -42,6 +42,11 @@ public class AddressServiceImpl extends AbstractService implements AddressServic
     }
 
     @Override
+    public void deleteByName(String userName) {
+        addressMapper.deleteByName(userName);
+    }
+
+    @Override
     public void update(Address address) {
         addressMapper.update(address);
     }

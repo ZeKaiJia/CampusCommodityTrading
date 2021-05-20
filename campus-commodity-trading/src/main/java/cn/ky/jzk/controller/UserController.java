@@ -1,6 +1,7 @@
 package cn.ky.jzk.controller;
 
 import cn.ky.jzk.model.User;
+import cn.ky.jzk.service.AddressService;
 import cn.ky.jzk.service.RelationCommodityUserService;
 import cn.ky.jzk.service.UserService;
 import cn.ky.jzk.swagger.api.UserControllerApi;
@@ -23,6 +24,10 @@ public class UserController extends BaseController implements UserControllerApi 
     @Autowired
     @Qualifier("userServiceImpl")
     private UserService userService;
+
+    @Autowired
+    @Qualifier("addressServiceImpl")
+    private AddressService addressService;
 
     @Autowired
     @Qualifier("relationCommodityUserServiceImpl")
@@ -50,6 +55,7 @@ public class UserController extends BaseController implements UserControllerApi 
             return getFailResult(404, "用户名不存在");
         }
         relationCommodityUserService.deleteByName(userName);
+        addressService.deleteByName(userName);
         return getSuccessResult(temp);
     }
 
