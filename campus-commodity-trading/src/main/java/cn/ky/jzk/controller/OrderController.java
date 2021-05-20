@@ -31,32 +31,35 @@ public class OrderController extends BaseController implements OrderControllerAp
     @PostMapping(value = "/insert")
     @ResponseBody
     public Response<Order> insert(@RequestBody Order order) {
-        temp = orderService.insert(order);
-        return dataAnalyse(temp, 404, "ID已存在");
+        return dataAnalyse(orderService.insert(order), 404, "ID已存在");
     }
 
     @Override
     @PostMapping(value = "/delete")
     @ResponseBody
     public Response<Order> delete(@RequestParam Integer id) {
-        temp = orderService.delete(id);
-        return dataAnalyse(temp, 404, "ID不存在");
+        return dataAnalyse(orderService.delete(id), 404, "ID不存在");
     }
 
     @Override
     @PostMapping(value = "/update")
     @ResponseBody
     public Response<Order> update(@RequestBody Order order) {
-        temp = orderService.update(order);
-        return dataAnalyse(temp, 404, "数据错误");
+        return dataAnalyse(orderService.update(order), 404, "数据错误");
     }
 
     @Override
     @GetMapping(value = "/select")
     @ResponseBody
     public Response<List<Order>> select() {
-        temps = orderService.select();
-        return dataAnalyse(temps, 404, "未找到数据");
+        return dataAnalyse(orderService.select(), 404, "未找到数据");
+    }
+
+    @Override
+    @GetMapping(value = "/selectById")
+    @ResponseBody
+    public Response<Order> selectById(@RequestParam Integer id) {
+        return dataAnalyse(orderService.selectById(id), 404, "未找到数据");
     }
 
     @Override
@@ -64,8 +67,9 @@ public class OrderController extends BaseController implements OrderControllerAp
     @ResponseBody
     public Response<List<Order>> selectByAnyParam(@RequestParam Integer id, @RequestParam String orderComId,
                                                   @RequestParam String orderNewId, @RequestParam String orderSalerName,
-                                                  @RequestParam String orderBuyerName, @RequestParam Integer orderStatus) {
-        temps =  orderService.selectByAnyParam(id, orderComId, orderNewId, orderSalerName, orderBuyerName, orderStatus);
-        return dataAnalyse(temps, 404, "未找到数据");
+                                                  @RequestParam String orderBuyerName, @RequestParam String orderTransportCode,
+                                                  @RequestParam Integer orderStatus) {
+        return dataAnalyse(orderService.selectByAnyParam(id, orderComId, orderNewId, orderSalerName,
+                orderBuyerName, orderTransportCode, orderStatus), 404, "未找到数据");
     }
 }

@@ -48,6 +48,12 @@
                       :key="scope.row.orderTransportTime"
                       :timestamp="scope.row.orderTransportTime">
                 发货
+                <div v-if="scope.row.orderTransportCode !== null">
+                  运单 - {{scope.row.orderTransportCode}}
+                </div>
+                <div v-if="scope.row.orderSalerAddress !== null">
+                  地址 - {{scope.row.orderSalerAddress}}
+                </div>
               </el-timeline-item>
               <el-timeline-item
                       size="large"
@@ -55,6 +61,9 @@
                       :key="scope.row.orderReceiveTime"
                       :timestamp="scope.row.orderReceiveTime">
                 收货
+                <div v-if="scope.row.orderBuyerAddress !== null">
+                  地址 - {{scope.row.orderBuyerAddress}}
+                </div>
               </el-timeline-item>
             </el-timeline>
             <el-row v-if="scope.row.remark !== null && scope.row.remark !== ''">
@@ -98,12 +107,12 @@
             >
               <!--发货按钮-->
               <el-button
-                type="primary"
-                icon="el-icon-truck"
-                size="mini"
-                @click="removeUserByName(scope.row.userName)"
-                v-if="userRole.roleNameEn === 'admin' || userRole.roleNameEn === 'saler'"
-                round
+                      type="primary"
+                      icon="el-icon-truck"
+                      size="mini"
+                      @click="showTransport(scope.row.id)"
+                      v-if="userRole.roleNameEn === 'admin' || userRole.roleNameEn === 'saler'"
+                      round
               />
             </el-tooltip>
             <el-tooltip
@@ -119,7 +128,7 @@
                       type="primary"
                       icon="el-icon-map-location"
                       size="mini"
-                      @click="removeUserByName(scope.row.userName)"
+                      @click="receive(scope.row.id)"
                       v-if="userRole.roleNameEn === 'admin' || userRole.roleNameEn === 'buyer'"
                       round
               />
@@ -129,54 +138,110 @@
       </el-table>
       <!--显示分页信息-->
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
-        :page-sizes="[1, 5, 7, 10, 30, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total">
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-sizes="[1, 5, 7, 10, 30, 50, 100]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total">
       </el-pagination>
     </el-card>
+    <!--发货的对话框-->
+    <el-dialog
+            title="发货"
+            :visible.sync="updateDialogVisible"
+            width="50%"
+            @close="updateDialogClosed"
+            style="margin-top: 100px"
+    >
+      <!--内容主题区域-->
+      <el-form
+              :model="updateForm"
+              :rules="updateFormRules"
+              ref="updateFormRef"
+              label-width="100px"
+              v-loading="dialogLoading"
+      >
+        <el-form-item label="运单号" prop="orderTransportCode">
+          <el-input v-model="updateForm.orderTransportCode"/>
+        </el-form-item>
+        <el-form-item label="发货地址" prop="orderSalerAddress">
+          <el-select v-model="updateForm.orderSalerAddress"
+                     style="width: 100%"
+                     placeholder="选择您的发货地址"
+                     default-first-option>
+            <el-option
+                    v-for="item in addresses"
+                    :key="item.id"
+                    :label="item.address"
+                    :value="item.address">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <!--底部按钮区-->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="transport">发 货</el-button>
+      </span>
+    </el-dialog>
     <!--回到顶部-->
     <el-backtop target=".el-main" :bottom="50">△</el-backtop>
   </div>
 </template>
 
 <script>
-  import {sliceData, checkError, getCookie, timestampToTime} from '../../plugins/utils'
-export default {
-  name: 'Orders',
-  data() {
-    return {
-      userRole: [],
-      // 开启加载
-      loading: true,
-      dialogLoading: true,
-      // 路由url
-      routeUrl: '/orders',
-      // 角色类型选择 TODO
-      options: [],
-      // 页面数据显示条数
-      pageSize: 7,
-      // 当前页数
-      currentPage: 1,
-      // 获取订单列表的参数对象
-      queryInfo: {
-        orderComId: ''
-      },
-      // 读取到的订单数据
-      orderList: [],
-      // 显示在 table 中的数据
-      showOrderList: [],
-      total: 0,
-      // 控制修改订单对话框的显示
-      editDialogVisible: false,
-      // 修改用户的表单数据
-      editForm: {
-        orderStatus: null
+  import {checkError, getCookie, sliceData, timestampToTime} from '../../plugins/utils'
+
+  export default {
+    name: 'Orders',
+    data() {
+      return {
+        addresses: [],
+        updateDialogVisible: false,
+        updateForm: {
+          id: '',
+          orderSalerAddress: '',
+          orderStatus: '',
+          orderTransportCode: ''
+        },
+        userRole: [],
+        // 开启加载
+        loading: true,
+        dialogLoading: true,
+        // 路由url
+        routeUrl: '/orders',
+        // 角色类型选择 TODO
+        options: [],
+        // 页面数据显示条数
+        pageSize: 7,
+        // 当前页数
+        currentPage: 1,
+        // 获取订单列表的参数对象
+        queryInfo: {
+          orderComId: ''
+        },
+        // 读取到的订单数据
+        orderList: [],
+        // 显示在 table 中的数据
+        showOrderList: [],
+        total: 0,
+        // 控制修改订单对话框的显示
+        editDialogVisible: false,
+        // 修改用户的表单数据
+        editForm: {
+          orderStatus: null
+        },
+        updateFormRules: {
+          orderTransportCode: [
+            {required: true, message: '请输入快递运单号', trigger: 'blur'},
+          ],
+          orderSalerAddress: [
+            {required: true, message: '请选择您的发货地址', trigger: 'change'}
+          ]
+        }
       }
-    }
   },
   created() {
     this.information.$emit('activePath', this.routeUrl)
@@ -184,6 +249,55 @@ export default {
     this.getOrderList()
   },
   methods: {
+    // 监听发货对话框的关闭事件
+    updateDialogClosed() {
+      this.$refs.updateFormRef.resetFields()
+    },
+    // 显示发货对话框
+    async showTransport(id) {
+      const {data: res} = await this.$http.get(
+              `order/selectById?id=${id}`
+      )
+      if (res.code !== 200) {
+        return this.$message.error('查询订单信息失败' + checkError(res))
+      }
+
+      if (res.data.orderStatus === 3) {
+        return this.$message.error('该订单已经收货')
+      } else if (res.data.orderStatus === 2) {
+        return this.$message.error('该订单已经发货')
+      }
+
+      const {data: add} = await this.$http.get(`address/selectByName?userName=${getCookie('ID')}`)
+      if (add.code !== 200) {
+        return this.$message.error('该用户没有配置地址!' + checkError(res))
+      } else {
+        this.addresses = add.data
+      }
+
+
+      this.updateForm = res.data
+      this.updateDialogVisible = true
+      this.dialogLoading = false
+    },
+    // 发货
+    async transport() {
+      this.$refs.updateFormRef.validate(async (valid) => {
+        if (!valid) return this.$message.error('请填写正确的发货信息后再提交')
+        this.dialogLoading = true
+        this.updateForm.orderStatus = 2
+        const { data: res } = await this.$http.post('order/update', this.updateForm)
+        this.dialogLoading = false
+        if (res.code !== 200) {
+          this.updateDialogVisible = false
+          this.$message.error('发货失败' + checkError(res))
+        } else {
+          this.updateDialogVisible = false
+          await this.getOrderList()
+          this.$message.success('发货成功')
+        }
+      })
+    },
     async getCurrentUserRole() {
       const {data: res} = await this.$http.get(
               `role/selectById?roleId=${getCookie('type')}`

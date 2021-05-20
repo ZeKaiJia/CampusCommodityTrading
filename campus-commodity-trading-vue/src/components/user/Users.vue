@@ -261,8 +261,9 @@
 </template>
 
 <script>
-  import {sliceData, checkError, getCookie} from '../../plugins/utils'
-export default {
+  import {checkError, getCookie, sliceData} from '../../plugins/utils'
+
+  export default {
   name: 'Users',
   data() {
     // 验证邮箱

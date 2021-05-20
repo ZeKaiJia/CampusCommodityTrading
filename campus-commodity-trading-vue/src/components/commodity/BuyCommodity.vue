@@ -253,6 +253,19 @@
                                     <el-form-item label="描述" prop="comDescription">
                                         <el-input v-model="buyForm.comDescription"/>
                                     </el-form-item>
+                                    <el-form-item label="地址" prop="address">
+                                        <el-select v-model="buyForm.address"
+                                                   style="width: 100%"
+                                                   placeholder="选择您的收货地址"
+                                                   default-first-option>
+                                            <el-option
+                                                    v-for="item in addresses"
+                                                    :key="item.id"
+                                                    :label="item.address"
+                                                    :value="item.address">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
                                 </el-col>
                             </el-form>
                         </el-row>
@@ -317,6 +330,7 @@
                 }
             }
             return {
+                addresses: [],
                 rate: null,
                 iconClasses: ['el-icon-heavy-rain', 'el-icon-cloudy-and-sunny', 'el-icon-sunny'],
                 loading: false,
@@ -353,7 +367,8 @@
                     comQuantityNow: 1,
                     comEachPrice: 1,
                     comDescription: '',
-                    valid: 0
+                    valid: 0,
+                    address: ''
                 },
                 // 创建新订单信息
                 orderForm: {
@@ -383,6 +398,9 @@
                     ],
                     comDescription: [
                         {required: true, message: '请输入商品描述', trigger: 'blur'}
+                    ],
+                    address: [
+                        {required: true, message: '请选择您的收货地址', trigger: 'change'}
                     ]
                 },
                 progressLoading: 0,
@@ -463,6 +481,7 @@
                 }
                 this.orderForm.orderComId = this.buyCommodityPost.comInfo.comId
                 this.orderForm.orderNewId = this.buyForm.comId
+                this.orderForm.orderBuyerAddress = this.buyForm.address
                 this.orderForm.orderBuyerName = getCookie('ID')
                 const {data: result} = await this.$http.get(`commodity/selectCommodityUser?comId=${this.orderForm.orderComId}`)
                 if (result.code !== 200) {
@@ -544,6 +563,13 @@
                 const {data: res} = await this.$http.get(`commodity/selectById?comId=${comId}`)
                 this.buyCommodityPost.comInfo = res.data
                 this.activeStep = 0
+
+                const {data: add} = await this.$http.get(`address/selectByName?userName=${getCookie('ID')}`)
+                if (add.code !== 200) {
+                    return this.$message.error('该用户没有配置地址!' + checkError(res))
+                } else {
+                    this.addresses = add.data
+                }
             },
             async checkCommodityUserInfo(comId) {
                 const {data: res} = await this.$http.get(`commodity/selectCommodityUser?comId=${comId}`)
@@ -631,6 +657,7 @@
         opacity: 0;
         transform: translateX(-200px);
     }
+
     #qrcodeImg {
         box-sizing: border-box;
         display: inline-block;

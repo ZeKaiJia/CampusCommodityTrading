@@ -28,6 +28,12 @@ public interface OrderControllerApi {
     @ApiOperation(value = "查询全体订单", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     Response<List<Order>> select();
 
+    @ApiOperation(value = "根据ID号查询订单", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "订单号", example = "1", name = "id", required = true, paramType = "query", dataType = "integer")
+    })
+    Response<Order> selectById(@ApiParam Integer id);
+
     @ApiOperation(value = "根据指定字段查询订单", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "订单号", example = "1", name = "id", required = false, paramType = "query", dataType = "integer"),
@@ -35,9 +41,10 @@ public interface OrderControllerApi {
             @ApiImplicitParam(value = "新商品号", example = "SH100", name = "orderNewId", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(value = "卖家账号", example = "Xb18620208", name = "orderSalerName", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(value = "买家账号", example = "Xb18620230", name = "orderBuyerName", required = false, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(value = "买家账号", example = "121224242323", name = "orderTransportCode", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(value = "订单状态(1:已下单2:已发货3:已收货)", example = "1", name = "orderStatus", required = false, paramType = "query", dataType = "integer")
     })
     Response<List<Order>> selectByAnyParam(@ApiParam Integer id, @ApiParam String orderComId, @ApiParam String orderNewId,
                                            @ApiParam String orderSalerName, @ApiParam String orderBuyerName,
-                                           @ApiParam Integer orderStatus);
+                                           @ApiParam String orderTransportCode, @ApiParam Integer orderStatus);
 }

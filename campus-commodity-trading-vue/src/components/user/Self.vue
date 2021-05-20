@@ -118,7 +118,7 @@
                 <el-col :span="10">
                     <el-select v-model="address"
                                placeholder="查看地址信息"
-                               style="width: 600px;"
+                               style="width: 33vw;"
                                clearable
                                filterable
                                allow-create
@@ -132,12 +132,24 @@
                         </el-option>
                     </el-select>
                 </el-col>
-                <el-col :span="2">
-                    <el-button type="success" plain @click="addAddress()">添加当前地址</el-button>
+                <el-col :span="1" style="text-align: center">
+                    <el-button v-if="!searchFlag" type="text" icon="el-icon-d-arrow-right" circle
+                               style="margin-top: 4px; font-size: 32px; padding: 0"
+                               @click="searchFlag = !searchFlag"></el-button>
+                    <el-button v-if="searchFlag" type="text" icon="el-icon-d-arrow-left" circle
+                               style="margin-top: 4px; font-size: 32px; padding: 0"
+                               @click="searchFlag = !searchFlag"></el-button>
                 </el-col>
-                <el-col :span="2">
-                    <el-button type="danger" plain @click="deleteAddress()">删除当前地址</el-button>
-                </el-col>
+                <transition name="fade">
+                    <el-col :span="3" v-if="searchFlag">
+                        <el-button type="success" plain @click="addAddress()">添加当前地址</el-button>
+                    </el-col>
+                </transition>
+                <transition name="fade">
+                    <el-col :span="3" v-if="searchFlag">
+                        <el-button type="danger" plain @click="deleteAddress()">删除当前地址</el-button>
+                    </el-col>
+                </transition>
             </el-row>
         </el-card>
         <!--修改用户的对话框-->
@@ -221,6 +233,7 @@
                 }
             }
             return {
+                searchFlag: false,
                 address: null,
                 addresses: [],
                 addressForm: {
@@ -482,5 +495,14 @@
     .upload-demo {
         width: 50px !important;
         display: inline-block;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: all 1s;
+    }
+
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+        transform: translateX(-200px);
     }
 </style>
