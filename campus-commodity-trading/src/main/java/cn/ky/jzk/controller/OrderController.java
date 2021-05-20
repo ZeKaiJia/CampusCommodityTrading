@@ -63,13 +63,9 @@ public class OrderController extends BaseController implements OrderControllerAp
     }
 
     @Override
-    @GetMapping(value = "/selectByAnyParam")
+    @PostMapping(value = "/selectByAnyParam")
     @ResponseBody
-    public Response<List<Order>> selectByAnyParam(@RequestParam Integer id, @RequestParam String orderComId,
-                                                  @RequestParam String orderNewId, @RequestParam String orderSalerName,
-                                                  @RequestParam String orderBuyerName, @RequestParam String orderTransportCode,
-                                                  @RequestParam Integer orderStatus) {
-        return dataAnalyse(orderService.selectByAnyParam(id, orderComId, orderNewId, orderSalerName,
-                orderBuyerName, orderTransportCode, orderStatus), 404, "未找到数据");
+    public Response<List<Order>> selectByAnyParam(@RequestBody Order order) {
+        return dataAnalyse(orderService.selectByAnyParam(order), 404, "未找到数据");
     }
 }

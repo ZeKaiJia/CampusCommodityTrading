@@ -191,7 +191,7 @@
         // 控制添加用户对话框的显示
         addDialogVisible: false,
         // 路由url
-        routeUrl: '/types',
+        routeUrl: '/roles',
         // 分配权限的加载动画
         loading: false,
         // 记录正在操作的角色

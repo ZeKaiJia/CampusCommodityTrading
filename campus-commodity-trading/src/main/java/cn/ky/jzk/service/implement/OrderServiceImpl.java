@@ -43,18 +43,18 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
 
     @Override
     public Order delete(Integer id) {
-        temps = orderMapper.selectByAnyParam(id, "", "", "", "", "",  null);
-        if (temps.size() == 0) {
+        temp = orderMapper.selectById(id);
+        if (temp == null) {
             return null;
         }
         orderMapper.delete(id);
-        return temps.get(0);
+        return temp;
     }
 
     @Override
     public Order update(@NotNull Order order) {
-        temps = orderMapper.selectByAnyParam(order.getId(), "", "", "", "", "", null);
-        if (temps.size() == 0) {
+        temp = orderMapper.selectById(order.getId());
+        if (temp == null) {
             return null;
         }
         if (order.getOrderStatus() == GlobalConstant.CREATE_ORDER_STATUS) {
@@ -85,10 +85,8 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
     }
 
     @Override
-    public List<Order> selectByAnyParam(Integer id, String orderComId, String orderNewId, String orderSalerName,
-                                        String orderBuyerName, String orderTransportCode, Integer orderStatus) {
-        temps = orderMapper.selectByAnyParam(id, orderComId, orderNewId, orderSalerName,
-                orderBuyerName, orderTransportCode, orderStatus);
+    public List<Order> selectByAnyParam(Order order) {
+        temps = orderMapper.selectByAnyParam(order);
         if (temps.size() == 0) {
             return null;
         }

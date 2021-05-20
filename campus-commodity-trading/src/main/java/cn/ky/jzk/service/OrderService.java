@@ -21,6 +21,5 @@ public interface OrderService {
 
     Order selectById(Integer id);
 
-    List<Order> selectByAnyParam(Integer id, String orderComId, String orderNewId, String orderSalerName,
-                           String orderBuyerName, String orderTransportCode, Integer orderStatus);
+    List<Order> selectByAnyParam(Order order);
 }

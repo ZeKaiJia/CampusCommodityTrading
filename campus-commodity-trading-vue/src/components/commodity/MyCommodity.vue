@@ -46,7 +46,7 @@
                             <el-image
                                     v-if="commodity.comPicture !== '' && commodity.comPicture !== null"
                                     v-loading="loading"
-                                    style="width: 6.5vw; height: 6.5vw; min-width: 94px; min-height: 94px"
+                                    style="width: 6.5vw; height: 6.5vw; min-width: 100px; min-height: 100px"
                                     :src="commodity.comPicture"
                                     fit="cover"
                                     @load="loadSuccess"
@@ -237,10 +237,13 @@
                     ]
                 },
                 mainLoading: true,
-                myCommodity: []
+                myCommodity: [],
+                // 路由url
+                routeUrl: '/myCommodity',
             }
         },
         created() {
+            this.information.$emit('activePath', this.routeUrl)
             this.getMyCommodity()
         },
         methods: {
@@ -387,10 +390,10 @@
                 const {data: res} = await this.$http.get(
                     `commodity/selectUserCommodity?userName=${getCookie('ID')}`
                 )
-                if (res.code !== 200) {
-                    return this.$message.error('查询用户信息失败' + checkError(res))
-                }
                 this.mainLoading = false
+                if (res.code !== 200) {
+                    return this.$message.error('查询用户商品失败 ' + checkError(res))
+                }
                 // 按Id排序
                 this.myCommodity = res.data.filter(n => n).sort(
                     function (a, b) {

@@ -128,7 +128,7 @@
                       type="primary"
                       icon="el-icon-map-location"
                       size="mini"
-                      @click="receive(scope.row.id)"
+                      @click="showReceive(scope.row.id)"
                       v-if="userRole.roleNameEn === 'admin' || userRole.roleNameEn === 'buyer'"
                       round
               />
@@ -186,6 +186,40 @@
         <el-button type="primary" @click="transport">发 货</el-button>
       </span>
     </el-dialog>
+    <!--收货的对话框-->
+    <el-dialog
+            title="收货"
+            :visible.sync="receiveDialogVisible"
+            width="70%"
+    >
+      <el-steps :active="activeStep" finish-status="success" simple style="margin-top: 20px">
+        <el-step title="确认商品信息"></el-step>
+        <el-step title="填写个人信息"></el-step>
+        <el-step title="扫码支付下单"></el-step>
+        <el-step title="收货发布评价"></el-step>
+      </el-steps>
+      <el-card style="margin-top: 12px; text-align: center; height: 270px">
+        <transition name="fade">
+          <div v-if="activeStep === 3"
+               style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -20%)">
+            <div>
+              发布您的评价，您的好评是给予卖家最大的支持
+              <el-rate
+                      v-model="rate"
+                      :icon-classes="iconClasses"
+                      void-icon-class="el-icon-star-off"
+                      :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                      show-score>
+              </el-rate>
+            </div>
+          </div>
+        </transition>
+      </el-card>
+      <!--底部按钮区-->
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="receive" v-if="activeStep === 3">发 布</el-button>
+      </span>
+    </el-dialog>
     <!--回到顶部-->
     <el-backtop target=".el-main" :bottom="50">△</el-backtop>
   </div>
@@ -198,7 +232,21 @@
     name: 'Orders',
     data() {
       return {
+        // 获取订单列表的参数对象
+        queryInfo: {
+          id: '',
+          orderComId: '',
+          orderNewId: '',
+          orderSalerName: '',
+          orderBuyerName: '',
+          orderTransportCode: '',
+          orderStatus: '',
+        },
+        rate: null,
+        iconClasses: ['el-icon-heavy-rain', 'el-icon-cloudy-and-sunny', 'el-icon-sunny'],
+        activeStep: 3,
         addresses: [],
+        receiveDialogVisible: false,
         updateDialogVisible: false,
         updateForm: {
           id: '',
@@ -209,7 +257,7 @@
         userRole: [],
         // 开启加载
         loading: true,
-        dialogLoading: true,
+        dialogLoading: false,
         // 路由url
         routeUrl: '/orders',
         // 角色类型选择 TODO
@@ -218,10 +266,6 @@
         pageSize: 7,
         // 当前页数
         currentPage: 1,
-        // 获取订单列表的参数对象
-        queryInfo: {
-          orderComId: ''
-        },
         // 读取到的订单数据
         orderList: [],
         // 显示在 table 中的数据
@@ -229,10 +273,9 @@
         total: 0,
         // 控制修改订单对话框的显示
         editDialogVisible: false,
-        // 修改用户的表单数据
-        editForm: {
-          orderStatus: null
-        },
+        // 收货时修改的两个商品
+        receiveOld: [],
+        receiveNew: [],
         updateFormRules: {
           orderTransportCode: [
             {required: true, message: '请输入快递运单号', trigger: 'blur'},
@@ -245,7 +288,6 @@
   },
   created() {
     this.information.$emit('activePath', this.routeUrl)
-    this.getCurrentUserRole()
     this.getOrderList()
   },
   methods: {
@@ -278,7 +320,6 @@
 
       this.updateForm = res.data
       this.updateDialogVisible = true
-      this.dialogLoading = false
     },
     // 发货
     async transport() {
@@ -298,6 +339,76 @@
         }
       })
     },
+    // 显示收货对话框
+    async showReceive(id) {
+      // 获取订单信息
+      const {data: res} = await this.$http.get(
+              `order/selectById?id=${id}`
+      )
+      if (res.code !== 200) {
+        return this.$message.error('查询订单信息失败' + checkError(res))
+      }
+
+      if (res.data.orderStatus === 3) {
+        return this.$message.error('该订单已经收货')
+      } else if (res.data.orderStatus === 1) {
+        return this.$message.error('该订单还未发货')
+      }
+      this.updateForm = res.data
+
+      // 获取新老商品信息
+      const {data: oldCom} = await this.$http.get(
+              `commodity/selectById?comId=${res.data.orderComId}`
+      )
+      const {data: newCom} = await this.$http.get(
+              `commodity/selectById?comId=${res.data.orderNewId}`
+      )
+      if (oldCom.code !== 200 || newCom.code !== 200) {
+        return this.$message.error('获取新老商品关联实体失败 ' + checkError(oldCom) + ' ' + checkError(newCom))
+      }
+      this.receiveOld = oldCom.data
+      this.receiveNew = newCom.data
+
+      this.receiveDialogVisible = true
+    },
+    async receive() {
+      // 新商品修改valid为true
+      this.receiveNew.valid = true
+      const {data: valid} = await this.$http.post(
+              'commodity/update', this.receiveNew
+      )
+      if (valid.code !== 200) {
+        this.receiveDialogVisible = false
+        return this.$message.error('新商品发布失败' + checkError(valid))
+      }
+      // 旧商品发布评价
+      if (this.rate === null) {
+        this.$message.error('请填写评价!')
+      } else {
+        const {data: old} = await this.$http.post(
+                `commodity/updateRate?comId=${this.receiveOld.comId}&rate=${this.rate}`
+        )
+        this.rate = null
+        if (old.code !== 200) {
+          this.receiveDialogVisible = false
+          this.$message.error('发布评价失败' + checkError(old))
+        } else {
+          this.$message.success('发布评价成功')
+        }
+
+        this.updateForm.orderStatus = 3
+        const { data: res } = await this.$http.post('order/update', this.updateForm)
+        this.dialogLoading = false
+        if (res.code !== 200) {
+          this.receiveDialogVisible = false
+          this.$message.error('收货失败' + checkError(res))
+        } else {
+          this.receiveDialogVisible = false
+          await this.getOrderList()
+          this.$message.success('收货成功')
+        }
+      }
+    },
     async getCurrentUserRole() {
       const {data: res} = await this.$http.get(
               `role/selectById?roleId=${getCookie('type')}`
@@ -309,8 +420,14 @@
     },
     // 获取订单列表
     async getOrderList() {
+      await this.getCurrentUserRole()
+      if (this.userRole.roleNameEn === 'buyer') {
+        this.queryInfo.orderBuyerName = getCookie('ID')
+      } else if (this.userRole.roleNameEn === 'saler') {
+        this.queryInfo.orderSalerName = getCookie('ID')
+      }
       this.loading = true
-      const { data: res } = await this.$http.get('order/select')
+      const { data: res } = await this.$http.post('order/selectByAnyParam', this.queryInfo)
       if (res.code !== 200) {
         this.loading = false
         return this.$message.error('获取订单列表失败!' + checkError(res))

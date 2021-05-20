@@ -105,7 +105,7 @@
                         <el-image
                                 v-if="commodity.comPicture !== '' && commodity.comPicture !== null"
                                 v-loading="loading"
-                                style="width: 6.5vw; height: 6.5vw; min-width: 100px; min-height: 101px"
+                                style="width: 6.5vw; height: 6.5vw; min-width: 100px; min-height: 100px"
                                 :src="commodity.comPicture"
                                 fit="cover"
                                 @load="loadSuccess"
@@ -192,7 +192,7 @@
             <el-steps :active="activeStep" finish-status="success" simple style="margin-top: 20px">
                 <el-step title="确认商品信息"></el-step>
                 <el-step title="填写个人信息"></el-step>
-                <el-step title="扫码支付购买"></el-step>
+                <el-step title="扫码支付下单"></el-step>
                 <el-step title="收货发布评价"></el-step>
             </el-steps>
             <el-card style="margin-top: 12px; text-align: center; height: 270px">
@@ -274,30 +274,12 @@
                 <transition name="fade" style="position: absolute; left: 50%; transform: translate(-50%)">
                     <div v-if="activeStep === 2" id="qrcodeImg"></div>
                 </transition>
-                <transition name="fade">
-                    <div v-if="activeStep === 3"
-                         style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -20%)">
-                        <el-progress v-if="progressLoading !== 101" type="circle" :percentage="progressLoading"
-                                     :stroke-width="12" :color="colors"></el-progress>
-                        <div v-if="progressLoading === 101">
-                            发布您的评价，您的好评是给予卖家最大的支持
-                            <el-rate
-                                    v-model="rate"
-                                    :icon-classes="iconClasses"
-                                    void-icon-class="el-icon-star-off"
-                                    :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                                    show-score>
-                            </el-rate>
-                        </div>
-                    </div>
-                </transition>
             </el-card>
             <!--底部按钮区-->
             <span slot="footer" class="dialog-footer">
                 <el-button @click="buyCommodityPreStep" v-if="activeStep > 0 && activeStep < 3">上 一 步</el-button>
                 <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep < 2">下 一 步</el-button>
-                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 2">购 买</el-button>
-                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 3" disabled>发 布</el-button>
+                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 2">下 单</el-button>
             </span>
         </el-dialog>
         <!--回到顶部-->
@@ -403,6 +385,8 @@
                         {required: true, message: '请选择您的收货地址', trigger: 'change'}
                     ]
                 },
+                // 路由url
+                routeUrl: '/buyCommodity',
                 progressLoading: 0,
                 inter: '',
                 colors: [
@@ -425,6 +409,7 @@
             })
         },
         created() {
+            this.information.$emit('activePath', this.routeUrl)
             this.getCommodity()
         },
         destroyed() {
@@ -432,24 +417,6 @@
             this.clipboard2.destroy()
         },
         methods: {
-            async updateRate() {
-                if (this.rate === null) {
-                    this.$message.error('请填写评价!')
-                } else {
-                    const {data: res} = await this.$http.post(
-                        `commodity/updateRate?comId=${this.buyCommodityPost.comInfo.comId}&rate=${this.rate}`
-                    )
-                    await this.getCommodity()
-                    this.rate = null
-                    if (res.code !== 200) {
-                        this.buyCommodityDialogVisible = false
-                        return this.$message.error('发布评价失败!')
-                    } else {
-                        this.closeBuyCommodityDialogVisible()
-                        return this.$message.success('发布评价成功!')
-                    }
-                }
-            },
             // 图片加载成功
             loadSuccess() {
                 this.loading = false
@@ -464,7 +431,7 @@
                 for (let i = 0; i < this.AllCommodity.length; i++) {
                     if (this.buyForm.comId === this.AllCommodity[i].comId) {
                         this.buyCommodityDialogVisible = false
-                        return this.$message.error('商品号重复，购买失败')
+                        return this.$message.error('商品号重复，下单失败')
                     }
                 }
                 const {data: commodityInsert} = await this.$http.post(
@@ -477,7 +444,7 @@
                 )
                 if (commodityInsert.code !== 200 || commodityUpdate.code !== 200) {
                     this.buyCommodityDialogVisible = false
-                    return this.$message.error('购买商品失败' + checkError(res))
+                    return this.$message.error('下单失败' + checkError(res))
                 }
                 this.orderForm.orderComId = this.buyCommodityPost.comInfo.comId
                 this.orderForm.orderNewId = this.buyForm.comId
@@ -496,7 +463,7 @@
                 )
                 if (res.code !== 200) {
                     this.buyCommodityDialogVisible = false
-                    return this.$message.error('购买商品失败' + checkError(res))
+                    return this.$message.error('下单失败' + checkError(res))
                 } else {
                     this.buyCommodityPost.comInfo.comQuantityNow -= this.buyForm.comQuantity
                         const { data: res2 } = await this.$http.post(
@@ -505,7 +472,10 @@
                         )
                     if (res2.code !== 200) {
                         this.buyCommodityDialogVisible = false
-                        return this.$message.error('购买商品失败' + checkError(res))
+                        return this.$message.error('下单失败' + checkError(res))
+                    } else {
+                        this.buyCommodityDialogVisible = false
+                        return this.$message.success('下单成功')
                     }
                 }
             },
@@ -530,14 +500,12 @@
                     this.addStep()
                     this.inter = setInterval(this.progress, 60)
                     setTimeout(this.buy, 7000)
-                } else if (this.activeStep === 3) {
-                    this.updateRate()
                 } else {
                     this.addStep()
                 }
             },
             addStep() {
-                this.activeStep < 4 ? this.activeStep++ : this.activeStep
+                this.activeStep < 3 ? this.activeStep++ : this.activeStep
             },
             closeBuyCommodityDialogVisible() {
                 this.$message.success('购买成功，请到 商品管理 > 我的商品 中进行查看')

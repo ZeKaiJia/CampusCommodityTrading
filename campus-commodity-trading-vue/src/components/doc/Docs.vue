@@ -14,7 +14,14 @@
 <script>
 export default {
   name: 'Docs',
+  data() {
+    return {
+      // 路由url
+      routeUrl: '/docs',
+    }
+  },
   created() {
+    this.information.$emit('activePath', this.routeUrl)
     this.changeStyle()
   },
   methods: {

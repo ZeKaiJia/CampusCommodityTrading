@@ -23,10 +23,5 @@ public interface OrderMapper {
 
     Order selectById(@Param("id") Integer id);
 
-    List<Order> selectByAnyParam(@Param("id") Integer id, @Param("orderComId") String orderComId,
-                                 @Param("orderNewId") String orderNewId,
-                                 @Param("orderSalerName") String orderSalerName,
-                                 @Param("orderBuyerName") String orderBuyerName,
-                                 @Param("orderTransportCode") String orderTransportCode,
-                                 @Param("orderStatus") Integer orderStatus);
+    List<Order> selectByAnyParam(Order order);
 }
