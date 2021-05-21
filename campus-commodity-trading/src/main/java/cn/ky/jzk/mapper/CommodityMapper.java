@@ -37,8 +37,7 @@ public interface CommodityMapper {
 
     void deleteAllZero(@Param("userName") String userName);
 
-    List<Commodity> selectByAnyParam(@Param("comId") String comId, @Param("comName") String comName,
-                                     @Param("minPrice") Double minPrice, @Param("maxPrice") Double maxPrice,
-                                     @Param("minQuantity") Integer minQuantity, @Param("maxQuantity") Integer maxQuantity,
-                                     @Param("comDescription") String comDescription);
+    List<Commodity> selectByAnyParam(@Param("commodity") Commodity commodity, @Param("minQuantity") Integer minQuantity,
+                                     @Param("maxQuantity") Integer maxQuantity, @Param("minPrice") Double minPrice,
+                                     @Param("maxPrice") Double maxPrice);
 }

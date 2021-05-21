@@ -129,19 +129,19 @@
         SELECT *
         FROM sys_commodity
         WHERE 1=1
-        <if test="comId != null and comId != ''">
-            AND comId like concat('%', '${comId}', '%')
+        <if test="commodity.comId != null and commodity.comId != ''">
+            AND comId like concat('%', '${commodity.comId}', '%')
         </if>
-        <if test="comName != null and comName != ''">
-            AND comName like concat('%', '${comName}', '%')
+        <if test="commodity.comName != null and commodity.comName != ''">
+            AND comName like concat('%', '${commodity.comName}', '%')
         </if>
         AND comEachPrice &gt;= #{minPrice}
         AND comEachPrice &lt;= #{maxPrice}
         AND comQuantityNow &gt;= #{minQuantity}
         AND comQuantityNow &lt;= #{maxQuantity}
         AND valid = 1
-        <if test="comDescription != null and comDescription != ''">
-            AND comDescription like concat('%', '${comDescription}', '%')
+        <if test="commodity.comDescription != null and commodity.comDescription != ''">
+            AND comDescription like concat('%', '${commodity.comDescription}', '%')
         </if>
     </select>
 </mapper>

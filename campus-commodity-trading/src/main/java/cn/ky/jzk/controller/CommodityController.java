@@ -153,13 +153,12 @@ public class CommodityController extends BaseController implements CommodityCont
     }
 
     @Override
-    @GetMapping(value = "/selectByAnyParam")
+    @PostMapping(value = "/selectByAnyParam")
     @ResponseBody
-    public Response<List<Commodity>> selectByAnyParam(@RequestParam String comId, @RequestParam String comName,
-                                                      @RequestParam Double minPrice, @RequestParam Double maxPrice,
-                                                      @RequestParam Integer minQuantity, @RequestParam Integer maxQuantity,
-                                                      @RequestParam String comDescription) {
-        temps =  commodityService.selectByAnyParam(comId, comName.replace(" ", ""), minPrice, maxPrice, minQuantity, maxQuantity, comDescription);
+    public Response<List<Commodity>> selectByAnyParam(@RequestBody Commodity commodity, @RequestParam Integer minQuantity,
+                                                      @RequestParam Integer maxQuantity, @RequestParam Double minPrice,
+                                                      @RequestParam Double maxPrice) {
+        temps =  commodityService.selectByAnyParam(commodity, minQuantity, maxQuantity, minPrice, maxPrice);
         return dataAnalyse(temps, 404, "未找到数据");
     }
 }

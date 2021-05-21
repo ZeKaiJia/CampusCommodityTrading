@@ -2,6 +2,7 @@ package cn.ky.jzk.service;
 
 import cn.ky.jzk.model.Commodity;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public interface CommodityService {
 
     List<Commodity> selectByQuantityNow(Integer comQuantityNow);
 
-    List<Commodity> selectByAnyParam(String comId, String comName, Double minPrice, Double maxPrice,
-                                     Integer minQuantity, Integer maxQuantity, String comDescription);
+    List<Commodity> selectByAnyParam(@NotNull Commodity commodity, Integer minQuantity,
+                                     Integer maxQuantity, Double minPrice,
+                                     Double maxPrice);
 }

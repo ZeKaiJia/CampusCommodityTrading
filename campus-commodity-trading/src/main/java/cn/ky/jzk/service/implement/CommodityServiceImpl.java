@@ -130,8 +130,10 @@ public class CommodityServiceImpl extends AbstractService implements CommoditySe
     }
 
     @Override
-    public List<Commodity> selectByAnyParam(String comId, String comName, Double minPrice, Double maxPrice, Integer minQuantity, Integer maxQuantity, String comDescription) {
-        temps = commodityMapper.selectByAnyParam(comId, comName, minPrice, maxPrice, minQuantity, maxQuantity, comDescription);
+    public List<Commodity> selectByAnyParam(Commodity commodity, Integer minQuantity,
+                                            Integer maxQuantity, Double minPrice,
+                                            Double maxPrice) {
+        temps = commodityMapper.selectByAnyParam(commodity, minQuantity, maxQuantity, minPrice, maxPrice);
         if (temps.size() == 0) {
             return null;
         }

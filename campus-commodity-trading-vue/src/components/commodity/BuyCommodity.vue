@@ -21,77 +21,81 @@
                                @click="searchFlag = !searchFlag"></el-button>
                 </el-col>
             </el-row>
-            <el-row v-if="searchFlag">
-                <el-card>
-                    <!--搜索与添加区域-->
-                    <el-form v-model="queryInfo" label-width="10px">
-                        <el-row :gutter="10">
-                            <el-col :span="6">
-                                <el-form-item prop="comId">
-                                    <el-input
-                                            v-model="queryInfo.comId"
-                                            placeholder="请输入商品号"
-                                            clearable>
-                                    </el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="6">
-                                <el-form-item prop="comName">
-                                    <el-input
-                                            v-model="queryInfo.comName"
-                                            placeholder="请输入商品名"
-                                            clearable>
-                                    </el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="2" style="height: 38px; display: flex; justify-content: center; align-items: center; margin-left: 12px">
-                                <span>存货范围</span>
-                            </el-col>
-                            <el-col :span="2" style="height: 38px; display: flex; justify-content: center; align-items: center">
-                                {{queryInfo.quantity[0]}}~{{queryInfo.quantity[1]}}
-                            </el-col>
-                            <el-col :span="7">
-                                <el-slider v-model="queryInfo.quantity" range :max="100">
-                                </el-slider>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="10">
-                            <el-col :span="2"
-                                    style="height: 38px; display: flex; justify-content: center; align-items: center; margin-left: 12px">
-                                <span>单价范围</span>
-                            </el-col>
-                            <el-col :span="2"
-                                    style="height: 38px; display: flex; justify-content: center; align-items: center">
-                                {{queryInfo.price[0]}}~{{queryInfo.price[1]}}
-                            </el-col>
-                            <el-col :span="9">
-                                <el-slider v-model="queryInfo.price" range :max="1000" :min="1">
-                                </el-slider>
-                            </el-col>
-                            <el-col :span="6">
-                                <el-form-item prop="comDescription">
-                                    <el-input
-                                            v-model="queryInfo.comDescription"
-                                            placeholder="请输入描述"
-                                            clearable
-                                            style="margin-left: 24px"
-                                    >
-                                    </el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="3">
-                                <el-button type="primary" @click="selectCommodity()" style="float: right;">搜索商品
-                                </el-button>
-                            </el-col>
-                            <el-col :span="1">
-                                <el-button type="text" icon="el-icon-refresh" circle
-                                           style="font-size: 32px; padding-top: 4px; margin-left: 12px"
-                                           @click="getCommodity"></el-button>
-                            </el-col>
-                        </el-row>
-                    </el-form>
-                </el-card>
-            </el-row>
+            <transition name="fadeY">
+                <el-row v-if="searchFlag">
+                    <el-card>
+                        <!--搜索与添加区域-->
+                        <el-form v-model="queryInfo" label-width="10px">
+                            <el-row :gutter="10">
+                                <el-col :span="6">
+                                    <el-form-item prop="comId">
+                                        <el-input
+                                                v-model="queryInfo.comId"
+                                                placeholder="请输入商品号"
+                                                clearable>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item prop="comName">
+                                        <el-input
+                                                v-model="queryInfo.comName"
+                                                placeholder="请输入商品名"
+                                                clearable>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="2"
+                                        style="height: 38px; display: flex; justify-content: center; align-items: center; margin-left: 12px">
+                                    <span>存货范围</span>
+                                </el-col>
+                                <el-col :span="2"
+                                        style="height: 38px; display: flex; justify-content: center; align-items: center">
+                                    {{queryInfo.quantity[0]}}~{{queryInfo.quantity[1]}}
+                                </el-col>
+                                <el-col :span="7">
+                                    <el-slider v-model="queryInfo.quantity" range :max="100">
+                                    </el-slider>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="10">
+                                <el-col :span="2"
+                                        style="height: 38px; display: flex; justify-content: center; align-items: center; margin-left: 12px">
+                                    <span>单价范围</span>
+                                </el-col>
+                                <el-col :span="2"
+                                        style="height: 38px; display: flex; justify-content: center; align-items: center">
+                                    {{queryInfo.price[0]}}~{{queryInfo.price[1]}}
+                                </el-col>
+                                <el-col :span="9">
+                                    <el-slider v-model="queryInfo.price" range :max="1000" :min="1">
+                                    </el-slider>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item prop="comDescription">
+                                        <el-input
+                                                v-model="queryInfo.comDescription"
+                                                placeholder="请输入描述"
+                                                clearable
+                                                style="margin-left: 24px"
+                                        >
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="3">
+                                    <el-button type="primary" @click="selectCommodity()" style="float: right;">搜索商品
+                                    </el-button>
+                                </el-col>
+                                <el-col :span="1">
+                                    <el-button type="text" icon="el-icon-refresh" circle
+                                               style="font-size: 32px; padding-top: 4px; margin-left: 12px"
+                                               @click="resetQueryInfo"></el-button>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                    </el-card>
+                </el-row>
+            </transition>
             <el-row>
                 <el-col :span="6" v-for="(commodity, index) in AllCommodity" :key="commodity.comId"
                         :offset="index % 3 === 0 ? 0 : 3">
@@ -199,7 +203,8 @@
                 <transition name="fade">
                     <div v-if="activeStep === 0"
                          style="position: absolute; left: 50%; transform: translate(-50%); margin-top: 8px">
-                        <i v-if="buyCommodityPost.comInfo.comPicture === '' || buyCommodityPost.comInfo.comPicture === null" class="el-icon-present"></i>
+                        <i v-if="buyCommodityPost.comInfo.comPicture === '' || buyCommodityPost.comInfo.comPicture === null"
+                           class="el-icon-present"></i>
                         <el-image
                                 v-if="buyCommodityPost.comInfo.comPicture !== '' && buyCommodityPost.comInfo.comPicture !== null"
                                 v-loading="loading"
@@ -211,7 +216,8 @@
                         >
                             <div slot="error" class="image-slot"
                                  style="display: flex; justify-content: center; align-items: center; height: 100%; flex-flow: column">
-                                <span class="el-icon-picture-outline" style="width: 48px; height: 48px; font-size: 48px"/>
+                                <span class="el-icon-picture-outline"
+                                      style="width: 48px; height: 48px; font-size: 48px"/>
                                 <span style="margin-top: 12px">加载失败</span>
                             </div>
                         </el-image>
@@ -321,9 +327,7 @@
                     comId: '',
                     comName: '',
                     quantity: [0, 100],
-                    price: [1, 10000],
-                    min: 0,
-                    max: 0,
+                    price: [0, 1000],
                     comDescription: ''
                 },
                 searchFlag: false,
@@ -365,7 +369,7 @@
                     comId: [
                         {required: true, message: '请输入商品号', trigger: 'blur'},
                         {min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur'},
-                        { validator: checkComId, trigger: 'blur' }
+                        {validator: checkComId, trigger: 'blur'}
                     ],
                     comName: [
                         {required: true, message: '请输入商品名称', trigger: 'blur'},
@@ -373,7 +377,7 @@
                     ],
                     comQuantity: [
                         {required: true, message: '请确定商品数量', trigger: 'change'},
-                        { validator: checkQuantity, trigger: 'change' }
+                        {validator: checkQuantity, trigger: 'change'}
                     ],
                     comEachPrice: [
                         {required: true, message: '请确定商品单价', trigger: 'change'}
@@ -417,6 +421,12 @@
             this.clipboard2.destroy()
         },
         methods: {
+            resetQueryInfo() {
+                Object.keys(this.queryInfo).forEach(key => this.queryInfo[key] = "")
+                this.queryInfo.quantity = [0, 100]
+                this.queryInfo.price = [0, 1000]
+                this.getCommodity()
+            },
             // 图片加载成功
             loadSuccess() {
                 this.loading = false
@@ -425,7 +435,6 @@
             loadError() {
                 this.loading = false
             },
-            // TODO
             async buy() {
                 this.buyForm.comQuantityNow = this.buyForm.comQuantity
                 for (let i = 0; i < this.AllCommodity.length; i++) {
@@ -466,10 +475,10 @@
                     return this.$message.error('下单失败' + checkError(res))
                 } else {
                     this.buyCommodityPost.comInfo.comQuantityNow -= this.buyForm.comQuantity
-                        const { data: res2 } = await this.$http.post(
-                            'commodity/update?',
-                            this.buyCommodityPost.comInfo
-                        )
+                    const {data: res2} = await this.$http.post(
+                        'commodity/update?',
+                        this.buyCommodityPost.comInfo
+                    )
                     if (res2.code !== 200) {
                         this.buyCommodityDialogVisible = false
                         return this.$message.error('下单失败' + checkError(res))
@@ -561,11 +570,9 @@
                 this.information.$emit('activePath', activePath)
             },
             async selectCommodity() {
-                const {data: res} = await this.$http.get(
-                    `commodity/selectByAnyParam?comId=${this.queryInfo.comId}&comName=${this.queryInfo.comName}
-                    &minPrice=${this.queryInfo.price[0]}&maxPrice=${this.queryInfo.price[1]}
-                    &minQuantity=${this.queryInfo.quantity[0]}&maxQuantity=${this.queryInfo.quantity[1]}
-                    &comDescription=${this.queryInfo.comDescription}`
+                const {data: res} = await this.$http.post(
+                    `commodity/selectByAnyParam?minQuantity=${this.queryInfo.quantity[0]}&maxQuantity=${this.queryInfo.quantity[1]}
+                    &minPrice=${this.queryInfo.price[0]}&maxPrice=${this.queryInfo.price[1]}`, this.queryInfo
                 )
                 if (res.code !== 200) {
                     return this.$message.error('查询商品信息失败' + checkError(res))
@@ -578,11 +585,6 @@
                 return this.$message.success('查询商品成功!')
             },
             async getCommodity() {
-                this.queryInfo.comId = ''
-                this.queryInfo.comName = ''
-                this.queryInfo.price = [0 , 1000]
-                this.queryInfo.quantity = [1, 100]
-                this.queryInfo.comDescription = ''
                 const {data: res} = await this.$http.get(
                     'commodity/select'
                 )
@@ -631,17 +633,17 @@
         display: inline-block;
         padding: 8px;
         background: #cccccc;
+
         & > img {
             display: inline-block !important;
         }
     }
-    /*
-        .fade-enter-to {
-            opacity: 1;
-            transform: translateX(350px);
-        }*/
+    .fadeY-enter-active, .fadeY-leave-active {
+        transition: all 1s;
+    }
 
-    /*.dialog {*/
-    /*    z-index: 3000 !important;*/
-    /*}*/
+    .fadeY-enter, .fadeY-leave-to {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
 </style>

@@ -35,14 +35,5 @@ public interface OrderControllerApi {
     Response<Order> selectById(@ApiParam Integer id);
 
     @ApiOperation(value = "根据指定字段查询订单", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "订单号", example = "1", name = "id", required = false, paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(value = "交易商品", example = "SH001", name = "orderComId", required = false, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(value = "新商品号", example = "SH100", name = "orderNewId", required = false, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(value = "卖家账号", example = "Xb18620208", name = "orderSalerName", required = false, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(value = "买家账号", example = "Xb18620230", name = "orderBuyerName", required = false, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(value = "买家账号", example = "121224242323", name = "orderTransportCode", required = false, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(value = "订单状态(1:已下单2:已发货3:已收货)", example = "1", name = "orderStatus", required = false, paramType = "query", dataType = "integer")
-    })
     Response<List<Order>> selectByAnyParam(Order order);
 }

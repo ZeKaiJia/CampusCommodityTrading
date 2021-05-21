@@ -55,10 +55,10 @@
             AND id = #{id}
         </if>
         <if test="orderComId != null and orderComId != ''">
-            AND orderComId = #{orderComId}
+            AND orderComId like concat('%', '${orderComId}', '%')
         </if>
         <if test="orderNewId != null and orderNewId != ''">
-            AND orderNewId = #{orderNewId}
+            AND orderNewId like concat('%', '${orderNewId}', '%')
         </if>
         <if test="orderSalerName != null and orderSalerName != ''">
             AND orderSalerName = #{orderSalerName}
@@ -67,7 +67,7 @@
             AND orderBuyerName = #{orderBuyerName}
         </if>
         <if test="orderTransportCode != null and orderTransportCode != ''">
-            AND orderTransportCode = #{orderTransportCode}
+            AND orderTransportCode like concat('%', '${orderTransportCode}', '%')
         </if>
         <if test="orderStatus != null and orderStatus != ''">
             AND orderStatus = #{orderStatus}
