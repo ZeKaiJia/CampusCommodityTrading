@@ -96,10 +96,9 @@
                     </el-card>
                 </el-row>
             </transition>
-            <el-row>
-                <el-col :span="6" v-for="(commodity, index) in AllCommodity" :key="commodity.comId"
-                        :offset="index % 3 === 0 ? 0 : 3">
-                    <el-card :body-style="{ padding: '0px' }" style="text-align: center; margin: 24px 0;">
+            <el-row :gutter="40">
+                <el-col :span="6" v-for="(commodity) in AllCommodity" :key="commodity.comId">
+                    <el-card :body-style="{ padding: '24px' }" style="text-align: center; margin: 24px 0;">
                         <el-button type="danger" icon="el-icon-warning-outline" circle
                                    style="float: left; margin: 12px"
                                    @click="checkCommodityUserInfo(commodity.comId)"></el-button>
@@ -109,7 +108,7 @@
                         <el-image
                                 v-if="commodity.comPicture !== '' && commodity.comPicture !== null"
                                 v-loading="loading"
-                                style="width: 6.5vw; height: 6.5vw; min-width: 100px; min-height: 100px"
+                                style="max-width: 100px; max-height: 100px; min-width: 100px; min-height: 100px"
                                 :src="commodity.comPicture"
                                 fit="cover"
                                 @load="loadSuccess"
@@ -132,13 +131,13 @@
                                 :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
                                 disabled show-score>
                         </el-rate>
-                        <el-row v-if="commodity.comRate === 0">暂无评价</el-row>
-                        <el-row>编号 - {{commodity.comId}}</el-row>
-                        <el-row>名称 - {{commodity.comName}}</el-row>
-                        <el-row>数量 - {{commodity.comQuantity}}单位</el-row>
-                        <el-row>存货 - {{commodity.comQuantityNow}}单位</el-row>
-                        <el-row>单价 - {{commodity.comEachPrice}}元</el-row>
-                        <el-row>描述 - {{commodity.comDescription}}</el-row>
+                        <el-row class="middleFont" v-if="commodity.comRate === 0">暂无评价</el-row>
+                        <el-row class="middleFont">编号 - {{commodity.comId}}</el-row>
+                        <el-row class="middleFont">名称 - {{commodity.comName}}</el-row>
+                        <el-row class="middleFont">数量 - {{commodity.comQuantity}}单位</el-row>
+                        <el-row class="middleFont">存货 - {{commodity.comQuantityNow}}单位</el-row>
+                        <el-row class="middleFont">单价 - {{commodity.comEachPrice}}元</el-row>
+                        <el-row class="middleFont">描述 - {{commodity.comDescription}}</el-row>
                     </el-card>
                 </el-col>
             </el-row>
@@ -147,7 +146,7 @@
         <el-dialog
                 title="联系卖家"
                 :visible.sync="callSalerDialogVisible"
-                width="50%"
+                width="40%"
                 center>
             <el-row :gutter="20">
                 <el-col :span="10">
@@ -221,12 +220,12 @@
                                 <span style="margin-top: 12px">加载失败</span>
                             </div>
                         </el-image>
-                        <el-row>编号 - {{buyCommodityPost.comInfo.comId}}</el-row>
-                        <el-row>名称 - {{buyCommodityPost.comInfo.comName}}</el-row>
-                        <el-row>数量 - {{buyCommodityPost.comInfo.comQuantity}}单位</el-row>
-                        <el-row>存货 - {{buyCommodityPost.comInfo.comQuantityNow}}单位</el-row>
-                        <el-row>单价 - {{buyCommodityPost.comInfo.comEachPrice}}元</el-row>
-                        <el-row>描述 - {{buyCommodityPost.comInfo.comDescription}}</el-row>
+                        <el-row class="middleFont">编号 - {{buyCommodityPost.comInfo.comId}}</el-row>
+                        <el-row class="middleFont">名称 - {{buyCommodityPost.comInfo.comName}}</el-row>
+                        <el-row class="middleFont">数量 - {{buyCommodityPost.comInfo.comQuantity}}单位</el-row>
+                        <el-row class="middleFont">存货 - {{buyCommodityPost.comInfo.comQuantityNow}}单位</el-row>
+                        <el-row class="middleFont">单价 - {{buyCommodityPost.comInfo.comEachPrice}}元</el-row>
+                        <el-row class="middleFont">描述 - {{buyCommodityPost.comInfo.comDescription}}</el-row>
                     </div>
                 </transition>
                 <transition name="fade">
@@ -610,10 +609,17 @@
     .centerFont {
         font-weight: bold;
         font-size: 28px;
+        transform: translateY(50%);
+    }
+
+    .middleFont {
+        font-size: 18px;
+        margin-top: 6px;
+        margin-bottom: 6px;
     }
 
     i {
-        font-size: 100px;
+        font-size: 102px;
     }
 
     .centerCol {

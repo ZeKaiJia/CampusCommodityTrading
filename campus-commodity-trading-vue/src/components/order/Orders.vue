@@ -92,7 +92,7 @@
                 <!--拓展列-->
                 <el-table-column type="expand" label="详细" width="64px" align="center">
                     <template slot-scope="scope">
-                        <el-timeline>
+                        <el-timeline class="middleFont">
                             <el-timeline-item
                                     size="large"
                                     color="#0bbd87"
@@ -106,10 +106,10 @@
                                     :key="scope.row.orderTransportTime"
                                     :timestamp="scope.row.orderTransportTime">
                                 发货
-                                <div v-if="scope.row.orderTransportCode !== null">
+                                <div v-if="scope.row.orderTransportCode !== null" class="middleFont">
                                     运单 - {{scope.row.orderTransportCode}}
                                 </div>
-                                <div v-if="scope.row.orderSalerAddress !== null">
+                                <div v-if="scope.row.orderSalerAddress !== null" class="middleFont">
                                     地址 - {{scope.row.orderSalerAddress}}
                                 </div>
                             </el-timeline-item>
@@ -119,7 +119,7 @@
                                     :key="scope.row.orderReceiveTime"
                                     :timestamp="scope.row.orderReceiveTime">
                                 收货
-                                <div v-if="scope.row.orderBuyerAddress !== null">
+                                <div v-if="scope.row.orderBuyerAddress !== null" class="middleFont">
                                     地址 - {{scope.row.orderBuyerAddress}}
                                 </div>
                             </el-timeline-item>
@@ -609,5 +609,12 @@
     .centerFont {
         font-weight: bold;
         font-size: 28px;
+        transform: translateY(50%);
+    }
+
+    .middleFont {
+        font-size: 18px;
+        margin-top: 6px;
+        margin-bottom: 6px;
     }
 </style>

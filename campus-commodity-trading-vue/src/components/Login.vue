@@ -520,16 +520,16 @@
         width: 100%;
         position: relative;
         background-color: #f6f6f6;
+        display: flex;
+        align-items: center;
     }
 
     .back {
         background-image: url("../assets/img/login/login-back.jpeg");
         background-repeat: no-repeat;
-        background-position: left bottom;
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        transform: translate(5%, -8%);
+        height: 610px;
+        width: 610px;
+        transform: translate(20%, 4%);
     }
 
     .login-box {
@@ -537,11 +537,8 @@
         height: 460px;
         background-color: rgb(255, 255, 255);
         border-radius: 15px;
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        transform: translate(160%, -28%);
         box-shadow: 0 4px 15px;
+        transform: translate(65%, 5%);
 
         .avater-box {
             height: 130px;

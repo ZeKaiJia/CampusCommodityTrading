@@ -17,14 +17,13 @@
                     <div class="centerFont">我的商品库</div>
                 </el-col>
                 <el-col :span="11">
-                    <el-button type="success" icon="el-icon-plus" circle style="margin-left: 0"
+                    <el-button type="success" icon="el-icon-plus" circle style="margin-left: 0; transform: translateY(-20%)"
                                @click="showAddDialog"></el-button>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col :span="6" v-for="(commodity, index) in myCommodity" :key="commodity.comId"
-                        :offset="index % 3 === 0 ? 0 : 3">
-                    <el-card :body-style="{ padding: '0px' }" style="text-align: center; margin: 24px 0;">
+            <el-row :gutter="40">
+                <el-col :span="6" v-for="(commodity) in myCommodity" :key="commodity.comId">
+                    <el-card :body-style="{ padding: '24px' }" style="text-align: center; margin: 24px 0;">
                         <el-button type="danger" icon="el-icon-delete" circle
                                    style="float: left; margin: 12px"
                                    @click="removeCommodity(commodity.comId)"></el-button>
@@ -46,7 +45,7 @@
                             <el-image
                                     v-if="commodity.comPicture !== '' && commodity.comPicture !== null"
                                     v-loading="loading"
-                                    style="width: 6.5vw; height: 6.5vw; min-width: 100px; min-height: 100px"
+                                    style="max-width: 100px; max-height: 100px; min-width: 100px; min-height: 100px"
                                     :src="commodity.comPicture"
                                     fit="cover"
                                     @load="loadSuccess"
@@ -67,13 +66,13 @@
                                 :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
                                 disabled show-score>
                         </el-rate>
-                        <el-row v-if="commodity.comRate === 0">暂无评价</el-row>
-                        <el-row>编号 - {{commodity.comId}}</el-row>
-                        <el-row>名称 - {{commodity.comName}}</el-row>
-                        <el-row>数量 - {{commodity.comQuantity}}单位</el-row>
-                        <el-row>存货 - {{commodity.comQuantityNow}}单位</el-row>
-                        <el-row>单价 - {{commodity.comEachPrice}}元</el-row>
-                        <el-row>描述 - {{commodity.comDescription}}</el-row>
+                        <el-row class="middleFont" v-if="commodity.comRate === 0">暂无评价</el-row>
+                        <el-row class="middleFont">编号 - {{commodity.comId}}</el-row>
+                        <el-row class="middleFont">名称 - {{commodity.comName}}</el-row>
+                        <el-row class="middleFont">数量 - {{commodity.comQuantity}}单位</el-row>
+                        <el-row class="middleFont">存货 - {{commodity.comQuantityNow}}单位</el-row>
+                        <el-row class="middleFont">单价 - {{commodity.comEachPrice}}元</el-row>
+                        <el-row class="middleFont">描述 - {{commodity.comDescription}}</el-row>
                     </el-card>
                 </el-col>
             </el-row>
@@ -206,7 +205,7 @@
                 // 添加表单的验证规则对象
                 addFormRules: {
                     comId: [
-                        {required: true, message: '请输入商品标号', trigger: 'blur'},
+                        {required: true, message: '请输入商品号', trigger: 'blur'},
                         {min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur'}
                     ],
                     comName: [
@@ -435,9 +434,16 @@
     .centerFont {
         font-weight: bold;
         font-size: 28px;
+        transform: translateY(50%);
+    }
+
+    .middleFont {
+        font-size: 18px;
+        margin-top: 6px;
+        margin-bottom: 6px;
     }
 
     i {
-        font-size: 100px;
+        font-size: 102px;
     }
 </style>
