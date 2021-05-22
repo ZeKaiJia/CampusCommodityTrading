@@ -123,6 +123,7 @@
                 :visible.sync="editDialogVisible"
                 width="50%"
                 @close="editDialogClosed"
+                style="margin-top: -50px"
         >
             <!--内容主题区域-->
             <el-form
@@ -154,6 +155,10 @@
                     <el-input v-model="editForm.comDescription"/>
                 </el-form-item>
             </el-form>
+            <el-card style="height: 200px">
+                <quill-editor ref="text" v-model="content" class="myQuillEditor"
+                              style="height: 100px"/>
+            </el-card>
             <!--底部按钮区-->
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editDialogVisible = false">取 消</el-button>
@@ -170,6 +175,7 @@
         name: "MyCommodity",
         data() {
             return {
+                content: '',
                 iconClasses: ['el-icon-heavy-rain', 'el-icon-cloudy-and-sunny', 'el-icon-sunny'],
                 currentComId: '',
                 headers: {

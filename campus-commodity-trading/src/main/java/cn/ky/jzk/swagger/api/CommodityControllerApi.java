@@ -87,7 +87,7 @@ public interface CommodityControllerApi {
     })
     Response<User> selectCommodityUser(@ApiParam String comId);
 
-    @ApiOperation(value = "根据指定字段查询商品", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
+    @ApiOperation(value = "根据指定字段查询商品", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "最小价格", example = "0", name = "minPrice", required = true, paramType = "query", dataType = "double"),
             @ApiImplicitParam(value = "最大价格", example = "100", name = "maxPrice", required = true, paramType = "query", dataType = "double"),

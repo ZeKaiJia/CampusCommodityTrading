@@ -251,6 +251,7 @@
                 title="收货"
                 :visible.sync="receiveDialogVisible"
                 width="70%"
+                style="margin-top: -50px"
         >
             <el-steps :active="activeStep" finish-status="success" simple style="margin-top: 20px">
                 <el-step title="确认商品信息"></el-step>
@@ -258,22 +259,24 @@
                 <el-step title="扫码支付下单"></el-step>
                 <el-step title="收货发布评价"></el-step>
             </el-steps>
-            <el-card style="margin-top: 12px; text-align: center; height: 270px">
-                <transition name="fade">
-                    <div v-if="activeStep === 3"
-                         style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -20%)">
-                        <div>
-                            发布您的评价，您的好评是给予卖家最大的支持
-                            <el-rate
-                                    v-model="rate"
-                                    :icon-classes="iconClasses"
-                                    void-icon-class="el-icon-star-off"
-                                    :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                                    show-score>
-                            </el-rate>
-                        </div>
+            <el-card style="margin-top: 12px; text-align: center; height: 470px">
+                <el-row>
+                    <div style="font-size: 16px; font: bold">
+                        发布您的评价，您的好评是给予卖家最大的支持
+                        <el-rate
+                                style="margin-top: 12px"
+                                v-model="rate"
+                                :icon-classes="iconClasses"
+                                void-icon-class="el-icon-star-off"
+                                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                                show-score>
+                        </el-rate>
                     </div>
-                </transition>
+                </el-row>
+                <el-row style="margin-top: 24px; border-bottom: 24px">
+                    <quill-editor ref="text" v-model="content" class="myQuillEditor"
+                                  style="height: 300px"/>
+                </el-row>
             </el-card>
             <!--底部按钮区-->
             <span slot="footer" class="dialog-footer">
@@ -292,6 +295,7 @@
         name: 'Orders',
         data() {
             return {
+                content: '',
                 statusOptions: [{
                     value: 1,
                     label: '已下单'

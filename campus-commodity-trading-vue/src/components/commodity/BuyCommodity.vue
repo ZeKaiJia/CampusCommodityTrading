@@ -277,8 +277,11 @@
                         </el-row>
                     </div>
                 </transition>
-                <transition name="fade" style="position: absolute; left: 50%; transform: translate(-50%)">
+                <transition name="fade" style="position: absolute; left: 50%; transform: translate(-50%)" mode="out-in">
                     <div v-if="activeStep === 2" id="qrcodeImg"></div>
+                    <el-progress v-if="progressLoading !== 101 && activeStep === 3" type="circle"
+                                 :percentage="progressLoading"
+                                 :stroke-width="12" :color="colors" style="transform: translateY(50%)"></el-progress>
                 </transition>
             </el-card>
             <!--底部按钮区-->
@@ -406,10 +409,10 @@
             this.clipboard1 = new Clipboard('.copy-phone')
             this.clipboard2 = new Clipboard('.copy-email')
             this.clipboard1.on('success', e1 => {
-                this.$message.success('联系电话：' + e1.text + ' 已复制到剪贴板！')
+                this.$message({message: '联系电话：' + e1.text + ' 已复制到剪贴板！', type: 'success', customClass: 'zZindex'})
             });
             this.clipboard2.on('success', e2 => {
-                this.$message.success('电子邮箱：' + e2.text + ' 已复制到剪贴板！')
+                this.$message({message: '电子邮箱：' + e2.text + ' 已复制到剪贴板！', type: 'success', customClass: 'zZindex'})
             })
         },
         created() {
@@ -447,13 +450,17 @@
                     `commodity/insert?userName=${this.buyCommodityPost.userName}`,
                     this.buyForm
                 )
+                if (commodityInsert.code !== 200) {
+                    this.buyCommodityDialogVisible = false
+                    return this.$message.error('下单失败 ID重复或数据错误')
+                }
                 const {data: commodityUpdate} = await this.$http.post(
                     `commodity/update?userName=${this.buyCommodityPost.userName}`,
                     this.buyForm
                 )
-                if (commodityInsert.code !== 200 || commodityUpdate.code !== 200) {
+                if (commodityUpdate.code !== 200) {
                     this.buyCommodityDialogVisible = false
-                    return this.$message.error('下单失败' + checkError(res))
+                    return this.$message.error('下单失败' + checkError(commodityUpdate))
                 }
                 this.orderForm.orderComId = this.buyCommodityPost.comInfo.comId
                 this.orderForm.orderNewId = this.buyForm.comId
@@ -461,7 +468,7 @@
                 this.orderForm.orderBuyerName = getCookie('ID')
                 const {data: result} = await this.$http.get(`commodity/selectCommodityUser?comId=${this.orderForm.orderComId}`)
                 if (result.code !== 200) {
-                    return this.$message.error('查询用户信息错误' + checkError(res))
+                    return this.$message.error('查询用户信息错误' + checkError(result))
                 } else {
                     this.callInfo = result.data
                 }
@@ -481,7 +488,7 @@
                     )
                     if (res2.code !== 200) {
                         this.buyCommodityDialogVisible = false
-                        return this.$message.error('下单失败' + checkError(res))
+                        return this.$message.error('下单失败' + checkError(res2))
                     } else {
                         this.buyCommodityDialogVisible = false
                         return this.$message.success('下单成功')
@@ -507,7 +514,7 @@
                     })
                 } else if (this.activeStep === 2) {
                     this.addStep()
-                    this.inter = setInterval(this.progress, 60)
+                    this.inter = setInterval(this.progress, 50)
                     setTimeout(this.buy, 7000)
                 } else {
                     this.addStep()
@@ -533,6 +540,7 @@
                 this.buyForm.comDescription = ''
                 this.buyForm.comEachPrice = 1
                 this.buyForm.comQuantity = 1
+                this.buyForm.address = ''
                 this.progressLoading = 0
             },
             async showBuyCommodityDialog(comId) {
@@ -543,7 +551,7 @@
 
                 const {data: add} = await this.$http.get(`address/selectByName?userName=${getCookie('ID')}`)
                 if (add.code !== 200) {
-                    return this.$message.error('该用户没有配置地址!' + checkError(res))
+                    return this.$message.error('该用户没有配置地址!' + checkError(add))
                 } else {
                     this.addresses = add.data
                 }
@@ -638,6 +646,7 @@
             display: inline-block !important;
         }
     }
+
     .fadeY-enter-active, .fadeY-leave-active {
         transition: all 1s;
     }
