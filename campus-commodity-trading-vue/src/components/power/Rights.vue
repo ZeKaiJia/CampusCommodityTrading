@@ -103,7 +103,7 @@
         <el-form-item label="权限等级" prop="remark">
           <el-select v-model="editForm.remark" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in permissionOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -137,7 +137,7 @@ export default {
       // 路由url
       routeUrl: '/rights',
       // 权限等级选项
-      options: [{
+      permissionOptions: [{
         value: '3',
         label: '管理级别'
       }, {

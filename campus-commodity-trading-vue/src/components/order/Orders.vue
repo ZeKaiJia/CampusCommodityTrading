@@ -335,8 +335,6 @@
                 dialogLoading: false,
                 // 路由url
                 routeUrl: '/orders',
-                // 角色类型选择 TODO
-                options: [],
                 // 页面数据显示条数
                 pageSize: 7,
                 // 当前页数

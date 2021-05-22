@@ -19,6 +19,7 @@ import NotFound404 from '../components/NotFound404'
 import Docs from '../components/doc/Docs'
 import { getCookie } from '../plugins/utils'
 import Orders from "../components/order/Orders";
+import Views from '../views/index'
 Vue.use(Router)
 
 // eslint-disable-next-line no-undef
@@ -32,6 +33,7 @@ const router = new Router({
       component: Home,
       redirect: '/welcome',
       children: [
+        { path: '/views', component: Views },
         { path: '/welcome', component: Welcome },
         { path: '/users', component: Users },
         { path: '/self', component: Self },
@@ -49,7 +51,8 @@ const router = new Router({
         { path: '/orders', component: Orders }
       ]
     }
-  ]
+  ],
+  mode: 'history'
 })
 // 挂载路由导航守卫
 router.beforeEach((to, from, next) => {

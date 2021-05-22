@@ -162,7 +162,7 @@
           <template>
             <el-select v-model="addForm.roleNameCn" placeholder="请选择">
               <el-option
-                      v-for="item in options"
+                      v-for="item in roleOptions"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value">
@@ -232,7 +232,7 @@
           <template>
             <el-select v-model="editForm.roleNameCn" placeholder="请选择">
               <el-option
-                      v-for="item in options"
+                      v-for="item in roleOptions"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value">
@@ -310,7 +310,7 @@
       // 路由url
       routeUrl: '/users',
       // 角色类型选择 TODO
-      options: [],
+      roleOptions: [],
       // 获取密码用户
       checkPassUser: '',
       // 显示密码
@@ -424,7 +424,7 @@
         return this.$message.error('获取角色列表失败!' + checkError(res))
       }
       for (let i = 0; i < res.data.length; i++) {
-        await this.options.push({'label': res.data[i].roleNameEn, 'value': res.data[i].roleNameCn})
+        await this.roleOptions.push({'label': res.data[i].roleNameEn, 'value': res.data[i].roleNameCn})
       }
     },
     // 获取用户列表

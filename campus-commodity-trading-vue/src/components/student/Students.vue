@@ -248,7 +248,7 @@
         <el-form-item label="性别" prop="stuGender">
           <el-select v-model="addForm.stuGender" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in sexOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -307,7 +307,7 @@
         <el-form-item label="性别" prop="stuGender">
           <el-select v-model="editForm.stuGender" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in sexOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -385,7 +385,7 @@ export default {
       // 路由url
       routeUrl: '/students',
       // 性别选择
-      options: [{
+      sexOptions: [{
         value: '男',
         label: '男'
       }, {
