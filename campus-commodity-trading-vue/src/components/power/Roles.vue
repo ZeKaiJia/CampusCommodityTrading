@@ -104,10 +104,10 @@
           <el-input v-model="editForm.roleId" disabled/>
         </el-form-item>
         <el-form-item label="中文名" prop="roleNameCn">
-          <el-input v-model="editForm.roleNameCn"/>
+          <el-input v-model="editForm.roleNameCn" disabled/>
         </el-form-item>
         <el-form-item label="英文名" prop="roleNameEn">
-          <el-input v-model="editForm.roleNameEn"/>
+          <el-input v-model="editForm.roleNameEn" disabled/>
         </el-form-item>
         <el-form-item label="描述" prop="roleDescription">
           <el-input v-model="editForm.roleDescription"/>

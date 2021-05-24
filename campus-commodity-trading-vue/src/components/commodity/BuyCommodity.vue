@@ -237,7 +237,7 @@
                                     ref="buyFormRef"
                                     label-width="80px"
                             >
-                                <el-col :span="12">
+                                <!--<el-col :span="12">
                                     <el-form-item label="商品号" prop="comId">
                                         <el-input v-model="buyForm.comId"/>
                                     </el-form-item>
@@ -257,7 +257,7 @@
                                     </el-form-item>
                                     <el-form-item label="描述" prop="comDescription">
                                         <el-input v-model="buyForm.comDescription"/>
-                                    </el-form-item>
+                                    </el-form-item>-->
                                     <el-form-item label="地址" prop="address">
                                         <el-select v-model="buyForm.address"
                                                    style="width: 100%"
@@ -271,7 +271,7 @@
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
-                                </el-col>
+                                <!--</el-col>-->
                             </el-form>
                         </el-row>
                     </div>
@@ -361,7 +361,7 @@
                 // 创建新订单信息
                 orderForm: {
                     orderComId: '',
-                    orderNewId: '',
+                    // orderNewId: '',
                     orderSalerName: '',
                     orderBuyerName: '',
                     orderStatus: 1
@@ -438,31 +438,31 @@
                 this.loading = false
             },
             async buy() {
-                this.buyForm.comQuantityNow = this.buyForm.comQuantity
-                for (let i = 0; i < this.AllCommodity.length; i++) {
-                    if (this.buyForm.comId === this.AllCommodity[i].comId) {
-                        this.buyCommodityDialogVisible = false
-                        return this.$message.error('商品号重复，下单失败')
-                    }
-                }
-                const {data: commodityInsert} = await this.$http.post(
-                    `commodity/insert?userName=${this.buyCommodityPost.userName}`,
-                    this.buyForm
-                )
-                if (commodityInsert.code !== 200) {
-                    this.buyCommodityDialogVisible = false
-                    return this.$message.error('下单失败 ID重复或数据错误')
-                }
-                const {data: commodityUpdate} = await this.$http.post(
-                    `commodity/update?userName=${this.buyCommodityPost.userName}`,
-                    this.buyForm
-                )
-                if (commodityUpdate.code !== 200) {
-                    this.buyCommodityDialogVisible = false
-                    return this.$message.error('下单失败' + checkError(commodityUpdate))
-                }
+                // this.buyForm.comQuantityNow = this.buyForm.comQuantity
+                // for (let i = 0; i < this.AllCommodity.length; i++) {
+                //     if (this.buyForm.comId === this.AllCommodity[i].comId) {
+                //         this.buyCommodityDialogVisible = false
+                //         return this.$message.error('商品号重复，下单失败')
+                //     }
+                // }
+                // const {data: commodityInsert} = await this.$http.post(
+                //     `commodity/insert?userName=${this.buyCommodityPost.userName}`,
+                //     this.buyForm
+                // )
+                // if (commodityInsert.code !== 200) {
+                //     this.buyCommodityDialogVisible = false
+                //     return this.$message.error('下单失败 ID重复或数据错误')
+                // }
+                // const {data: commodityUpdate} = await this.$http.post(
+                //     `commodity/update?userName=${this.buyCommodityPost.userName}`,
+                //     this.buyForm
+                // )
+                // if (commodityUpdate.code !== 200) {
+                //     this.buyCommodityDialogVisible = false
+                //     return this.$message.error('下单失败' + checkError(commodityUpdate))
+                // }
                 this.orderForm.orderComId = this.buyCommodityPost.comInfo.comId
-                this.orderForm.orderNewId = this.buyForm.comId
+                // this.orderForm.orderNewId = this.buyForm.comId
                 this.orderForm.orderBuyerAddress = this.buyForm.address
                 this.orderForm.orderBuyerName = getCookie('ID')
                 const {data: result} = await this.$http.get(`commodity/selectCommodityUser?comId=${this.orderForm.orderComId}`)
@@ -490,6 +490,7 @@
                         return this.$message.error('下单失败' + checkError(res2))
                     } else {
                         this.buyCommodityDialogVisible = false
+                        this.getCommodity()
                         return this.$message.success('下单成功')
                     }
                 }

@@ -31,12 +31,12 @@
                                     <el-form-item prop="orderComId">
                                         <el-input
                                                 v-model="queryInfo.orderComId"
-                                                placeholder="请输入原商品号"
+                                                placeholder="请输入商品号"
                                                 clearable>
                                         </el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="6">
+                                <!--<el-col :span="6">
                                     <el-form-item prop="orderNewId">
                                         <el-input
                                                 v-model="queryInfo.orderNewId"
@@ -44,7 +44,7 @@
                                                 clearable>
                                         </el-input>
                                     </el-form-item>
-                                </el-col>
+                                </el-col>-->
                                 <el-col :span="6">
                                     <el-form-item prop="orderTransportCode">
                                         <el-input
@@ -54,8 +54,6 @@
                                         </el-input>
                                     </el-form-item>
                                 </el-col>
-                            </el-row>
-                            <el-row :gutter="10">
                                 <el-col :span="6">
                                     <el-form-item prop="orderStatus">
                                         <el-select v-model="queryInfo.orderStatus" placeholder="请选择订单状态">
@@ -68,7 +66,7 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="3">
+                                <el-col :span="5">
                                     <el-button type="primary" @click="selectOrder()" style="float: right;">搜索订单
                                     </el-button>
                                 </el-col>
@@ -144,8 +142,7 @@
                         <span>{{scope.$index+(currentPage - 1) * pageSize + 1}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="原商品号" prop="orderComId" align="center"/>
-                <el-table-column label="新商品号" prop="orderNewId" align="center"/>
+                <el-table-column label="商品号" prop="orderComId" align="center"/>
                 <el-table-column label="卖家名" prop="orderSalerName" align="center"
                                  v-if="userRole.roleNameEn !== 'saler'"/>
                 <el-table-column label="买家名" prop="orderBuyerName" align="center"
@@ -311,7 +308,7 @@
                 queryInfo: {
                     id: '',
                     orderComId: '',
-                    orderNewId: '',
+                    // orderNewId: '',
                     orderSalerName: '',
                     orderBuyerName: '',
                     orderTransportCode: '',
@@ -468,27 +465,27 @@
                 const {data: oldCom} = await this.$http.get(
                     `commodity/selectById?comId=${res.data.orderComId}`
                 )
-                const {data: newCom} = await this.$http.get(
-                    `commodity/selectById?comId=${res.data.orderNewId}`
-                )
-                if (oldCom.code !== 200 || newCom.code !== 200) {
-                    return this.$message.error('获取新老商品关联实体失败 ' + checkError(oldCom) + ' ' + checkError(newCom))
+                // const {data: newCom} = await this.$http.get(
+                //     `commodity/selectById?comId=${res.data.orderNewId}`
+                // )
+                if (oldCom.code !== 200) {
+                    return this.$message.error('获取商品信息失败 ' + checkError(oldCom))
                 }
                 this.receiveOld = oldCom.data
-                this.receiveNew = newCom.data
+                // this.receiveNew = newCom.data
 
                 this.receiveDialogVisible = true
             },
             async receive() {
                 // 新商品修改valid为true
-                this.receiveNew.valid = true
-                const {data: valid} = await this.$http.post(
-                    'commodity/update', this.receiveNew
-                )
-                if (valid.code !== 200) {
-                    this.receiveDialogVisible = false
-                    return this.$message.error('新商品发布失败' + checkError(valid))
-                }
+                // this.receiveNew.valid = true
+                // const {data: valid} = await this.$http.post(
+                //     'commodity/update', this.receiveNew
+                // )
+                // if (valid.code !== 200) {
+                //     this.receiveDialogVisible = false
+                //     return this.$message.error('新商品发布失败' + checkError(valid))
+                // }
                 // 旧商品发布评价
                 if (this.rate === null) {
                     this.$message.error('请填写评价!')

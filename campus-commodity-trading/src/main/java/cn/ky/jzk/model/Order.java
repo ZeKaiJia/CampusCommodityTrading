@@ -31,12 +31,6 @@ public class Order extends BaseEntity {
     @ApiModelProperty(value="交易商品", example = "SH001", required = true)
     private String orderComId;
     /**
-     * 新商品号
-     * The New Id.
-     */
-    @ApiModelProperty(value="新商品号", example = "SH100", required = true)
-    private String orderNewId;
-    /**
      * 卖家账号
      * The Saler Name.
      */

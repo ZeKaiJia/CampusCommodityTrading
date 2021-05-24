@@ -142,7 +142,7 @@
                 </el-col>
                 <transition name="fade">
                     <el-col :span="3" v-if="searchFlag">
-                        <el-button type="success" plain @click="addAddress()">添加当前地址</el-button>
+                        <el-button type="success" plain @click="addAddress()">添加新地址</el-button>
                     </el-col>
                 </transition>
                 <transition name="fade">
@@ -307,25 +307,31 @@
             this.getAllInfo()
         },
         methods: {
-            async addAddress() {
-                if (typeof (this.address) == 'undefined' || !this.address) {
-                    return this.$message.warning('请按回车或点击鼠标选择地址')
-                }
-                if (typeof (this.address) == 'object') {
-                    this.addressForm.address = this.address.address
-                    for (let i = 0; i < this.addresses.length; i++) {
-                        if (this.addresses[i].address === this.address.address) {
-                            return this.$message.warning('地址不能重复')
-                        }
-                    }
+            // 验证地址
+            checkAddress(value) {
+                if ( value !== null && value !== '') {
+                    return true
                 } else {
-                    this.addressForm.address = this.address
-                    for (let i = 0; i < this.addresses.length; i++) {
-                        if (this.addresses[i].address === this.address) {
-                            return this.$message.warning('地址不能重复')
-                        }
-                    }
+                    return false
                 }
+            },
+            async addAddress() {
+                this.$prompt('请输入新地址信息', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    inputValidator: this.checkAddress,
+                    inputErrorMessage: '请输入地址信息'
+                }).then((value) => {
+                    this.addAddress2(value)
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    });
+                });
+            },
+            async addAddress2(value) {
+                this.addressForm.address = value.value
                 const {data: res} = await this.$http.post('address/insert', this.addressForm)
                 if (res.code !== 200) {
                     return this.$message.error('添加地址失败')
@@ -366,7 +372,8 @@
                     '/gitee/saveImg',
                     param
                 )
-                if (res.code !== 200) {
+                if (res.code !== 200 || res.status === 500) {
+                    this.loading = false
                     return this.$message.error('文件大小不能超过1M且只能上传一张')
                 } else {
                     this.editForm.userAvatar = "https://gitee.com/Robot_Kevin/TypeChoImg/raw/master/cct/" + res.data.resultImgUrl.split('/').pop()

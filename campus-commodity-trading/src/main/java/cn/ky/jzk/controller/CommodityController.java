@@ -54,7 +54,6 @@ public class CommodityController extends BaseController implements CommodityCont
         if (temp == null) {
             return getFailResult(404, "ID不存在");
         }
-        relationCommodityUserService.deleteSingle(userName, comId);
         return getSuccessResult(temp);
     }
 

@@ -54,8 +54,6 @@ public class UserController extends BaseController implements UserControllerApi 
         if (temp == null) {
             return getFailResult(404, "用户名不存在");
         }
-        relationCommodityUserService.deleteByName(userName);
-        addressService.deleteByName(userName);
         return getSuccessResult(temp);
     }
 
