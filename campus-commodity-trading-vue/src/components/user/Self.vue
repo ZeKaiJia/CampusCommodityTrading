@@ -113,7 +113,7 @@
         <el-card style="margin-top: 24px">
             <el-row :gutter="20">
                 <el-col :span="4">
-                    <div class="centerFont">地址信息维护</div>
+                    <div class="centerFont" style="transform: translateY(75%)">地址信息维护</div>
                 </el-col>
                 <el-col :span="10">
                     <el-select v-model="address"

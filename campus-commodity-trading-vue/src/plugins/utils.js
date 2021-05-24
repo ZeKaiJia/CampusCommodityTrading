@@ -147,6 +147,41 @@ function getCookie(name) {
 function clearCookie(name) {
   setCookie(name, '', -1)
 }
+// 全屏模式切换
+function toggleFullscreen() {
+  let _this = this;
+  let el = document.documentElement;
+  if (document.fullscreenElement === null) {
+    _this.openFullscreen(el);
+  } else {
+    _this.quitFullscreen();
+  }
+}
+// 打开全屏模式
+function openFullscreen(element) {
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.webkitRequestFullScreen) {
+    element.webkitRequestFullScreen();
+  } else if (element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if (element.msRequestFullscreen) {
+    // IE11
+    element.msRequestFullscreen();
+  }
+}
+// 关闭全屏模式
+function quitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitCancelFullScreen) {
+    document.webkitCancelFullScreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
 export {
   timestampToTime,
   easyTimestamp,
@@ -159,5 +194,8 @@ export {
   setCookie,
   getCookie,
   clearCookie,
-  transDate
+  transDate,
+  toggleFullscreen,
+  openFullscreen,
+  quitFullscreen
 }

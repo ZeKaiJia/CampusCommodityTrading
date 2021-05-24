@@ -133,7 +133,7 @@
             :visible.sync="addDialogVisible"
             width="50%"
             @close="addDialogClosed"
-            style="margin-top: -100px"
+            style="margin-top: -50px"
     >
       <!--内容主题区域-->
       <el-form

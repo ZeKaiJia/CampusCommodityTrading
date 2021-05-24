@@ -18,11 +18,11 @@
       </div>
       <div class="percent">
         <div class="item bg-color-black">
-          <span>今日任务通过率</span>
+          <span>任务通过率</span>
           <CenterChart :id="rate[0].id" :tips="rate[0].tips" :colorObj="rate[0].colorData" />
         </div>
         <div class="item bg-color-black">
-          <span>今日任务达标率</span>
+          <span>任务达标率</span>
           <CenterChart :id="rate[1].id" :tips="rate[1].tips" :colorObj="rate[1].colorData" />
         </div>
         <div class="water">

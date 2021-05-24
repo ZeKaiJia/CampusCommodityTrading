@@ -105,7 +105,7 @@
     import center from "./center";
     import bottomLeft from "./bottomLeft";
     import bottomRight from "./bottomRight";
-    import {clearCookie} from '../plugins/utils'
+    import {clearCookie, quitFullscreen} from '../plugins/utils'
 
     export default {
         data() {
@@ -132,17 +132,15 @@
         },
         methods: {
             gotoManage() {
-                let _this = this;
                 if (document.fullscreenElement !== null) {
-                    _this.quitFullscreen();
+                    quitFullscreen()
                 }
                 this.loading = true
                 this.gotoLoading('/home')
             },
             backToLogin() {
-                let _this = this;
                 if (document.fullscreenElement !== null) {
-                    _this.quitFullscreen();
+                    quitFullscreen()
                 }
                 window.sessionStorage.clear()
                 clearCookie('type')
@@ -150,38 +148,6 @@
                 clearCookie('ID')
                 this.loading = true
                 this.gotoLoading('/login')
-            },
-            toggleFullscreen() {
-                let _this = this;
-                let el = document.documentElement;
-                if (document.fullscreenElement === null) {
-                    _this.openFullscreen(el);
-                } else {
-                    _this.quitFullscreen();
-                }
-            },
-            openFullscreen(element) {
-                if (element.requestFullscreen) {
-                    element.requestFullscreen();
-                } else if (element.webkitRequestFullScreen) {
-                    element.webkitRequestFullScreen();
-                } else if (element.mozRequestFullScreen) {
-                    element.mozRequestFullScreen();
-                } else if (element.msRequestFullscreen) {
-                    // IE11
-                    element.msRequestFullscreen();
-                }
-            },
-            quitFullscreen() {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitCancelFullScreen) {
-                    document.webkitCancelFullScreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
             },
             timeFn() {
                 setInterval(() => {

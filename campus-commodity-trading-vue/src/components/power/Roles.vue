@@ -52,7 +52,7 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <!--添加用户的对话框-->
+    <!--添加角色的对话框-->
     <el-dialog
             title="添加角色"
             :visible.sync="addDialogVisible"

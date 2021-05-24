@@ -4,7 +4,7 @@
       <span class="title">{{this.roleInfo.roleNameCn}}端</span>
     </el-row>
     <el-row type="flex" justify="center">
-      <el-carousel :interval="4000" arrow="always" height="580px" style="width: 1150px">
+      <el-carousel :interval="4000" arrow="always" height="75vh" style="width: 80vw">
         <el-carousel-item
           v-for="item in src"
           :key="item"
@@ -12,7 +12,7 @@
         >
           <el-image
             :src="item"
-            style="height: 580px"
+            style="height: 75vh"
             fit="cover"
             @load="loadSuccess"
             @error="loadError"
@@ -204,8 +204,7 @@
   .title {
     font-size: 28px;
     font-weight: bold;
-    margin-bottom: 6px;
-    margin-top: -10px;
+    margin-bottom: 12px;
     cursor: default;
   }
   .foot {

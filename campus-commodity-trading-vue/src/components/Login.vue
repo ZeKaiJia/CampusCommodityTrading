@@ -8,7 +8,9 @@
             </div>
             <!--标题-->
             <div class="login-title">
-                <span>校园二手商品交易平台</span>
+                <!--TODO-->
+                <!--<span>校园二手商品交易平台</span>-->
+                <span>智能化共享租赁平台</span>
             </div>
             <!--登录表单区-->
             <el-form
@@ -179,7 +181,7 @@
 
 <script>
     import SIdentify from './util/Identify'
-    import {checkError, setCookie} from '../plugins/utils'
+    import {checkError, openFullscreen, setCookie} from '../plugins/utils'
 
     export default {
         name: 'login',
@@ -333,38 +335,6 @@
             this.makeCode(this.identifyCodes, 4)
         },
         methods: {
-            toggleFullscreen() {
-                let _this = this;
-                let el = document.documentElement;
-                if (document.fullscreenElement === null) {
-                    _this.openFullscreen(el);
-                } else {
-                    _this.quitFullscreen();
-                }
-            },
-            openFullscreen(element) {
-                if (element.requestFullscreen) {
-                    element.requestFullscreen();
-                } else if (element.webkitRequestFullScreen) {
-                    element.webkitRequestFullScreen();
-                } else if (element.mozRequestFullScreen) {
-                    element.mozRequestFullScreen();
-                } else if (element.msRequestFullscreen) {
-                    // IE11
-                    element.msRequestFullscreen();
-                }
-            },
-            quitFullscreen() {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitCancelFullScreen) {
-                    document.webkitCancelFullScreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            },
             async findPassword() {
                 this.$refs.findFormRef.validate(async (valid) => {
                     if (!valid) {
@@ -450,10 +420,9 @@
                         setCookie('ID', result.data.userName, 24 * 60 * 60)
                         this.$message.success('欢迎您，' + result.data.userNick)
                         if (type.data.roleNameEn === 'admin') {
-                            let _this = this;
                             let el = document.documentElement;
                             if (document.fullscreenElement === null) {
-                                _this.openFullscreen(el);
+                                openFullscreen(el)
                             }
                             await this.$router.push({path: '/views'}, () => {
                             }, () => {

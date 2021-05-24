@@ -12,6 +12,7 @@
                     <div>
                         <el-avatar :src="avatarUrl"/>
                     </div>
+                    <el-button v-if="userRole.roleNameEn === 'admin'" type="primary" plain @click="toView">运管平台</el-button>
                     <el-button type="info" @click="logout">退出</el-button>
                 </div>
             </div>
@@ -77,11 +78,12 @@
 </template>
 
 <script>
-    import {checkError, clearCookie, getCookie} from '../plugins/utils'
+    import {checkError, clearCookie, getCookie, openFullscreen} from '../plugins/utils'
 
     export default {
         data() {
             return {
+                userRole: [],
                 avatarUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
                 showUser: '',
                 menuList: [
@@ -139,6 +141,7 @@
             }
         },
         created() {
+            this.getCurrentUserRole()
             this.getAvatar()
             this.getMenuList()
             this.showUser = getCookie('user')
@@ -148,6 +151,24 @@
         },
         name: 'Home',
         methods: {
+            async toView() {
+                let el = document.documentElement;
+                if (document.fullscreenElement === null) {
+                    openFullscreen(el)
+                }
+                await this.$router.push({path: '/views'}, () => {
+                }, () => {
+                })
+            },
+            async getCurrentUserRole() {
+                const {data: res} = await this.$http.get(
+                    `role/selectById?roleId=${getCookie('type')}`
+                )
+                if (res.code !== 200) {
+                    return this.$message.error('查询角色信息失败' + checkError(res))
+                }
+                this.userRole = res.data
+            },
             // 查找头像
             async getAvatar() {
                 const name = getCookie('ID')

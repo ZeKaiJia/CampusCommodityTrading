@@ -42,6 +42,7 @@ import 'quill/dist/quill.bubble.css'
 
 // TODO 配置请求的根路径
 axios.defaults.baseURL = '//localhost:14001'
+// axios.defaults.baseURL = '//fwwb.ims.cool:14001'
 axios.defaults.withCredentials = true
 
 Vue.config.productionTip = false
