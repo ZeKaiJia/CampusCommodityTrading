@@ -5,7 +5,7 @@
             <div class="top-head">
                 <div>
                     <i class="el-icon-s-goods"/>
-                    <span style="cursor: default;">运管平台</span>
+                    <span style="cursor: default;">智能化共享租赁平台</span>
                 </div>
                 <div style="margin-right: 24px">
                     <span style="cursor: default;">{{this.showUser}}</span>
@@ -89,10 +89,10 @@
                 menuList: [
                     {
                         id: 1,
-                        authName: '用户管理',
+                        authName: '用户中心',
                         children: [
                             {id: 11, authName: '个人信息', path: 'self'},
-                            {id: 12, authName: '用户列表', path: 'users'}
+                            {id: 12, authName: '用户管理', path: 'users'}
                         ]
                     },
                     {
@@ -102,10 +102,10 @@
                     },
                     {
                         id: 3,
-                        authName: '商品管理',
+                        authName: '商品中心',
                         children: [
                             {id: 31, authName: '我的商品', path: 'myCommodity'},
-                            {id: 32, authName: '购买商品', path: 'buyCommodity'}
+                            {id: 32, authName: '租赁商品', path: 'buyCommodity'}
                         ]
                     },
                     {
@@ -189,9 +189,25 @@
                 await this.$router.push('/login')
             },
             // 获取所有的菜单
-            // TODO
             async getMenuList() {
-                getCookie('type')
+                await this.getCurrentUserRole()
+                if (this.userRole.roleNameEn === 'buyer') {
+                    this.menuList[0].children = this.menuList[0].children.splice(0, 1)
+
+                    this.menuList[2].children = this.menuList[2].children.splice(1, 2)
+
+                    const list1 = this.menuList.slice(0, 1)
+                    const list2 = this.menuList.slice(2, 4)
+                    this.menuList = list1.concat(list2)
+                } else if (this.userRole.roleNameEn === 'saler') {
+                    this.menuList[0].children = this.menuList[0].children.splice(0, 1)
+
+                    this.menuList[2].children = this.menuList[2].children.splice(0, 1)
+
+                    const list1 = this.menuList.slice(0, 1)
+                    const list2 = this.menuList.slice(2, 4)
+                    this.menuList = list1.concat(list2)
+                }
             },
             toggleCollapse() {
                 this.isCollapse = !this.isCollapse

@@ -4,17 +4,17 @@
       <span class="title">{{this.roleInfo.roleNameCn}}端</span>
     </el-row>
     <el-row type="flex" justify="center">
-      <el-carousel :interval="4000" arrow="always" height="75vh" style="width: 80vw">
+      <el-carousel :interval="3000" arrow="always" height="75vh" style="width: 80vw">
         <el-carousel-item
-          v-for="item in src"
-          :key="item"
-          v-loading="loading"
+                v-for="item in src"
+                :key="item"
+                v-loading="loading"
         >
           <el-image
-            :src="item"
-            style="height: 75vh"
-            fit="cover"
-            @load="loadSuccess"
+                  :src="item"
+                  style="height: 75vh"
+                  fit="cover"
+                  @load="loadSuccess"
             @error="loadError"
           >
             <div slot="error" class="image-slot"
@@ -39,28 +39,30 @@
         </el-col>
         <el-col :span="6">
           <el-link
-            href="http://www.ky.zstu.edu.cn/index/xyxw.htm"
-            target="_blank"
-            class="link"
-            :underline="false"
-            icon="el-icon-s-claim"
-          >最新校务通知</el-link>
+                  @click="jump('/orders')"
+                  class="link"
+                  :underline="false"
+                  icon="el-icon-s-order"
+          >订单记录
+          </el-link>
         </el-col>
         <el-col :span="6">
           <el-link
-            @click="jump('/users')"
-            class="link"
-            :underline="false"
-            icon="el-icon-s-custom"
-          >用户列表查询</el-link>
+                  @click="jump('/users')"
+                  class="link"
+                  :underline="false"
+                  icon="el-icon-s-custom"
+          >用户列表
+          </el-link>
         </el-col>
         <el-col :span="6">
           <el-link
-            @click="jump('/docs')"
-            class="link"
-            :underline="false"
-            icon="el-icon-s-order"
-          >API文档查询</el-link>
+                  @click="jump('/docs')"
+                  class="link"
+                  :underline="false"
+                  icon="el-icon-s-promotion"
+          >API文档
+          </el-link>
         </el-col>
       </el-row>
     </el-card>
@@ -75,28 +77,30 @@
         </el-col>
           <el-col :span="6">
             <el-link
-              href="http://www.ky.zstu.edu.cn/index/xyxw.htm"
-              target="_blank"
-              class="link"
-              :underline="false"
-              icon="el-icon-s-claim"
-            >最新校务通知</el-link>
+                    @click="jump('/self')"
+                    class="link"
+                    :underline="false"
+                    icon="el-icon-s-custom"
+            >信息修改
+            </el-link>
           </el-col>
           <el-col :span="6">
             <el-link
-              @click="jump('/students')"
-              class="link"
-              :underline="false"
-              icon="el-icon-s-custom"
-            >学生信息查询</el-link>
+                    @click="jump('/buyCommodity')"
+                    class="link"
+                    :underline="false"
+                    icon="el-icon-s-home"
+            >租赁市场
+            </el-link>
           </el-col>
           <el-col :span="6">
             <el-link
-              @click="jump('/subjects')"
-              class="link"
-              :underline="false"
-              icon="el-icon-s-order"
-            >教师课程查询</el-link>
+                    @click="jump('/orders')"
+                    class="link"
+                    :underline="false"
+                    icon="el-icon-s-order"
+            >订单查询
+            </el-link>
           </el-col>
       </el-row>
     </el-card>
@@ -111,28 +115,30 @@
         </el-col>
         <el-col :span="6">
           <el-link
-            href="http://www.ky.zstu.edu.cn/index/xyxw.htm"
-            target="_blank"
-            class="link"
-            :underline="false"
-            icon="el-icon-s-claim"
-          >最新校务通知</el-link>
+                  @click="jump('/self')"
+                  class="link"
+                  :underline="false"
+                  icon="el-icon-s-custom"
+          >信息修改
+          </el-link>
         </el-col>
         <el-col :span="6">
           <el-link
-            @click="jump('/stuTranscripts')"
-            class="link"
-            :underline="false"
-            icon="el-icon-s-custom"
-          >学生成绩查询</el-link>
+                  @click="jump('/buyCommodity')"
+                  class="link"
+                  :underline="false"
+                  icon="el-icon-s-promotion"
+          >发布商品
+          </el-link>
         </el-col>
         <el-col :span="6">
           <el-link
-            @click="jump('/subjects')"
-            class="link"
-            :underline="false"
-            icon="el-icon-s-order"
-          >学生课程浏览</el-link>
+                  @click="jump('/orders')"
+                  class="link"
+                  :underline="false"
+                  icon="el-icon-s-order"
+          >订单查询
+          </el-link>
         </el-col>
       </el-row>
     </el-card>
@@ -140,11 +146,11 @@
 </template>
 
 <script>
-  import school1 from '../assets/img/welcome/school1.jpg'
-  import school2 from '../assets/img/welcome/school2.jpg'
-  import school3 from '../assets/img/welcome/school3.jpg'
-  import welcome1 from '../assets/img/welcome/welcome1.jpg'
-  import welcome2 from '../assets/img/welcome/welcome2.jpeg'
+  import bigPic from '../assets/img/welcome/bigPic.jpeg'
+  import bigPic1 from '../assets/img/welcome/bigPic1.jpeg'
+  import bigPic2 from '../assets/img/welcome/bigPic2.jpeg'
+  import bigPic3 from '../assets/img/welcome/bigPic3.jpeg'
+  import bigPic4 from '../assets/img/welcome/bigPic4.jpeg'
   import {checkError, getCookie} from '../plugins/utils'
 
   export default {
@@ -153,11 +159,11 @@
       return {
         // 轮播图
         src: [
-          welcome1,
-          welcome2,
-          school1,
-          school2,
-          school3
+          bigPic,
+          bigPic1,
+          bigPic2,
+          bigPic3,
+          bigPic4
         ],
         // 开启加载
         loading: true,
