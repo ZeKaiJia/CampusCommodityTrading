@@ -389,7 +389,7 @@
             // 点击按钮修改用户信息
             editUser() {
                 this.$refs.editFormRef.validate(async (valid) => {
-                    if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
+                    if (!valid) return this.$message({message: '请填写正确的用户信息后提交！', type: 'error', customClass: 'zZindex'})
                     this.dialogLoading = true
                     const {data: role} = await this.$http.get(
                         `role/selectById?roleId=${getCookie('type')}`

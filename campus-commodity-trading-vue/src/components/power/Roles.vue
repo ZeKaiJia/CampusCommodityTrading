@@ -333,7 +333,7 @@
       // 点击按钮添加角色信息
       addRole() {
         this.$refs.addFormRef.validate(async (valid) => {
-          if (!valid) return this.$message.error('请填写正确的角色信息后再提交')
+          if (!valid) return this.$message({message: '请填写正确的角色信息后提交！', type: 'error', customClass: 'zZindex'})
           const {data: res} = await this.$http.post(
                   'role/insert',
                   this.addForm
@@ -351,7 +351,7 @@
       // 点击按钮修改角色信息
       editRole() {
         this.$refs.editFormRef.validate(async (valid) => {
-          if (!valid) return this.$message.error('请填写正确的角色信息后再提交')
+          if (!valid) return this.$message({message: '请填写正确的角色信息后提交！', type: 'error', customClass: 'zZindex'})
           const {data: res} = await this.$http.post(
                   'role/update',
                   this.editForm

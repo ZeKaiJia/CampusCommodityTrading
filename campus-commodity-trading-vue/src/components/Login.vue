@@ -199,7 +199,8 @@
             // 验证邮箱
             const checkEmail = (rule, value, callback) => {
                 const regEmail = /^([a-zA-z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-                if (regEmail.test(value)) {
+                console.log(value)
+                if (regEmail.test(value) || value === '' || value === null) {
                     return callback()
                 } else {
                     callback(new Error('请输入合法的邮箱'))
@@ -208,7 +209,7 @@
             // 验证手机号
             const checkMobile = (rule, value, callback) => {
                 const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
-                if (regMobile.test(value)) {
+                if (regMobile.test(value) || value === '' || value === null) {
                     return callback()
                 } else {
                     callback(new Error('请输入合法的手机号'))
@@ -338,7 +339,7 @@
             async findPassword() {
                 this.$refs.findFormRef.validate(async (valid) => {
                     if (!valid) {
-                        return this.$message.error('请填写好正确的信息后修改！')
+                        return this.$message({message: '请填写好正确的信息后修改！', type: 'error', customClass: 'zZindex'})
                     }
                     const {data: result} = await this.$http.get(`user/selectByName?userName=${this.findForm.userName}`)
                     const {data: role} = await this.$http.get(`role/selectUserRole?userName=${this.findForm.userName}`)
@@ -366,7 +367,7 @@
                 if (this.findForm.userName !== '' && this.findForm.userName !== null) {
                     const {data: result} = await this.$http.get(`user/selectByName?userName=${this.findForm.userName}`)
                     if (result.code !== 200 || result.data === null) {
-                        return this.$message.error('输入的信息无效！')
+                        this.$message({message: '输入的信息无效！', type: 'error', customClass: 'zZindex'})
                     } else {
                         this.findForm.userQuest = result.data.userQuest
                     }
@@ -463,7 +464,7 @@
             // 点击按钮添加新用户
             addUser() {
                 this.$refs.addFormRef.validate(async (valid) => {
-                    if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
+                    if (!valid) return this.$message({message: '请填写正确的用户信息后提交！', type: 'error', customClass: 'zZindex'})
                     this.dialogLoading = true
                     const {data: res} = await this.$http.post(
                         `user/insert?roleNameCn=${this.addForm.roleNameCn}&status=3`,

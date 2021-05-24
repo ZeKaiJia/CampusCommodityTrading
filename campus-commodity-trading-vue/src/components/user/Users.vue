@@ -481,7 +481,7 @@
     // 点击按钮添加新用户
     addUser() {
       this.$refs.addFormRef.validate(async (valid) => {
-        if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
+        if (!valid) return this.$message({message: '请填写正确的用户信息后提交！', type: 'error', customClass: 'zZindex'})
         this.dialogLoading = true
         const { data: res } = await this.$http.post(
           `user/insert?roleNameCn=${this.addForm.roleNameCn}&status=1`,
@@ -501,7 +501,7 @@
     // 点击按钮修改用户信息
     async editUser() {
       this.$refs.editFormRef.validate(async (valid) => {
-        if (!valid) return this.$message.error('请填写正确的用户信息后再提交')
+        if (!valid) return this.$message({message: '请填写正确的用户信息后提交！', type: 'error', customClass: 'zZindex'})
         this.dialogLoading = true
         const { data: res } = await this.$http.post(
           `user/update?roleNameCn=${this.editForm.roleNameCn}&status=0`,

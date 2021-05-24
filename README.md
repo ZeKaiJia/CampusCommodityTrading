@@ -19,3 +19,7 @@
 
 ### 2021.5.23
 - 完成服务器部署，两处TODO。
+
+### 2021.5.24
+- 修复了登录页面注册新用户时不输入电话和邮箱也会触发校验的bug。
+- 使用this.$message({message: '！', type: '', customClass: 'zZindex'})修复了dialog笼罩层遮盖message的bug。

@@ -324,7 +324,7 @@
             // 点击按钮修改商品信息
             async editCommodity() {
                 this.$refs.editFormRef.validate(async (valid) => {
-                    if (!valid) return this.$message.error('请填写正确的商品信息后再提交')
+                    if (!valid) return this.$message({message: '请填写正确的商品信息后提交！', type: 'error', customClass: 'zZindex'})
                     this.dialogLoading = true
                     const { data: res } = await this.$http.post(
                         'commodity/update',
@@ -408,7 +408,7 @@
             },
             async addCommodity() {
                 this.$refs.addFormRef.validate(async (valid) => {
-                    if (!valid) return this.$message.error('请填写正确的商品信息后再提交')
+                    if (!valid) return this.$message({message: '请填写正确的商品信息后提交！', type: 'error', customClass: 'zZindex'})
                     this.dialogLoading = true
                     this.addForm.comQuantityNow = this.addForm.comQuantity
                     const { data: res } = await this.$http.post(

@@ -432,7 +432,7 @@
             // 发货
             async transport() {
                 this.$refs.updateFormRef.validate(async (valid) => {
-                    if (!valid) return this.$message.error('请填写正确的发货信息后再提交')
+                    if (!valid) return this.$message({message: '请填写正确的发货信息后提交！', type: 'error', customClass: 'zZindex'})
                     this.dialogLoading = true
                     this.updateForm.orderStatus = 2
                     const {data: res} = await this.$http.post('order/update', this.updateForm)
