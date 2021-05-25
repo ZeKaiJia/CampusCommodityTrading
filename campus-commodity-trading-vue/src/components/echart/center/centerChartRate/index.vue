@@ -11,18 +11,19 @@
 </template>
 
 <script>
-import Echart from '@/common/echart'
-export default {
-  data () {
-    return {
-      options: {},
-    };
-  },
-  components: {
-    Echart,
-  },
-  props: {
-    id: {
+  import Echart from '@/common/echart'
+
+  export default {
+    data() {
+      return {
+        options: {},
+      };
+    },
+    components: {
+      Echart,
+    },
+    props: {
+      id: {
       type: String,
       required: true,
       default: "chartRate"

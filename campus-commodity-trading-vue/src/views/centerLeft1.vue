@@ -6,7 +6,7 @@
           <icon name="chart-bar"></icon>
         </span>
         <div class="d-flex">
-          <span class="fs-xl text mx-2">任务通过率</span>
+          <span class="fs-xl text mx-2">接口调用率</span>
           <dv-decoration-3 style="width:1.25rem;height:.25rem; position:relative;top:-.0375rem;" />
         </div>
       </div>
@@ -17,12 +17,14 @@
       <div class="bottom-data">
         <div class="item-box" v-for="(item,index) in numberData" :key="index">
           <div class="d-flex">
-            <span class="coin">￥</span>
+            <!--<span class="coin">￥</span>-->
             <dv-digital-flop :config="item.number" style="width:2.5rem;height:.625rem;" />
           </div>
           <p class="text" style="text-align: center;">
             {{item.text}}
-            <span class="colorYellow">(件)</span>
+            <span class="colorYellow" v-if="index === 3">(件)</span>
+            <span class="colorYellow" v-else-if="index === 0">(件)</span>
+            <span class="colorYellow" v-else>(元)</span>
           </p>
         </div>
       </div>
@@ -42,7 +44,7 @@ export default {
             toFixed: 1,
             content: "{nt}"
           },
-          text: "今日构建总量"
+          text: "上架数量"
         },
         {
           number: {
@@ -50,7 +52,7 @@ export default {
             toFixed: 1,
             content: "{nt}"
           },
-          text: "总共完成数量"
+          text: "总成交额"
         },
         {
           number: {
@@ -58,7 +60,7 @@ export default {
             toFixed: 1,
             content: "{nt}"
           },
-          text: "正在编译数量"
+          text: "缓冲金额"
         },
         {
           number: {
@@ -66,7 +68,7 @@ export default {
             toFixed: 1,
             content: "{nt}"
           },
-          text: "未通过数量"
+          text: "下单数量"
         }
       ]
     };
@@ -85,6 +87,9 @@ export default {
     },
     changeNumber() {
       this.numberData.forEach((item, index) => {
+        if (index === 1) {
+          item.number.number[0] += index * 10;
+        }
         item.number.number[0] += ++index;
         item.number = { ...item.number };
       });

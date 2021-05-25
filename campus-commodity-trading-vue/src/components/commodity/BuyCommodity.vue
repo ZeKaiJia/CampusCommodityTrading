@@ -324,7 +324,6 @@
                 rate: null,
                 iconClasses: ['el-icon-heavy-rain', 'el-icon-cloudy-and-sunny', 'el-icon-sunny'],
                 loading: false,
-                // TODO
                 queryInfo: {
                     comId: '',
                     comName: '',

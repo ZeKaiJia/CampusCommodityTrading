@@ -5,7 +5,7 @@
         <span style="color:#5cd9e8">
           <icon name="align-left"></icon>
         </span>
-        <span class="fs-xl text mx-2">产品销售渠道分析</span>
+        <span class="fs-xl text mx-2">大宗交易渠道分析</span>
       </div>
       <div class="d-flex jc-center body-box" style=" margin-top: 0;">
         <dv-capsule-chart :config="config" style="width: 100%;height:2rem" />
@@ -25,24 +25,24 @@ export default {
       config: {
         data: [
           {
-            name: "南阳",
+            name: "北京",
             value: 167
           },
           {
-            name: "周口",
-            value: 67
+            name: "上海",
+            value: 133
           },
           {
-            name: "漯河",
-            value: 123
+            name: "深圳",
+            value: 113
           },
           {
-            name: "郑州",
-            value: 55
+            name: "广州",
+            value: 90
           },
           {
-            name: "西峡",
-            value: 98
+            name: "杭州",
+            value: 68
           }
         ]
       }

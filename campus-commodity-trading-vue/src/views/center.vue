@@ -13,7 +13,7 @@
         <span style="color:#5cd9e8">
           <icon name="align-left"></icon>
         </span>
-        <span class="fs-xl text mx-2 mb-1">年度负责人组件达标榜</span>
+        <span class="fs-xl text mx-2 mb-1">今年累计提交次数排行</span>
         <dv-scroll-ranking-board :config="ranking" style="height:2.75rem" />
       </div>
       <div class="percent">
@@ -41,23 +41,23 @@ export default {
     return {
       titleItem: [
         {
-          title: "今年累计任务建次数",
+          title: "今年累计提交次数",
           number: {
-            number: [120],
+            number: [397],
             toFixed: 1,
             content: "{nt}"
           }
         },
         {
-          title: "本月累计任务次数",
+          title: "本月累计提交次数",
           number: {
-            number: [18],
+            number: [38],
             toFixed: 1,
             content: "{nt}"
           }
         },
         {
-          title: "今日累计任务次数",
+          title: "今日累计提交次数",
           number: {
             number: [2],
             toFixed: 1,
@@ -65,7 +65,7 @@ export default {
           }
         },
         {
-          title: "今年失败任务次数",
+          title: "待解决问题数",
           number: {
             number: [14],
             toFixed: 1,
@@ -73,17 +73,17 @@ export default {
           }
         },
         {
-          title: "今年成功任务次数",
+          title: "系统组件数",
           number: {
-            number: [106],
+            number: [12],
             toFixed: 1,
             content: "{nt}"
           }
         },
         {
-          title: "今年达标任务个数",
+          title: "今年定制个数",
           number: {
-            number: [100],
+            number: [62],
             toFixed: 1,
             content: "{nt}"
           }
@@ -92,51 +92,43 @@ export default {
       ranking: {
         data: [
           {
-            name: "周口",
+            name: "贾泽楷",
             value: 55
           },
           {
-            name: "南阳",
-            value: 120
+            name: "胡馨月",
+            value: 42
           },
           {
-            name: "西峡",
+            name: "宓彦阳",
+            value: 36
+          },
+          {
+            name: "周庭康",
+            value: 32
+          },
+          {
+            name: "朱星",
+            value: 32
+          },
+          {
+            name: "测试合计",
+            value: 32
+          },
+          {
+            name: "后端合计",
+            value: 87
+          },
+          {
+            name: "前端合计",
             value: 78
-          },
-          {
-            name: "驻马店",
-            value: 66
-          },
-          {
-            name: "新乡",
-            value: 80
-          },
-          {
-            name: "新乡2",
-            value: 80
-          },
-          {
-            name: "新乡3",
-            value: 80
-          },
-          {
-            name: "新乡4",
-            value: 80
-          },
-          {
-            name: "新乡5",
-            value: 80
-          },
-          {
-            name: "新乡6",
-            value: 80
-          },
+          }
         ],
         carousel: "single",
-        unit: "人"
+        unit: "次"
       },
       water: {
-        data: [24, 45],
+        data: [5, 55],
         shape: "roundRect",
         formatter: "{value}%",
         waveNum: 3
@@ -145,7 +137,7 @@ export default {
       rate: [
         {
           id: "centerRate1",
-          tips: 60,
+          tips: 88,
           colorData: {
             textStyle: "#3fc0fb",
             series: {
@@ -159,7 +151,7 @@ export default {
         },
         {
           id: "centerRate2",
-          tips: 40,
+          tips: 72,
           colorData: {
             textStyle: "#67e0e3",
             series: {

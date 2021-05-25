@@ -309,7 +309,6 @@
       dialogLoading: true,
       // 路由url
       routeUrl: '/users',
-      // 角色类型选择 TODO
       roleOptions: [],
       // 获取密码用户
       checkPassUser: '',

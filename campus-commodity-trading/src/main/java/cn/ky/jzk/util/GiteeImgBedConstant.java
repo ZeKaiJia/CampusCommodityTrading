@@ -38,7 +38,6 @@ public interface GiteeImgBedConstant {
      */
     String BUILD_PAGE_URL = "https://gitee.com/api/v5/repos/%s/%s/pages/builds";
     /**
-     * TODO： gitpage请求路径
      * 示例："http://quxuecx.gitee.io/typechoblogimg/";
      */
     String GITPAGE_REQUEST_URL = "http://robot_kevin.gitee.io/typechoimg";

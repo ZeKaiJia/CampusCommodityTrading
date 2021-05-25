@@ -32,15 +32,12 @@ public class JSONUtil {
         try {
             map = (Map<String,Object>)objectMapper.readValue(json, Map.class);
         } catch (JsonParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         }
@@ -61,15 +58,12 @@ public class JSONUtil {
         try {
             mapList = (List<Map<String,?>>)objectMapper.readValue(json, javaType);
         } catch (JsonParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         }
@@ -102,15 +96,12 @@ public class JSONUtil {
         try {
             jsonList = objectMapper.writeValueAsString(object);
         } catch (JsonParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         }
@@ -130,15 +121,12 @@ public class JSONUtil {
         try {
             jsonList = objectMapper.writeValueAsString(cardInfoList);
         } catch (JsonParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw e;
         }
