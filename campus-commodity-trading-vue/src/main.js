@@ -31,7 +31,7 @@ import '@/common/flexible.js';
 // 引入全局css
 import './assets/scss/style.scss';
 
-//引入echart
+// 引入echart
 import * as echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 

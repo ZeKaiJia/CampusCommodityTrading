@@ -9,7 +9,17 @@
         <!--查询卡片区-->
         <el-card style="margin-top: 14px" v-loading="mainLoading">
             <el-row :gutter="20">
-                <el-col :span="13" style="text-align: right">
+                <el-col :span="4">
+                    <el-switch
+                            style="display: block"
+                            v-model="cardOrTable"
+                            active-color="#13ce66"
+                            inactive-color="#409EFF"
+                            active-text="卡片"
+                            inactive-text="表格">
+                    </el-switch>
+                </el-col>
+                <el-col :span="9" style="text-align: right">
                     <div class="centerFont">二手商品库</div>
                 </el-col>
                 <el-col :span="11" style="text-align: right">
@@ -21,7 +31,7 @@
                                @click="searchFlag = !searchFlag"></el-button>
                 </el-col>
             </el-row>
-            <transition name="fadeY">
+            <transition name="fadeY" mode="out-in">
                 <el-row v-if="searchFlag">
                     <el-card>
                         <!--搜索与添加区域-->
@@ -96,51 +106,183 @@
                     </el-card>
                 </el-row>
             </transition>
-            <el-row :gutter="40">
-                <el-col :span="6" v-for="(commodity) in AllCommodity" :key="commodity.comId">
-                    <el-card :body-style="{ padding: '24px' }" style="text-align: center; margin: 24px 0;">
-                        <el-button type="danger" icon="el-icon-warning-outline" circle
-                                   style="float: left; margin: 12px"
-                                   @click="checkCommodityUserInfo(commodity.comId)"></el-button>
-                        <el-button type="primary" icon="el-icon-shopping-cart-2" circle
-                                   style="float: right; margin: 12px"
-                                   @click="showBuyCommodityDialog(commodity.comId)"></el-button>
-                        <el-image
-                                v-if="commodity.comPicture !== '' && commodity.comPicture !== null"
-                                v-loading="loading"
-                                style="max-width: 100px; max-height: 100px; min-width: 100px; min-height: 100px"
-                                :src="commodity.comPicture"
-                                fit="cover"
-                                @load="loadSuccess"
-                                @error="loadError"
-                        >
-                            <div slot="error" class="image-slot"
-                                 style="display: flex; justify-content: center; align-items: center; height: 100%; flex-flow: column">
+            <transition name="slide-fade" mode="out-in">
+                <el-row :gutter="40" v-if="cardOrTable">
+                    <el-col :span="6" v-for="(commodity) in AllCommodity" :key="commodity.comId">
+                        <el-card :body-style="{ padding: '24px' }" style="text-align: center; margin: 24px 0;">
+                            <el-button type="danger" icon="el-icon-warning-outline" circle
+                                       style="float: left; margin: 12px"
+                                       @click="checkCommodityUserInfo(commodity.comId)"></el-button>
+                            <el-button type="primary" icon="el-icon-shopping-cart-2" circle
+                                       style="float: right; margin: 12px"
+                                       @click="showBuyCommodityDialog(commodity.comId)"></el-button>
+                            <el-image
+                                    v-if="commodity.comPicture !== '' && commodity.comPicture !== null"
+                                    v-loading="loading"
+                                    style="max-width: 100px; max-height: 100px; min-width: 100px; min-height: 100px"
+                                    :src="commodity.comPicture"
+                                    fit="cover"
+                                    @load="loadSuccess"
+                                    @error="loadError"
+                            >
+                                <div slot="error" class="image-slot"
+                                     style="display: flex; justify-content: center; align-items: center; height: 100%; flex-flow: column">
                                 <span class="el-icon-picture-outline"
                                       style="width: 48px; height: 48px; font-size: 48px"/>
-                                <span style="margin-top: 12px">加载失败</span>
-                            </div>
-                        </el-image>
-                        <i v-if="commodity.comPicture === '' || commodity.comPicture === null"
-                           class="el-icon-present"></i>
-                        <el-rate
-                                v-if="commodity.comRate !== 0"
-                                v-model="commodity.comRate"
-                                :icon-classes="iconClasses"
-                                void-icon-class="el-icon-star-off"
-                                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                                disabled show-score>
-                        </el-rate>
-                        <el-row class="middleFont" v-if="commodity.comRate === 0">暂无评价</el-row>
-                        <el-row class="middleFont">编号 - {{commodity.comId}}</el-row>
-                        <el-row class="middleFont">名称 - {{commodity.comName}}</el-row>
-                        <el-row class="middleFont">数量 - {{commodity.comQuantity}}单位</el-row>
-                        <el-row class="middleFont">存货 - {{commodity.comQuantityNow}}单位</el-row>
-                        <el-row class="middleFont">单价 - {{commodity.comEachPrice}}元</el-row>
-                        <el-row class="middleFont">描述 - {{commodity.comDescription}}</el-row>
-                    </el-card>
-                </el-col>
-            </el-row>
+                                    <span style="margin-top: 12px">加载失败</span>
+                                </div>
+                            </el-image>
+                            <i v-if="commodity.comPicture === '' || commodity.comPicture === null"
+                               class="el-icon-present"></i>
+                            <el-rate
+                                    v-if="commodity.comRate !== 0"
+                                    v-model="commodity.comRate"
+                                    :icon-classes="iconClasses"
+                                    void-icon-class="el-icon-star-off"
+                                    :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                                    disabled show-score>
+                            </el-rate>
+                            <el-row class="middleFont" v-if="commodity.comRate === 0">暂无评价</el-row>
+                            <el-row class="middleFont">编号 - {{commodity.comId}}</el-row>
+                            <el-row class="middleFont">名称 - {{commodity.comName}}</el-row>
+                            <el-row class="middleFont">数量 - {{commodity.comQuantity}}单位</el-row>
+                            <el-row class="middleFont">存货 - {{commodity.comQuantityNow}}单位</el-row>
+                            <el-row class="middleFont">单价 - {{commodity.comEachPrice}}元</el-row>
+                            <el-row class="middleFont">描述 - {{commodity.comDescription}}</el-row>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                <!--商品列表区域-->
+                <el-table
+                        :data="showCommodity"
+                        :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+                        border
+                        v-loading="loading"
+                        v-if="!cardOrTable"
+                >
+                    <!--拓展列-->
+                    <el-table-column type="expand" label="详细" width="64px" align="center">
+                        <template slot-scope="scope">
+                            <el-row v-if="scope.row.utcCreate !== null && scope.row.utcCreate !== ''">
+                                <el-col :span="3" align="right">
+                                    <el-tag type="info" effect="plain">
+                                        创建时间
+                                    </el-tag>
+                                </el-col>
+                                <el-col :span="10">
+                                    <el-tag type="info" effect="plain">
+                                        {{scope.row.utcCreate}}
+                                    </el-tag>
+                                </el-col>
+                            </el-row>
+                            <el-row v-if="scope.row.utcModify !== null && scope.row.utcModify !== ''">
+                                <el-col :span="3" align="right">
+                                    <el-tag type="info" effect="plain">
+                                        修改时间
+                                    </el-tag>
+                                </el-col>
+                                <el-col :span="10">
+                                    <el-tag type="info" effect="plain">
+                                        {{scope.row.utcModify}}
+                                    </el-tag>
+                                </el-col>
+                            </el-row>
+                            <el-row v-if="scope.row.modifyBy !== null && scope.row.modifyBy !== ''">
+                                <el-col :span="3" align="right">
+                                    <el-tag type="info" effect="plain">
+                                        修改人
+                                    </el-tag>
+                                </el-col>
+                                <el-col :span="10">
+                                    <el-tag type="info" effect="plain">
+                                        {{scope.row.modifyBy}}
+                                    </el-tag>
+                                </el-col>
+                            </el-row>
+                            <el-row v-if="scope.row.remark !== null && scope.row.remark !== ''">
+                                <el-col :span="3" align="right">
+                                    <el-tag type="info" effect="plain">
+                                        备注
+                                    </el-tag>
+                                </el-col>
+                                <el-col :span="10">
+                                    <el-tag type="info" effect="plain">
+                                        {{scope.row.remark}}
+                                    </el-tag>
+                                </el-col>
+                            </el-row>
+                        </template>
+                    </el-table-column>
+                    <!--索引列-->
+                    <el-table-column label="序号" width="58px" align="center">
+                        <template slot-scope="scope">
+                            <span>{{scope.$index+(currentPage - 1) * pageSize + 1}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="商品号" prop="comId" align="center" width="120px"/>
+                    <el-table-column label="名称" prop="comName" align="center" width="240px"/>
+                    <el-table-column label="数量" prop="comQuantity" align="center" width="80px"/>
+                    <el-table-column label="存货" prop="comQuantityNow" align="center" width="80px"/>
+                    <el-table-column label="租价/天" prop="comEachPrice" align="center" width="120px"/>
+                    <el-table-column label="描述" prop="comDescription" align="center"/>
+                    <el-table-column label="评分" align="center" width="60px">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.comRate === 0 ? '无' : scope.row.comRate}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" align="center" width="180px">
+                        <template slot-scope="scope">
+                            <el-tooltip
+                                    class="dark"
+                                    effect="dark"
+                                    content="修改信息"
+                                    placement="top"
+                                    :enterable="false"
+                                    :hide-after="2000"
+                            >
+                                <!--修改按钮-->
+                                <el-button
+                                        type="primary"
+                                        icon="el-icon-edit"
+                                        size="mini"
+                                        @click="showEditDialog(scope.row.userName)"
+                                        round
+                                />
+                            </el-tooltip>
+                            <el-tooltip
+                                    class="dark"
+                                    effect="dark"
+                                    content="删除用户"
+                                    placement="top"
+                                    :enterable="false"
+                                    :hide-after="2000"
+                            >
+                                <!--删除按钮-->
+                                <el-button
+                                        type="danger"
+                                        icon="el-icon-delete"
+                                        size="mini"
+                                        @click="removeUserByName(scope.row.userName)"
+                                        round
+                                />
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </transition>
+            <transition name="slide-fade" mode="out-in">
+                <!--显示分页信息-->
+                <el-pagination
+                        v-if="!cardOrTable"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-sizes="[1, 5, 7, 10, 30, 50, 100]"
+                        :page-size="pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="total">
+                </el-pagination>
+            </transition>
         </el-card>
         <!--联系卖家的对话框-->
         <el-dialog
@@ -296,7 +438,7 @@
 </template>
 
 <script>
-    import {checkError, getCookie} from "../../plugins/utils";
+    import {checkError, getCookie, sliceData, timestampToTime} from "../../plugins/utils";
     import Clipboard from 'clipboard';
     import QRCode from 'qrcodejs2'
 
@@ -320,6 +462,7 @@
                 }
             }
             return {
+                cardOrTable: true,
                 addresses: [],
                 rate: null,
                 iconClasses: ['el-icon-heavy-rain', 'el-icon-cloudy-and-sunny', 'el-icon-sunny'],
@@ -339,6 +482,7 @@
                 dialogLoading: true,
                 buyCommodityDialogVisible: false,
                 mainLoading: true,
+                showCommodity: [],
                 AllCommodity: [],
                 callInfo: [],
                 buyCommodityPost: {
@@ -400,7 +544,12 @@
                     {color: '#5cb87a', percentage: 75},
                     {color: '#1989fa', percentage: 90},
                     {color: '#6f7ad3', percentage: 100}
-                ]
+                ],
+                // 页面数据显示条数
+                pageSize: 7,
+                // 当前页数
+                currentPage: 1,
+                total: 0,
             }
         },
         mounted() {
@@ -422,6 +571,20 @@
             this.clipboard2.destroy()
         },
         methods: {
+            // 当前页面显示数据条数改变事件
+            // eslint-disable-next-line no-dupe-keys,vue/no-dupe-keys
+            handleSizeChange(val) {
+                this.pageSize = val
+                // 根据当前页数和每页显示数控大小截取数据
+                this.showCommodity = sliceData(this.AllCommodity, this.currentPage, this.pageSize)
+            },
+            // 页码改变事件
+            // eslint-disable-next-line no-dupe-keys,vue/no-dupe-keys
+            handleCurrentChange(val) {
+                this.currentPage = val
+                // 根据当前页数和每页显示数控大小截取数据
+                this.showCommodity = sliceData(this.AllCommodity, this.currentPage, this.pageSize)
+            },
             resetQueryInfo() {
                 Object.keys(this.queryInfo).forEach(key => this.queryInfo[key] = "")
                 this.queryInfo.quantity = [0, 100]
@@ -589,6 +752,21 @@
                 }
                 this.mainLoading = false
                 this.AllCommodity = res.data
+                this.AllCommodity.forEach(function (item) {
+                    item.userLastLogin = timestampToTime(item.userLastLogin)
+                    item.utcCreate = timestampToTime(item.utcCreate)
+                    item.utcModify = timestampToTime(item.utcModify)
+                })
+                this.showCommodity = this.AllCommodity
+                this.total = res.data.length
+                if (!this.cardOrTable) {
+                    // 根据当前页数和每页显示数控大小截取数据
+                    this.showCommodity = sliceData(this.AllCommodity, this.currentPage, this.pageSize)
+                    if (this.showUsrList.length === 0) {
+                        this.currentPage = this.currentPage - 1
+                        this.showCommodity = sliceData(this.AllCommodity, this.currentPage, this.pageSize)
+                    }
+                }
                 return this.$message.success('查询商品成功!')
             },
             async getCommodity() {
@@ -600,6 +778,20 @@
                 }
                 this.mainLoading = false
                 this.AllCommodity = res.data
+                this.AllCommodity.forEach(function (item) {
+                    item.utcCreate = timestampToTime(item.utcCreate)
+                    item.utcModify = timestampToTime(item.utcModify)
+                })
+                this.showCommodity = this.AllCommodity
+                this.total = res.data.length
+                if (!this.cardOrTable) {
+                    // 根据当前页数和每页显示数控大小截取数据
+                    this.showCommodity = sliceData(this.AllCommodity, this.currentPage, this.pageSize)
+                    if (this.showUsrList.length === 0) {
+                        this.currentPage = this.currentPage - 1
+                        this.showCommodity = sliceData(this.AllCommodity, this.currentPage, this.pageSize)
+                    }
+                }
             }
         }
     }
@@ -660,5 +852,27 @@
     .fadeY-enter, .fadeY-leave-to {
         opacity: 0;
         transform: translateY(-50px);
+    }
+
+    .el-tag {
+        margin-left: 16px;
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    /* 可以设置不同的进入和离开动画 */
+    /* 设置持续时间和动画函数 */
+    .slide-fade-enter-active {
+        transition: all .3s ease;
+    }
+
+    .slide-fade-leave-active {
+        transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active for below version 2.1.8 */ {
+        transform: translateX(10px);
+        opacity: 0;
     }
 </style>

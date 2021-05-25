@@ -20,7 +20,59 @@
               border
               stripe
       >
-        <el-table-column type="index" label="#" width="48px" align="center"/>
+        <!--拓展列-->
+        <el-table-column type="expand" label="详细" width="64px" align="center">
+          <template slot-scope="scope">
+            <el-row v-if="scope.row.utcCreate !== null && scope.row.utcCreate !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  创建时间
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.utcCreate}}
+                </el-tag>
+              </el-col>
+            </el-row>
+            <el-row v-if="scope.row.utcModify !== null && scope.row.utcModify !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  修改时间
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.utcModify}}
+                </el-tag>
+              </el-col>
+            </el-row>
+            <el-row v-if="scope.row.modifyBy !== null && scope.row.modifyBy !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  修改人
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.modifyBy}}
+                </el-tag>
+              </el-col>
+            </el-row>
+            <el-row v-if="scope.row.remark !== null && scope.row.remark !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  备注
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.remark}}
+                </el-tag>
+              </el-col>
+            </el-row>
+          </template>
+        </el-table-column>
         <el-table-column label="ID" prop="roleId" align="center" width="80px"/>
         <el-table-column label="中文名" prop="roleNameCn" align="center" width="160px"/>
         <el-table-column label="英文名" prop="roleNameEn" align="center"/>
@@ -166,7 +218,7 @@
 </template>
 
 <script>
-  import {checkError, getCookie, setCookie} from '../../plugins/utils'
+  import {checkError, getCookie, setCookie, timestampToTime} from '../../plugins/utils'
 
   export default {
     name: 'Roles',
@@ -313,6 +365,10 @@
           return this.$message.error('获取角色列表失败!' + checkError(res))
         }
         this.typeList = res.data
+        this.typeList.forEach(function (item) {
+          item.utcCreate = timestampToTime(item.utcCreate)
+          item.utcModify = timestampToTime(item.utcModify)
+        })
         this.total = res.data.length
       },
       // 监听修改角色对话框的点击事件
@@ -409,5 +465,10 @@
   }
   .ddiv /deep/ .el-transfer-panel__body {
     height: 100%;
+  }
+  .el-tag {
+    margin-left: 16px;
+    margin-top: 6px;
+    margin-bottom: 6px;
   }
 </style>

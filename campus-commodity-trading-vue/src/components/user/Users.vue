@@ -41,11 +41,76 @@
       </el-row>
       <!--用户列表区域-->
       <el-table
-        :data="showUsrList"
-        :header-cell-style="{background:'#eef1f6',color:'#606266'}"
-        border
-        v-loading="loading"
+              :data="showUsrList"
+              :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+              border
+              v-loading="loading"
       >
+        <!--拓展列-->
+        <el-table-column type="expand" label="详细" width="64px" align="center">
+          <template slot-scope="scope">
+            <el-row v-if="scope.row.userLastLogin !== null && scope.row.userLastLogin !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  最近登录
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.userLastLogin}}
+                </el-tag>
+              </el-col>
+            </el-row>
+            <el-row v-if="scope.row.utcCreate !== null && scope.row.utcCreate !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  创建时间
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.utcCreate}}
+                </el-tag>
+              </el-col>
+            </el-row>
+            <el-row v-if="scope.row.utcModify !== null && scope.row.utcModify !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  修改时间
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.utcModify}}
+                </el-tag>
+              </el-col>
+            </el-row>
+            <el-row v-if="scope.row.modifyBy !== null && scope.row.modifyBy !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  修改人
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.modifyBy}}
+                </el-tag>
+              </el-col>
+            </el-row>
+            <el-row v-if="scope.row.remark !== null && scope.row.remark !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  备注
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.remark}}
+                </el-tag>
+              </el-col>
+            </el-row>
+          </template>
+        </el-table-column>
         <!--索引列-->
         <el-table-column label="序号" width="58px" align="center">
           <template slot-scope="scope">
@@ -261,7 +326,7 @@
 </template>
 
 <script>
-  import {checkError, getCookie, sliceData} from '../../plugins/utils'
+  import {checkError, getCookie, sliceData, timestampToTime} from '../../plugins/utils'
 
   export default {
   name: 'Users',
@@ -429,12 +494,17 @@
     // 获取用户列表
     async getUserList() {
       this.loading = true
-      const { data: res } = await this.$http.get('user/select')
+      const {data: res} = await this.$http.get('user/select')
       if (res.code !== 200) {
         this.loading = false
         return this.$message.error('获取用户列表失败!' + checkError(res))
       }
       this.userList = res.data
+      this.userList.forEach(function (item) {
+        item.userLastLogin = timestampToTime(item.userLastLogin)
+        item.utcCreate = timestampToTime(item.utcCreate)
+        item.utcModify = timestampToTime(item.utcModify)
+      })
       // 根据当前页数和每页显示数控大小截取数据
       this.showUsrList = sliceData(this.userList, this.currentPage, this.pageSize)
       if (this.showUsrList.length === 0) {

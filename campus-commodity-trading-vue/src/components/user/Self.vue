@@ -360,6 +360,12 @@
                 this.fileList = fileList.slice(-1)
             },
             async updateAvatar() {
+                this.$notify({
+                    title: '警告',
+                    message: '若无法上传，请刷新页面并重新选择1M一下的图片',
+                    type: 'warning',
+                    showClose: false
+                });
                 this.loading = true
                 const param = new FormData()
                 this.fileList.forEach(
