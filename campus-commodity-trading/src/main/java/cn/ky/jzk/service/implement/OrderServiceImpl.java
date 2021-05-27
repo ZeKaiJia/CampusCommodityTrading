@@ -63,6 +63,7 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
             order.setOrderTransportTime(DateUtil.currentSecond());
         } else if (order.getOrderStatus() == GlobalConstant.RECIEVE_ORDER_STATUS) {
             order.setOrderReceiveTime(DateUtil.currentSecond());
+            order.setOrderTime(order.getOrderReceiveTime() + order.getOrderTime());
         } else {
             return null;
         }

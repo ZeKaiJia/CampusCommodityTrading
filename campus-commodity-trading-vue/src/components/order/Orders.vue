@@ -54,7 +54,7 @@
                                         </el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="6">
+                                <el-col :span="4">
                                     <el-form-item prop="orderStatus">
                                         <el-select v-model="queryInfo.orderStatus" placeholder="请选择订单状态">
                                             <el-option
@@ -66,7 +66,19 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="5">
+                                <el-col :span="4">
+                                    <el-form-item prop="orderPayStatus">
+                                        <el-select v-model="queryInfo.orderPayStatus" placeholder="请选择付款状态">
+                                            <el-option
+                                                    v-for="item in payOptions"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="3">
                                     <el-button type="primary" @click="selectOrder()" style="float: right;">搜索订单
                                     </el-button>
                                 </el-col>
@@ -147,12 +159,22 @@
                                  v-if="userRole.roleNameEn !== 'saler'"/>
                 <el-table-column label="买家名" prop="orderBuyerName" align="center"
                                  v-if="userRole.roleNameEn !== 'buyer'"/>
-                <el-table-column label="状态" align="center">
+                <el-table-column label="订单状态" align="center">
                     <template slot-scope="scope">
                         <span>{{scope.row.orderStatus === 1 ? '已下单' : scope.row.orderStatus === 2 ? '已发货' : '已收货'}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" width="180px">
+                <el-table-column label="付款状态" align="center">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.orderPayStatus === 1 ? '已付款' : '未付款'}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="到期时间" align="center">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.orderStatus === 3 ? scope.row.orderTime : '请收货后查看'}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" align="center" width="200px">
                     <template slot-scope="scope">
                         <el-tooltip
                                 class="dark"
@@ -186,6 +208,24 @@
                                     icon="el-icon-map-location"
                                     size="mini"
                                     @click="showReceive(scope.row.id)"
+                                    v-if="userRole.roleNameEn === 'admin' || userRole.roleNameEn === 'buyer'"
+                                    round
+                            />
+                        </el-tooltip>
+                        <el-tooltip
+                                class="dark"
+                                effect="dark"
+                                content="付款"
+                                placement="top"
+                                :enterable="false"
+                                :hide-after="2000"
+                        >
+                            <!--付款按钮-->
+                            <el-button
+                                    type="primary"
+                                    icon="el-icon-sell"
+                                    size="mini"
+                                    @click="pay()"
                                     v-if="userRole.roleNameEn === 'admin' || userRole.roleNameEn === 'buyer'"
                                     round
                             />
@@ -253,12 +293,12 @@
             <el-steps :active="activeStep" finish-status="success" simple style="margin-top: 20px">
                 <el-step title="确认商品信息"></el-step>
                 <el-step title="填写个人信息"></el-step>
-                <el-step title="扫码支付下单"></el-step>
+                <el-step title="扫码先付后租"></el-step>
                 <el-step title="收货发布评价"></el-step>
             </el-steps>
             <el-card style="margin-top: 12px; text-align: center; height: 470px">
                 <el-row>
-                    <div style="font-size: 16px; font: bold">
+                    <div style="font-size: 16px;">
                         发布您的评价，您的好评是给予卖家最大的支持
                         <el-rate
                                 style="margin-top: 12px"
@@ -286,7 +326,7 @@
 </template>
 
 <script>
-    import {checkError, getCookie, sliceData, timestampToTime} from '../../plugins/utils'
+    import {checkError, easyTimestamp, getCookie, sliceData, timestampToTime} from '../../plugins/utils'
 
     export default {
         name: 'Orders',
@@ -303,6 +343,13 @@
                     value: 3,
                     label: '已收货'
                 }],
+                payOptions: [{
+                    value: 1,
+                    label: '已付款'
+                }, {
+                    value: 2,
+                    label: '未付款'
+                }],
                 searchFlag: false,
                 // 获取订单列表的参数对象
                 queryInfo: {
@@ -313,6 +360,7 @@
                     orderBuyerName: '',
                     orderTransportCode: '',
                     orderStatus: '',
+                    orderPayStatus: ''
                 },
                 rate: null,
                 iconClasses: ['el-icon-heavy-rain', 'el-icon-cloudy-and-sunny', 'el-icon-sunny'],
@@ -324,7 +372,8 @@
                     id: '',
                     orderSalerAddress: '',
                     orderStatus: '',
-                    orderTransportCode: ''
+                    orderTransportCode: '',
+                    orderTime: ''
                 },
                 userRole: [],
                 // 开启加载
@@ -361,6 +410,9 @@
             this.getOrderList()
         },
         methods: {
+            pay() {
+                this.$message.error('系统暂未开通支付宝接口!')
+            },
             async selectOrder() {
                 await this.getCurrentUserRole()
                 if (this.userRole.roleNameEn === 'buyer') {
@@ -473,7 +525,6 @@
                 }
                 this.receiveOld = oldCom.data
                 // this.receiveNew = newCom.data
-
                 this.receiveDialogVisible = true
             },
             async receive() {
@@ -540,6 +591,7 @@
                 }
                 this.orderList = res.data
                 for (let i = 0; i < this.orderList.length; i++) {
+                    this.orderList[i].orderTime = easyTimestamp(this.orderList[i].orderTime)
                     this.orderList[i].orderCreateTime = timestampToTime(this.orderList[i].orderCreateTime)
                     this.orderList[i].orderTransportTime = timestampToTime(this.orderList[i].orderTransportTime)
                     this.orderList[i].orderReceiveTime = timestampToTime(this.orderList[i].orderReceiveTime)

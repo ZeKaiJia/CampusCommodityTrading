@@ -337,7 +337,7 @@
             <el-steps :active="activeStep" finish-status="success" simple style="margin-top: 20px">
                 <el-step title="确认商品信息"></el-step>
                 <el-step title="填写个人信息"></el-step>
-                <el-step title="扫码支付下单"></el-step>
+                <el-step title="扫码先付后租"></el-step>
                 <el-step title="收货发布评价"></el-step>
             </el-steps>
             <el-card style="margin-top: 12px; text-align: center; height: 270px">
@@ -377,7 +377,7 @@
                                     :model="buyForm"
                                     :rules="buyFormRules"
                                     ref="buyFormRef"
-                                    label-width="80px"
+                                    label-width="120px"
                             >
                                 <!--<el-col :span="12">
                                     <el-form-item label="商品号" prop="comId">
@@ -400,7 +400,7 @@
                                     <el-form-item label="描述" prop="comDescription">
                                         <el-input v-model="buyForm.comDescription"/>
                                     </el-form-item>-->
-                                    <el-form-item label="地址" prop="address">
+                                    <el-form-item label="收货地址" prop="address">
                                         <el-select v-model="buyForm.address"
                                                    style="width: 100%"
                                                    placeholder="选择您的收货地址"
@@ -413,6 +413,14 @@
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
+                                <el-form-item label="租赁数量(单位)" prop="comQuantity">
+                                    <el-slider v-model="buyForm.comQuantity" show-input :min="1" :max="100"
+                                               style="margin-left: 10px"></el-slider>
+                                </el-form-item>
+                                <el-form-item label="租赁时长（天)" prop="orderTime">
+                                    <el-slider v-model="orderForm.orderTime" show-input :min="1" :max="365"
+                                               style="margin-left: 10px"></el-slider>
+                                </el-form-item>
                                 <!--</el-col>-->
                             </el-form>
                         </el-row>
@@ -429,7 +437,7 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="buyCommodityPreStep" v-if="activeStep > 0 && activeStep < 3">上 一 步</el-button>
                 <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep < 2">下 一 步</el-button>
-                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 2">下 单</el-button>
+                <el-button type="primary" @click="buyCommodityNextStep" v-if="activeStep === 2">先 租 后 付</el-button>
             </span>
         </el-dialog>
         <!--回到顶部-->
@@ -507,7 +515,9 @@
                     // orderNewId: '',
                     orderSalerName: '',
                     orderBuyerName: '',
-                    orderStatus: 1
+                    orderStatus: 1,
+                    orderTime: '',
+                    orderPayStatus: 2,
                 },
                 // 修改表单的验证规则对象
                 buyFormRules: {
@@ -521,7 +531,6 @@
                         {min: 2, max: 10, message: '长度在2到10个字符', trigger: 'blur'}
                     ],
                     comQuantity: [
-                        {required: true, message: '请确定商品数量', trigger: 'change'},
                         {validator: checkQuantity, trigger: 'change'}
                     ],
                     comEachPrice: [
@@ -627,6 +636,10 @@
                 // this.orderForm.orderNewId = this.buyForm.comId
                 this.orderForm.orderBuyerAddress = this.buyForm.address
                 this.orderForm.orderBuyerName = getCookie('ID')
+                console.log(this.orderForm.orderTime)
+                this.orderForm.orderTime *=  86400000
+                console.log(this.orderForm.orderTime)
+                this.orderForm.orderPayStatus = 2
                 const {data: result} = await this.$http.get(`commodity/selectCommodityUser?comId=${this.orderForm.orderComId}`)
                 if (result.code !== 200) {
                     return this.$message.error('查询用户信息错误' + checkError(result))
@@ -713,7 +726,8 @@
 
                 const {data: add} = await this.$http.get(`address/selectByName?userName=${getCookie('ID')}`)
                 if (add.code !== 200) {
-                    return this.$message.error('该用户没有配置地址!' + checkError(add))
+                    this.buyCommodityDialogVisible = false
+                    return this.$message.error('您还没有配置地址!请前往个人信息页添加！' + checkError(add))
                 } else {
                     this.addresses = add.data
                 }
@@ -745,6 +759,8 @@
                     &minPrice=${this.queryInfo.price[0]}&maxPrice=${this.queryInfo.price[1]}`, this.queryInfo
                 )
                 if (res.code !== 200) {
+                    this.AllCommodity = []
+                    this.showCommodity = []
                     return this.$message.error('查询商品信息失败' + checkError(res))
                 }
                 if (res.data.length === 0) {

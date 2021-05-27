@@ -84,4 +84,16 @@ public class Order extends BaseEntity {
      */
     @ApiModelProperty(value="订单状态(1:已下单2:已发货3:已收货)", example = "1", required = true)
     private Integer orderStatus;
+    /**
+     * 订单支付状态
+     * The Pay Status.
+     */
+    @ApiModelProperty(value="订单支付状态(1:已支付2:未支付)", example = "1", required = true)
+    private Integer orderPayStatus;
+    /**
+     * 订单截止时间
+     * The Time.
+     */
+    @ApiModelProperty(value="订单截止时间", example = "1621074167413", required = true)
+    private long orderTime;
 }

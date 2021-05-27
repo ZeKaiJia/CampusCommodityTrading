@@ -8,10 +8,12 @@
     <insert id="insert" parameterType="cn.ky.jzk.model.Order">
         INSERT INTO sys_order (orderComId, orderSalerName, orderBuyerName, orderSalerAddress,
                                orderBuyerAddress, orderCreateTime, orderTransportCode, orderStatus,
+                               orderPayStatus, orderTime,
                                utcCreate, utcModify, modifyBy, valid, remark, customa, customb)
-        VALUE (#{orderComId}, #{orderSalerName}, #{orderBuyerName}, #{orderSalerAddress},
-               #{orderBuyerAddress}, #{orderCreateTime}, #{orderTransportCode}, 1,
-              #{utcCreate}, #{utcModify}, #{modifyBy}, 1, #{remark}, #{customa}, #{customb})
+            VALUE (#{orderComId}, #{orderSalerName}, #{orderBuyerName}, #{orderSalerAddress},
+                   #{orderBuyerAddress}, #{orderCreateTime}, #{orderTransportCode}, 1,
+                   #{orderPayStatus}, #{orderTime},
+                   #{utcCreate}, #{utcModify}, #{modifyBy}, 1, #{remark}, #{customa}, #{customb})
     </insert>
     <delete id="delete">
         DELETE FROM sys_order
@@ -34,6 +36,12 @@
             </if>
             <if test="orderTransportCode != null and orderTransportCode != ''">
                 orderTransportCode = #{orderTransportCode},
+            </if>
+            <if test="orderPayStatus != null and orderPayStatus != ''">
+                orderPayStatus = #{orderPayStatus},
+            </if>
+            <if test="orderTime != null and orderTime != ''">
+                orderTime = #{orderTime},
             </if>
         </set>
         WHERE id = #{id}
@@ -68,6 +76,9 @@
         </if>
         <if test="orderStatus != null and orderStatus != ''">
             AND orderStatus = #{orderStatus}
+        </if>
+        <if test="orderPayStatus != null and orderPayStatus != ''">
+            AND orderPayStatus = #{orderPayStatus}
         </if>
     </select>
 </mapper>
