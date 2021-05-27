@@ -1,5 +1,6 @@
 package cn.ky.jzk.service.implement;
 
+import cn.ky.jzk.blockChain.Block;
 import cn.ky.jzk.mapper.OrderMapper;
 import cn.ky.jzk.model.Order;
 import cn.ky.jzk.service.AbstractService;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,11 +34,34 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
 
     private List<Order> temps;
 
+    public static int difficulty = 5;
+
+    public static ArrayList<Block> blockchain = new ArrayList<Block>();
+
     @Override
     public Order insert(@NotNull Order order) {
+        // 计算创建时间
         if (order.getOrderStatus().equals(GlobalConstant.CREATE_ORDER_STATUS)) {
             order.setOrderCreateTime(DateUtil.currentSecond());
         }
+//
+//        // 计算当前区块链哈希值
+//        Block block;
+//        temps = orderMapper.select();
+//        int blockChainSize = temps.size();
+//        if (blockChainSize == 0) {
+//            block = new Block(GlobalConstant.CREATE_ORDER_NODE_CHAIN, "0");
+//        } else {
+//            block = new Block(GlobalConstant.CREATE_ORDER_NODE_CHAIN, temps.get(blockChainSize - 1).getHashCode());
+//        }
+//        block.mineBlock(difficulty);
+//        order.setHashCode(block.getHash());
+//
+//        String preHash = "0";
+//        // 校验区块链合法性
+//        for (Order o : temps) {
+//            blockchain.add(new Block(GlobalConstant.CREATE_ORDER_NODE_CHAIN, preHash));
+//        }
         orderMapper.insert(packageInfo(request, order, 1));
         return order;
     }

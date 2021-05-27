@@ -15,4 +15,7 @@ public interface GlobalConstant {
 
     // 请求处理成功
     String REQUEST_SUCCESS = "Success!";
+
+    // 创建订单区块链
+    String CREATE_ORDER_NODE_CHAIN = "Insert into order with block chain hash code.";
 }

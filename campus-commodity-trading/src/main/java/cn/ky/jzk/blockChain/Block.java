@@ -4,8 +4,6 @@ import cn.ky.jzk.util.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 区块
@@ -18,7 +16,11 @@ import org.slf4j.LoggerFactory;
 @AllArgsConstructor
 public class Block {
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    /**
+     * 数据
+     * The Data.
+     */
+    private String data;
     /**
      * 哈希值
      * The Hash.
@@ -29,11 +31,6 @@ public class Block {
      * The Previous Hash.
      */
     public String previousHash;
-    /**
-     * 数据
-     * The Data.
-     */
-    private String data;
     /**
      * 时间戳
      * The TimeStamp.

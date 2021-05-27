@@ -49,6 +49,7 @@
     <select id="select" resultType="cn.ky.jzk.model.Order">
         SELECT *
         FROM sys_order
+        Order By id
     </select>
     <select id="selectById" resultType="cn.ky.jzk.model.Order">
         SELECT *
