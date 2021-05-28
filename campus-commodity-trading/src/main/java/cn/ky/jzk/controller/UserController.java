@@ -85,8 +85,12 @@ public class UserController extends BaseController implements UserControllerApi 
     @Override
     @PostMapping(value = "/login")
     @ResponseBody
-    public Response<User> login(@RequestBody User user) {
-        temp = userService.login(user.getUserName(), user.getUserPassword());
-        return dataAnalyse(temp, 404, "登陆失败");
+    public Response<String> login(@RequestBody User user) {
+        Integer code = userService.login(user.getUserName(), user.getUserPassword());
+        if (code != 200) {
+            return getFailResult(code, "登录失败");
+        } else {
+            return getSuccessResult("登录成功");
+        }
     }
 }

@@ -4,6 +4,7 @@ import cn.ky.jzk.util.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * 区块
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
  * @author kevin
  */
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Block {

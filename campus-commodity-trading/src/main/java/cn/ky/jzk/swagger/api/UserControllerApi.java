@@ -39,5 +39,5 @@ public interface UserControllerApi {
     Response<User> selectByName(@ApiParam String userName);
 
     @ApiOperation(value = "用户登陆", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
-    Response<User> login(User user);
+    Response<String> login(User user);
 }

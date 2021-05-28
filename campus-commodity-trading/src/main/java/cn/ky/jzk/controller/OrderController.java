@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -31,7 +33,13 @@ public class OrderController extends BaseController implements OrderControllerAp
     @PostMapping(value = "/insert")
     @ResponseBody
     public Response<Order> insert(@RequestBody Order order) {
-        return dataAnalyse(orderService.insert(order), 404, "ID已存在");
+        try {
+            temp = orderService.insert(order);
+        } catch (IOException | ClassCastException | SQLException e) {
+            e.printStackTrace();
+            return dataAnalyse(null, 408, "区块链校验失败");
+        }
+        return dataAnalyse(temp, 404, "ID已存在");
     }
 
     @Override

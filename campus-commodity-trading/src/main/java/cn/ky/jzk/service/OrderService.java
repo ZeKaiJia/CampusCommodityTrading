@@ -3,6 +3,8 @@ package cn.ky.jzk.service;
 import cn.ky.jzk.model.Order;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -11,7 +13,7 @@ import java.util.List;
  */
 public interface OrderService {
 
-    Order insert(@NotNull Order order);
+    Order insert(@NotNull Order order) throws IOException, SQLException, ClassCastException ;
 
     Order delete(Integer id);
 

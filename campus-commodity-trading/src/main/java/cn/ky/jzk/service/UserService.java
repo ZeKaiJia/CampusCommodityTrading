@@ -21,5 +21,5 @@ public interface UserService {
 
     User selectByName(String userName);
 
-    User login(String userName, String userPassword);
+    Integer login(String userName, String userPassword);
 }

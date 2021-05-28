@@ -67,11 +67,6 @@ public class UserServiceImpl  extends AbstractService implements UserService {
         if (temp == null) {
             return null;
         }
-        relationRoleUserMapper.delete(user.getUserName());
-        relationRoleUserMapper.insert(user.getUserName(), role.getRoleId());
-        if (status == 2) {
-            user = temp;
-        }
         userMapper.update(packageInfo(request, user, status));
         return user;
     }
@@ -91,13 +86,19 @@ public class UserServiceImpl  extends AbstractService implements UserService {
     }
 
     @Override
-    public User login(String userName, String userPassword) {
-        temp = userMapper.selectByName(userName);
-        if (temp == null || !temp.getUserPassword().equals(userPassword)) {
-            return null;
+    public Integer login(String userName, String userPassword) {
+        try {
+            temp = userMapper.selectByName(userName);
+            if (temp == null) {
+                return 404;
+            } else if (!temp.getUserPassword().equals(userPassword)) {
+                return 412;
+            }
+            temp.setUtcModify(DateUtil.currentSecond());
+            userMapper.login(temp);
+        } catch (Exception e) {
+            return 408;
         }
-        temp.setUtcModify(DateUtil.currentSecond());
-        userMapper.login(temp);
-        return temp;
+        return 200;
     }
 }

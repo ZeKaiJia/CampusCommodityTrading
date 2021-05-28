@@ -4,16 +4,20 @@ import cn.ky.jzk.blockChain.Block;
 import cn.ky.jzk.mapper.OrderMapper;
 import cn.ky.jzk.model.Order;
 import cn.ky.jzk.service.AbstractService;
+import cn.ky.jzk.service.BlockService;
 import cn.ky.jzk.service.OrderService;
 import cn.ky.jzk.util.DateUtil;
 import cn.ky.jzk.util.GlobalConstant;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,20 +34,43 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
     @Autowired
     OrderMapper orderMapper;
 
+    @Autowired
+    @Qualifier(value = "blockServiceImpl")
+    BlockService blockService;
+
     private Order temp;
 
     private List<Order> temps;
+
+    private Block block;
+
+    private List<Block> blocks;
 
     public static int difficulty = 5;
 
     public static ArrayList<Block> blockchain = new ArrayList<Block>();
 
     @Override
-    public Order insert(@NotNull Order order) {
+    public Order insert(@NotNull Order order) throws IOException, SQLException, ClassCastException {
         // 计算创建时间
         if (order.getOrderStatus().equals(GlobalConstant.CREATE_ORDER_STATUS)) {
             order.setOrderCreateTime(DateUtil.currentSecond());
         }
+
+        // 查询区块链状态
+        blocks = blockService.select();
+        // 原始区块前继哈希为0
+        if (blocks.size() == 0) {
+            block = new Block(order.getOrderCreateTime() + "", "0");
+        } else {
+            block = new Block(order.getOrderCreateTime() + "", blocks.get(blocks.size() - 1).hash);
+        }
+        // 挖掘块
+        block.mineBlock(difficulty);
+        // 存储块
+        blockService.insert(block);
+        isChainValid();
+        // 校验块
 //
 //        // 计算当前区块链哈希值
 //        Block block;
@@ -117,5 +144,34 @@ public class OrderServiceImpl extends AbstractService implements OrderService {
             return null;
         }
         return temps;
+    }
+
+    public Boolean isChainValid() throws IOException, SQLException, ClassCastException {
+        blockchain = new ArrayList<>();
+        Block currentBlock;
+        Block previousBlock;
+        String hashTarget = new String(new char[difficulty]).replace('\0', '0');
+
+        List<Block> list = blockService.select();
+        blockchain.addAll(list);
+
+        //loop through blockchain to check hashes:
+        for (int i = 1; i < blockchain.size(); i++) {
+            currentBlock = blockchain.get(i);
+            previousBlock = blockchain.get(i - 1);
+            //compare registered hash and calculated hash:
+            if (!currentBlock.hash.equals(currentBlock.calculateHash())) {
+                throw new IOException("Current Hashes not equal");
+            }
+            //compare previous hash and registered previous hash
+            if (!previousBlock.hash.equals(currentBlock.previousHash)) {
+                throw new ClassCastException("Previous Hashes not equal");
+            }
+            //check if hash is solved
+            if (!currentBlock.hash.substring(0, difficulty).equals(hashTarget)) {
+                throw new SQLException("This block hasn't been mined");
+            }
+        }
+        return true;
     }
 }

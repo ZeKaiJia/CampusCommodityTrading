@@ -348,6 +348,7 @@
                         return this.$message.error(checkError(result) + '！请重试')
                     } else {
                         if (result.data.userAnswer === this.findForm.userAnswer) {
+                            console.log(this.findForm)
                             const {data: res} = await this.$http.post(
                                 `user/update?roleNameCn=${role.data.roleNameCn}&status=2`,
                                 this.findForm
@@ -407,14 +408,15 @@
                         return this.$message.error('出错啦，再试一次')
                     }
                     // eslint-disable-next-line
-                    const {data: result} = await this.$http.post(
+                    const {data: log} = await this.$http.post(
                         'user/login',
                         this.loginForm
                     )
-                    if (result.code !== 200) {
+                    if (log.code !== 200) {
                         this.refreshCode()
-                        return this.$message.error(checkError(result) + '！请重试')
+                        return this.$message.error(checkError(log) + '！请重试')
                     } else {
+                        const {data: result} = await this.$http.get(`user/selectByName?userName=${this.loginForm.userName}`)
                         const {data: type} = await this.$http.get(`role/selectUserRole?userName=${result.data.userName}`)
                         setCookie('type', type.data.roleId, 24 * 60 * 60)
                         setCookie('user', result.data.userNick, 24 * 60 * 60)
