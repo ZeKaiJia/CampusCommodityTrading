@@ -1,11 +1,10 @@
 package cn.ky.jzk.mapper;
 
 import cn.ky.jzk.model.Role;
-import cn.ky.jzk.model.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: Kevin
@@ -19,6 +18,8 @@ public interface RelationRoleUserMapper {
     void update(@Param("userName") String userName, @Param("roleId") String roleId);
 
     Role selectUserRole(@Param("userName") String userName);
+
+    Set<String> findRoleByUserName(@Param("userName") String userName);
 
     void delete(@Param("userName") String userName);
 }

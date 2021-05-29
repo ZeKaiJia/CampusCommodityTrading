@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.ky.jzk.mapper.PermissionMapper">
+    <cache eviction="FIFO" readOnly="true" size="1024" flushInterval="30000"/>
+    <insert id="insert" parameterType="cn.ky.jzk.model.Permission">
+        INSERT INTO sys_permission (perId, perName, perCode, perUrl, utcCreate, utcModify,
+                                    modifyBy, valid, remark, customa, customb)
+        VALUE (#{perId}, #{perName}, #{perCode}, #{perUrl}, #{utcCreate},
+               #{utcModify}, #{modifyBy}, 1, #{remark}, #{customa}, #{customb})
+    </insert>
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM sys_permission
+        WHERE perId = #{perId}
+    </delete>
+    <update id="update" parameterType="cn.ky.jzk.model.Permission">
+        UPDATE sys_permission
+        <set>
+            <if test="perName != null and perName != ''">
+                perName = #{perName},
+            </if>
+            <if test="perCode != null and perCode != ''">
+                perCode = #{perCode},
+            </if>
+            <if test="perUrl != null and perUrl != ''">
+                perUrl = #{perUrl},
+            </if>
+            <if test="utcCreate != null and utcCreate != ''">
+                utcCreate = #{utcCreate},
+            </if>
+            <if test="utcModify != null and utcModify != ''">
+                utcModify = #{utcModify},
+            </if>
+            <if test="modifyBy != null and modifyBy != ''">
+                modifyBy = #{modifyBy},
+            </if>
+            <if test="valid != null">
+                valid = #{valid},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="customa != null and customa != ''">
+                customa = #{customa},
+            </if>
+            <if test="customb != null and customb != ''">
+                customb = #{customb},
+            </if>
+        </set>
+        WHERE roleId = #{roleId}
+    </update>
+    <select id="select" resultType="cn.ky.jzk.model.Permission">
+        SELECT *
+        FROM sys_permission
+    </select>
+    <select id="selectById" resultType="cn.ky.jzk.model.Permission">
+        SELECT *
+        FROM sys_permission
+        WHERE perId = #{perId}
+    </select>
+</mapper>

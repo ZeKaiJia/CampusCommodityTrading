@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 /**
  * @Author: Kevin
  * @Date: 2021/4/18 17:33
@@ -43,5 +45,10 @@ public class RelationRoleUserServiceImpl implements RelationRoleUserService {
     @Override
     public Role selectUserRole(String userName) {
         return relationRoleUserMapper.selectUserRole(userName);
+    }
+
+    @Override
+    public Set<String> findRoleByUserName(String userName) {
+        return relationRoleUserMapper.findRoleByUserName(userName);
     }
 }

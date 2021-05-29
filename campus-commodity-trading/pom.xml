@@ -18,6 +18,36 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+        <!-- Shiro all -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-all</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <!-- Shiro核心包 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <!-- 添加Shiro web支持 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <!-- 添加Shiro Spring支持 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <!-- 添加Shiro Spring Boot支持 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring-boot-web-starter</artifactId>
+            <version>1.5.3</version>
+        </dependency>
 
         <!-- HTTP组件 -->
         <dependency>

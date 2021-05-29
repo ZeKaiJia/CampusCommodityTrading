@@ -134,4 +134,14 @@ public abstract class AbstractService {
         }
         return address;
     }
+
+    protected static Permission packageInfo(HttpServletRequest request, Permission permission, Integer status) {
+        permission.setUtcModify(Long.parseLong(getInfo(request).get("utcModify")));
+        permission.setModifyBy(getInfo(request).get("modifyBy"));
+        // 状态为1时为新建数据
+        if (status == 1) {
+            permission.setUtcCreate(permission.getUtcModify());
+        }
+        return permission;
+    }
 }

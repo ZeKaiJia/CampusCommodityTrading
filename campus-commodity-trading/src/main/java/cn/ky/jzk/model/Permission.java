@@ -22,7 +22,7 @@ public class Permission extends BaseEntity {
      * The Permission ID.
      */
     @ApiModelProperty(value = "序号", example = "1", required = true)
-    private String perId;
+    private int perId;
     /**
      * 权限名
      * The Permission Name.

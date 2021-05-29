@@ -31,4 +31,9 @@
                  WHERE userName = #{userName}
              )
     </select>
+    <select id="findRoleByUserName" parameterType="String" resultType="String">
+        SELECT roleId
+        FROM rel_user_role
+        WHERE userName = #{userName}
+    </select>
 </mapper>

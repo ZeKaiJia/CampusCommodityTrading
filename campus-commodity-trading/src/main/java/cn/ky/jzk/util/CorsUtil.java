@@ -1,5 +1,6 @@
 package cn.ky.jzk.util;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,8 +12,10 @@ import javax.servlet.http.HttpServletResponse;
  * @Date: 2020/8/19 7:11 下午
  */
 public class CorsUtil implements HandlerInterceptor {
+    private static final String OPTIONS_FOR_REQUEST = "OPTIONS";
+
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, @NotNull Object handler) throws Exception {
         // 设置编码格式
         response.setContentType("text/html;charset=UTF-8");
         // 允许哪些Origin发起跨域请求,nginx下正常
@@ -45,7 +48,6 @@ public class CorsUtil implements HandlerInterceptor {
 
     }
 
-    private static final String OPTIONS_FOR_REQUEST = "OPTIONS";
     public static void setResponseHeader(HttpServletResponse response, HttpServletRequest request) {
         // 设置编码格式
         response.setContentType("text/html;charset=UTF-8");

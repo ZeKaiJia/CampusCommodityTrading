@@ -1,7 +1,6 @@
 package cn.ky.jzk.mapper;
 
 import cn.ky.jzk.model.Role;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
