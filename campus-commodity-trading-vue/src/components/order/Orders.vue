@@ -169,9 +169,9 @@
                         <span>{{scope.row.orderPayStatus === 1 ? '已付款' : '未付款'}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="到期时间" align="center">
+                <el-table-column label="到期时间/租赁时间" align="center">
                     <template slot-scope="scope">
-                        <span>{{scope.row.orderStatus === 3 ? scope.row.orderTime : '请收货后查看'}}</span>
+                        <span>{{scope.row.orderStatus === 3 ? scope.row.orderTime : (scope.row.orderTime * 1.0 / 86400000 + '天')}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" width="200px">
@@ -431,6 +431,9 @@
                 }
                 this.orderList = res.data
                 for (let i = 0; i < this.orderList.length; i++) {
+                    if (this.orderList[i].orderStatus === 3) {
+                        this.orderList[i].orderTime = easyTimestamp(this.orderList[i].orderTime)
+                    }
                     this.orderList[i].orderCreateTime = timestampToTime(this.orderList[i].orderCreateTime)
                     this.orderList[i].orderTransportTime = timestampToTime(this.orderList[i].orderTransportTime)
                     this.orderList[i].orderReceiveTime = timestampToTime(this.orderList[i].orderReceiveTime)
@@ -591,7 +594,9 @@
                 }
                 this.orderList = res.data
                 for (let i = 0; i < this.orderList.length; i++) {
-                    this.orderList[i].orderTime = easyTimestamp(this.orderList[i].orderTime)
+                    if (this.orderList[i].orderStatus === 3) {
+                        this.orderList[i].orderTime = easyTimestamp(this.orderList[i].orderTime)
+                    }
                     this.orderList[i].orderCreateTime = timestampToTime(this.orderList[i].orderCreateTime)
                     this.orderList[i].orderTransportTime = timestampToTime(this.orderList[i].orderTransportTime)
                     this.orderList[i].orderReceiveTime = timestampToTime(this.orderList[i].orderReceiveTime)

@@ -35,9 +35,14 @@ public class OrderController extends BaseController implements OrderControllerAp
     public Response<Order> insert(@RequestBody Order order) {
         try {
             temp = orderService.insert(order);
-        } catch (IOException | ClassCastException | SQLException e) {
+        } catch (IOException i) {
+            return dataAnalyse(null, 408, "当前区块哈希值校验失败！");
+        } catch (ClassCastException c) {
+            return dataAnalyse(null, 408, "上一个区块哈希值校验失败！");
+        } catch (SQLException s) {
+            return dataAnalyse(null, 408, "当前区块重复挖掘使用！");
+        } catch (Exception e) {
             e.printStackTrace();
-            return dataAnalyse(null, 408, "区块链校验失败");
         }
         return dataAnalyse(temp, 404, "ID已存在");
     }

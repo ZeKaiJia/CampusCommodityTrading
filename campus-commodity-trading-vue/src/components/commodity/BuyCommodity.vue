@@ -428,7 +428,7 @@
                 </transition>
                 <transition name="fade" style="position: absolute; left: 50%; transform: translate(-50%)" mode="out-in">
                     <div v-if="activeStep === 2" id="qrcodeImg"></div>
-                    <el-progress v-if="progressLoading !== 101 && activeStep === 3" type="circle"
+                    <el-progress v-if="(progressLoading !== 100 || !blockFlag)&& activeStep === 3" type="circle"
                                  :percentage="progressLoading"
                                  :stroke-width="12" :color="colors" style="transform: translateY(50%)"></el-progress>
                 </transition>
@@ -470,6 +470,7 @@
                 }
             }
             return {
+                blockFlag: false,
                 cardOrTable: true,
                 addresses: [],
                 rate: null,
@@ -478,8 +479,8 @@
                 queryInfo: {
                     comId: '',
                     comName: '',
-                    quantity: [0, 100],
-                    price: [0, 1000],
+                    quantity: [1, 100],
+                    price: [1, 1000],
                     comDescription: ''
                 },
                 searchFlag: false,
@@ -516,7 +517,7 @@
                     orderSalerName: '',
                     orderBuyerName: '',
                     orderStatus: 1,
-                    orderTime: '',
+                    orderTime: 1,
                     orderPayStatus: 2,
                 },
                 // 修改表单的验证规则对象
@@ -632,6 +633,7 @@
                 //     this.buyCommodityDialogVisible = false
                 //     return this.$message.error('下单失败' + checkError(commodityUpdate))
                 // }
+                this.blockFlag = false
                 this.orderForm.orderComId = this.buyCommodityPost.comInfo.comId
                 // this.orderForm.orderNewId = this.buyForm.comId
                 this.orderForm.orderBuyerAddress = this.buyForm.address
@@ -651,7 +653,10 @@
                     `order/insert`,
                     this.orderForm
                 )
-                if (res.code !== 200) {
+                if (res.code === 408) {
+                    this.buyCommodityDialogVisible = false
+                    return this.$message.error(res.message)
+                } else if (res.code !== 200) {
                     this.buyCommodityDialogVisible = false
                     return this.$message.error('下单失败' + checkError(res))
                 } else {
@@ -664,6 +669,7 @@
                         this.buyCommodityDialogVisible = false
                         return this.$message.error('下单失败' + checkError(res2))
                     } else {
+                        this.blockFlag = true
                         this.buyCommodityDialogVisible = false
                         this.getCommodity()
                         return this.$message.success('下单成功')
@@ -690,7 +696,7 @@
                 } else if (this.activeStep === 2) {
                     this.addStep()
                     this.inter = setInterval(this.progress, 50)
-                    setTimeout(this.buy, 7000)
+                    setTimeout(this.buy, 5000)
                 } else {
                     this.addStep()
                 }
@@ -742,10 +748,10 @@
                 }
             },
             progress() {
-                if (this.progressLoading < 101) {
+                if (this.progressLoading <= 100) {
                     this.progressLoading++
                 } else {
-                    this.progressLoading = 101
+                    this.progressLoading = 100
                     clearInterval(this.inter)
                 }
             },
