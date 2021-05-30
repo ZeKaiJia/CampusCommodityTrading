@@ -182,10 +182,17 @@
                 }
             },
             async logout() {
+                const {data: res} = await this.$http.get('user/logout')
+                if (res.code !== 200) {
+                    this.$message.error('登出失败!')
+                } else {
+                    this.$message.success('登出成功!')
+                }
                 window.sessionStorage.clear()
                 clearCookie('type')
                 clearCookie('user')
                 clearCookie('ID')
+                clearCookie('times')
                 await this.$router.push('/login')
             },
             // 获取所有的菜单

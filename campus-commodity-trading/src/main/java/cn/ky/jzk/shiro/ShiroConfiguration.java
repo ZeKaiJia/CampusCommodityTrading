@@ -5,13 +5,15 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.codec.Base64;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authc.AnonymousFilter;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -42,12 +44,11 @@ public class ShiroConfiguration {
         return new MemoryConstrainedCacheManager();
     }
     @Bean
-    public SessionManager sessionManager() {
-        return new CustomSessionManager();
-    }
-    @Bean
-    public CorsAuthenticationFilter corsAuthenticationFilter() {
-        return new CorsAuthenticationFilter();
+    public DefaultWebSessionManager sessionManager(){
+        DefaultWebSessionManager defaultSessionManager = new DefaultWebSessionManager();
+        //将sessionIdUrlRewritingEnabled属性设置成false
+        defaultSessionManager.setSessionIdUrlRewritingEnabled(false);
+        return defaultSessionManager;
     }
     @Bean
     public DefaultWebSecurityManager securityManager(){
@@ -63,14 +64,23 @@ public class ShiroConfiguration {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         shiroFilterFactoryBean.setLoginUrl("/user/login");
+
+        Map<String, Filter> filterMap = new LinkedHashMap<>();
+        filterMap.put("anon",new AnonymousFilter());
+        filterMap.put("authc",new FormAuthenticationFilter());
+        filterMap.put("corsAuthenticationFilter", new CorsAuthenticationFilter());
+        shiroFilterFactoryBean.setFilters(filterMap);
+
         Map<String,String> filterChainDefinitionMap = new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/role/select","anon");
+        filterChainDefinitionMap.put("/role/selectUserRole","anon");
+        filterChainDefinitionMap.put("/user/selectByName","anon");
+        filterChainDefinitionMap.put("/user/update","anon");
+        filterChainDefinitionMap.put("/user/insert","anon");
         filterChainDefinitionMap.put("/favicon.ico","anon");
         filterChainDefinitionMap.put("/user/login","anon");
         filterChainDefinitionMap.put("/**", "corsAuthenticationFilter");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-        Map<String, Filter> filterMap = new LinkedHashMap<>();
-        filterMap.put("corsAuthenticationFilter", corsAuthenticationFilter());
-        shiroFilterFactoryBean.setFilters(filterMap);
         return shiroFilterFactoryBean;
     }
 

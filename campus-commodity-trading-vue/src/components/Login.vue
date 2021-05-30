@@ -348,7 +348,6 @@
                         return this.$message.error(checkError(result) + '！请重试')
                     } else {
                         if (result.data.userAnswer === this.findForm.userAnswer) {
-                            console.log(this.findForm)
                             const {data: res} = await this.$http.post(
                                 `user/update?roleNameCn=${role.data.roleNameCn}&status=2`,
                                 this.findForm
@@ -360,6 +359,8 @@
                                 this.findDialogVisible = false
                                 return this.$message.success('修改成功！')
                             }
+                        } else {
+                            return this.$message({message: '密保答案错误！', type: 'error', customClass: 'zZindex'})
                         }
                     }
                 })

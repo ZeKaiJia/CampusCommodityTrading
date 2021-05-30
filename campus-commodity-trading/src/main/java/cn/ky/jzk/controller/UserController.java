@@ -5,7 +5,15 @@ import cn.ky.jzk.service.AddressService;
 import cn.ky.jzk.service.RelationCommodityUserService;
 import cn.ky.jzk.service.UserService;
 import cn.ky.jzk.swagger.api.UserControllerApi;
+import cn.ky.jzk.util.CorsUtil;
 import cn.ky.jzk.vo.Response;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.SessionException;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -86,11 +94,51 @@ public class UserController extends BaseController implements UserControllerApi 
     @PostMapping(value = "/login")
     @ResponseBody
     public Response<String> login(@RequestBody User user) {
-        Integer code = userService.login(user.getUserName(), user.getUserPassword());
+        User result;
+        int code;
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getUserPassword());
+        token.setRememberMe(true);
+        try {
+            subject.login(token);
+            code = userService.login(user.getUserName(), user.getUserPassword());
+            session.setAttribute("user", subject);
+        } catch (UnknownAccountException e) {
+            return getFailResult(404, "Message not found");
+        } catch (IncorrectCredentialsException e) {
+            return getFailResult(412, "Incorrect message");
+        } catch (LockedAccountException e) {
+            return getFailResult(401, "Account locked");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return getFailResult(408, "Unknown error");
+        }
         if (code != 200) {
             return getFailResult(code, "登录失败");
         } else {
             return getSuccessResult("登录成功");
         }
+    }
+
+
+    @Override
+    @GetMapping(value = "/logout")
+    @ResponseBody
+    public Response<String> userLogout() {
+        CorsUtil.setResponseHeader(response, request);
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.logout();
+        } catch (SessionException e) {
+            e.printStackTrace();
+            return getFailResult(408, e.toString());
+        }
+        return getSuccessResult("logout");
+    }
+
+    @Override
+    @RequestMapping(value = "/toLogin", method = RequestMethod.GET)
+    public String toLogin() {
+        return "redirect:user/login";
     }
 }
