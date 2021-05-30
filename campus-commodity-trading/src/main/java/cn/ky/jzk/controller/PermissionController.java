@@ -28,6 +28,22 @@ public class PermissionController extends BaseController implements PermissionCo
     List<Permission> temps;
 
     @Override
+    @PostMapping(value = "/insert")
+    @ResponseBody
+    public Response<Permission> insert(@RequestBody Permission permission) {
+        temp = permissionService.insert(permission);
+        return dataAnalyse(temp, 404, "数据错误");
+    }
+
+    @Override
+    @PostMapping(value = "/delete")
+    @ResponseBody
+    public Response<Permission> delete(@RequestParam int perId) {
+        temp = permissionService.delete(perId);
+        return dataAnalyse(temp, 404, "数据错误");
+    }
+
+    @Override
     @PostMapping(value = "/update")
     @ResponseBody
     public Response<Permission> update(@RequestBody Permission permission) {

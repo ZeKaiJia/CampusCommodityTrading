@@ -97,8 +97,11 @@
                     },
                     {
                         id: 2,
-                        authName: '角色管理',
-                        children: [{id: 21, authName: '角色列表', path: 'roles'}]
+                        authName: '系统配置',
+                        children: [
+                            {id: 21, authName: '角色定义', path: 'roles'},
+                            {id: 22, authName: '权限分配', path: 'rights'}
+                        ]
                     },
                     {
                         id: 3,
@@ -125,8 +128,8 @@
                 ],
                 iconsObj: {
                     1: 'iconfont icon-icon-test35',
-                    2: 'iconfont icon-icon-test38',
-                    3: 'iconfont icon-icon-test38',
+                    2: 'iconfont icon-icon-test16',
+                    3: 'iconfont icon-icon-test11',
                     4: 'iconfont icon-icon-test9',
                     5: 'iconfont icon-icon-test31',
                     6: 'iconfont icon-icon-test29',

@@ -35,4 +35,10 @@ public class Permission extends BaseEntity {
      */
     @ApiModelProperty(value = "权限代码", example = "user:select", required = true)
     private String perCode;
+    /**
+     * 接口路径
+     * The Permission URL.
+     */
+    @ApiModelProperty(value = "接口路径", example = "user/select", required = true)
+    private String perUrl;
 }

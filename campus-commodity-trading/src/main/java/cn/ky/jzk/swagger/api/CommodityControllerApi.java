@@ -5,7 +5,6 @@ import cn.ky.jzk.model.User;
 import cn.ky.jzk.vo.Response;
 import io.swagger.annotations.*;
 import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -81,7 +80,7 @@ public interface CommodityControllerApi {
     })
     Response<List<Commodity>> selectUserCommodity(@ApiParam String userName);
 
-    @ApiOperation(value = "根据商铺号查询用户", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
+    @ApiOperation(value = "根据商品号查询用户", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "商品号", example = "SH001", name = "comId", required = true, paramType = "query", dataType = "string")
     })

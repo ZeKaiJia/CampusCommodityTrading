@@ -49,7 +49,7 @@
                 customb = #{customb},
             </if>
         </set>
-        WHERE roleId = #{roleId}
+        WHERE perId = #{perId}
     </update>
     <select id="select" resultType="cn.ky.jzk.model.Permission">
         SELECT *
