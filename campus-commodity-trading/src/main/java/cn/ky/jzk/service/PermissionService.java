@@ -1,6 +1,7 @@
 package cn.ky.jzk.service;
 
 import cn.ky.jzk.model.Permission;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface PermissionService {
     List<Permission> select();
 
     Permission selectById(int perId);
+
+    Permission selectByCode(@Param("perCode") String perCode);
 }

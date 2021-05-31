@@ -2,13 +2,16 @@ package cn.ky.jzk.controller;
 
 import cn.ky.jzk.model.Permission;
 import cn.ky.jzk.service.PermissionService;
+import cn.ky.jzk.service.RelationRolePermissionService;
 import cn.ky.jzk.swagger.api.PermissionControllerApi;
 import cn.ky.jzk.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: Kevin
@@ -22,6 +25,10 @@ public class PermissionController extends BaseController implements PermissionCo
     @Autowired
     @Qualifier("permissionServiceImpl")
     private PermissionService permissionService;
+
+    @Autowired
+    @Qualifier("relationRolePermissionServiceImpl")
+    private RelationRolePermissionService relationRolePermissionService;
 
     private Permission temp;
 
@@ -65,5 +72,29 @@ public class PermissionController extends BaseController implements PermissionCo
     public Response<Permission> selectById(@RequestParam int perId) {
         temp =  permissionService.selectById(perId);
         return dataAnalyse(temp, 404, "未找到数据");
+    }
+
+    @Override
+    @GetMapping(value = "/findPermissionByRoleId")
+    @ResponseBody
+    public Response<List<Permission>> findPermissionByRoleId(String roleId) {
+        temps = new LinkedList<>();
+        Set<String> permissions = relationRolePermissionService.findPermissionByRoleId(roleId);
+        for (String permission : permissions) {
+            temps.add(permissionService.selectByCode(permission));
+        }
+        return dataAnalyse(temps, 404, "未找到数据");
+    }
+
+    @Override
+    @PostMapping(value = "/managePermission")
+    @ResponseBody
+    public Response<String> managePermission(@RequestParam String roleId, @RequestParam List<String> permissionCodes) {
+        String result = null;
+        relationRolePermissionService.deleteByRoleId(roleId);
+        if (permissionCodes.size() != 0) {
+            result = relationRolePermissionService.managePermission(roleId, permissionCodes);
+        }
+        return dataAnalyse(result, 404, "未找到数据");
     }
 }

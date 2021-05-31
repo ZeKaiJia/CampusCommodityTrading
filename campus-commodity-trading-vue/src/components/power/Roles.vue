@@ -173,26 +173,26 @@
     </el-dialog>
     <!--分配权限的对话框-->
     <el-dialog
-      title="分配权限"
-      :visible.sync="manageDialogVisible"
-      width="75%"
-      @close="reset"
+            title="分配权限"
+            :visible.sync="manageDialogVisible"
+            width="85%"
+            @close="reset"
     >
       <div style="text-align: center" class="ddiv">
         <!--穿梭框候选区-->
         <el-transfer
-          v-loading="loading"
-          filterable
-          style="text-align: left; display: inline-block"
-          v-model="value"
-          :data="data"
-          :titles="['未拥有', '已拥有']"
-          :button-texts="['删权限', '加权限']"
-          :format="{
+                v-loading="loading"
+                filterable
+                style="text-align: left; display: inline-block"
+                v-model="manageValue"
+                :data="manageData"
+                :titles="['未拥有', '已拥有']"
+                :button-texts="['删权限', '加权限']"
+                :format="{
             noChecked: '${total}',
             hasChecked: '${checked}/${total}'
           }"
-          ref="myTransfer"
+                ref="myTransfer"
         />
       </div>
       <!--底部按钮区-->
@@ -237,8 +237,10 @@
         return data;
       };
       return {
-        data: generateData(),
-        value: [0, 1, 2, 3, 4, 5, 6, 7],
+        // 分配权限中所有的权限
+        manageData: [],
+        // 分配权限中已拥有的权限下标
+        manageValue: [],
         dialogLoading: true,
         // 控制添加用户对话框的显示
         addDialogVisible: false,
@@ -414,48 +416,86 @@
           )
           if (res.code !== 200) {
             this.editDialogVisible = false
-          return this.$message.error('修改角色失败' + checkError(res))
-        } else {
-          this.editDialogVisible = false
-          this.$message.success('修改角色成功')
-        }
+            return this.$message.error('修改角色失败' + checkError(res))
+          } else {
+            this.editDialogVisible = false
+            this.$message.success('修改角色成功')
+          }
           await this.getTypeList()
-      })
-    },
-    // 监听分配权限对话框的点击事件
-    showManageDialog(role) {
-      this.manageDialogVisible = true
-      this.manageRole = role
-      this.generateManage(role)
-    },
-    // 穿梭框数据初始化
-    async generateManage() {
-    },
-    // 处理权限的变化
-    async manage () {
-      this.manageDialogVisible = false
-      return this.$message.success('分配权限成功!')
-    },
-    // 重置穿梭框搜索数据
-    reset() {
-      if (this.$refs.myTransfer) {
-        this.$refs.myTransfer.$children['0']._data.query = ''
-        // 清空右边搜索
-        this.$refs.myTransfer.$children['3']._data.query = ''
+        })
+      },
+      // 监听分配权限对话框的点击事件
+      showManageDialog(roleId) {
+        this.manageDialogVisible = true
+        this.manageRole = roleId
+        this.generateManage(roleId)
+      },
+      // 穿梭框数据初始化
+      async generateManage(roleId) {
+        this.manageValue = []
+        this.manageData = []
+        const {data: enablePermissions} = await this.$http.get(`permission/findPermissionByRoleId?roleId=${roleId}`)
+        const {data: allPermissions} = await this.$http.get('permission/select')
+        if (allPermissions.code !== 200) {
+          return this.$message.error('获取权限列表失败!' + checkError(allPermissions))
+        }
+        this.managePermission = enablePermissions.data
+        for (let i = 0; i < allPermissions.data.length; i++) {
+          this.manageData.push({
+            key: i,
+            label: allPermissions.data[i].perName + ' ' + allPermissions.data[i].perCode,
+            per: allPermissions.data[i].perCode
+          })
+        }
+        if (enablePermissions.code === 200) {
+          // eslint-disable-next-line no-unused-vars
+          this.managePermission.forEach((permission, index) => {
+            for (let i = 0; i < this.manageData.length; i++) {
+              if (this.manageData[i].per === permission.perCode) {
+                this.manageValue.push(i)
+              }
+            }
+          })
+        }
+      },
+      // 处理权限的变化
+      async manage() {
+        this.loading = true
+        let permissionCodes = []
+        for (let i = 0; i < this.manageValue.length; i++) {
+          permissionCodes.push(this.manageData[this.manageValue[i]].per)
+        }
+        const {data: res} = await this.$http.post(
+                `permission/managePermission?roleId=${this.manageRole}&permissionCodes=${permissionCodes}`
+        )
+        this.loading = false
+        if (res.code !== 200) {
+          this.manageDialogVisible = false
+          return this.$message.error('分配权限失败!')
+        }
+        this.manageDialogVisible = false
+        return this.$message.success('分配权限成功!')
+      },
+      // 重置穿梭框搜索数据
+      reset() {
+        if (this.$refs.myTransfer) {
+          this.$refs.myTransfer.$children['0']._data.query = ''
+          // 清空右边搜索
+          this.$refs.myTransfer.$children['3']._data.query = ''
+        }
+      },
+      // 面包屑导航切换
+      changeMenu(activePath) {
+        this.information.$emit('activePath', activePath)
       }
-    },
-    // 面包屑导航切换
-    changeMenu(activePath) {
-      this.information.$emit('activePath', activePath)
     }
-  }
 }
 </script>
 
 <style lang="less" scoped>
   .el-transfer /deep/ .el-transfer-panel {
-    width: 350px !important;
-    height: 400px;
+    width: 500px !important;
+    height: 500px;
   }
   .ddiv /deep/ .el-transfer-panel__filter {
     width: 90%;

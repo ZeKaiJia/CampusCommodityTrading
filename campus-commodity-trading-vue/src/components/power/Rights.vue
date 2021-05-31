@@ -34,11 +34,69 @@
               stripe
               v-loading="loading"
       >
-        <el-table-column label="序号" prop="perId" width="70px" align="center"/>
+        <!--拓展列-->
+        <el-table-column type="expand" label="详细" width="64px" align="center">
+          <template slot-scope="scope">
+            <el-row v-if="scope.row.utcCreate !== null && scope.row.utcCreate !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  创建时间
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.utcCreate}}
+                </el-tag>
+              </el-col>
+            </el-row>
+            <el-row v-if="scope.row.utcModify !== null && scope.row.utcModify !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  修改时间
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.utcModify}}
+                </el-tag>
+              </el-col>
+            </el-row>
+            <el-row v-if="scope.row.modifyBy !== null && scope.row.modifyBy !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  修改人
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.modifyBy}}
+                </el-tag>
+              </el-col>
+            </el-row>
+            <el-row v-if="scope.row.remark !== null && scope.row.remark !== ''">
+              <el-col :span="3" align="right">
+                <el-tag type="info" effect="plain">
+                  备注
+                </el-tag>
+              </el-col>
+              <el-col :span="10">
+                <el-tag type="info" effect="plain">
+                  {{scope.row.remark}}
+                </el-tag>
+              </el-col>
+            </el-row>
+          </template>
+        </el-table-column>
+        <!--索引列-->
+        <el-table-column label="序号" width="58px" align="center">
+          <template slot-scope="scope">
+            <span>{{scope.$index+(currentPage - 1) * pageSize + 1}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="名称" prop="perName" align="center" width="300px"/>
         <el-table-column label="内部代码" prop="perCode" align="center"/>
         <el-table-column label="接口路径" prop="perUrl" align="center"/>
-        <el-table-column label="权限等级" prop="customa" align="center" width="148px">
+        <el-table-column label="权限等级" prop="customa" align="center" width="130px">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.customa === '0'" type="info">零级</el-tag>
             <el-tag type="success" v-else-if="scope.row.customa === '1'">一级</el-tag>
@@ -168,7 +226,7 @@
 </template>
 
 <script>
-  import {checkError, sliceData} from '../../plugins/utils'
+  import {checkError, sliceData, timestampToTime} from '../../plugins/utils'
 
   export default {
     name: 'Rights',
@@ -266,6 +324,10 @@
         return this.$message.error('获取权限列表失败!' + checkError(res))
       }
       this.rightsList = res.data
+      this.rightsList.forEach(function (item) {
+        item.utcCreate = timestampToTime(item.utcCreate)
+        item.utcModify = timestampToTime(item.utcModify)
+      })
       this.showRightsList = sliceData(this.rightsList, this.currentPage, this.pageSize)
       if (this.showRightsList.length === 0) {
         this.currentPage = this.currentPage - 1
@@ -382,4 +444,10 @@
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .el-col .el-tag {
+    margin-left: 16px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+</style>

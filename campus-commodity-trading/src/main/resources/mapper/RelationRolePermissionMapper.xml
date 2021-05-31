@@ -5,9 +5,19 @@
 
 <mapper namespace="cn.ky.jzk.mapper.RelationRolePermissionMapper">
     <cache eviction="FIFO" readOnly="true" size="1024" flushInterval="30000"/>
+    <insert id="managePermission">
+        INSERT INTO  rel_role_permission (roleid, percode) VALUES
+        <foreach collection="codes" item="code" separator=",">
+            (#{roleId}, #{code})
+        </foreach>
+    </insert>
     <select id="findPermissionByRoleId" parameterType="String" resultType="String">
         SELECT perCode
         FROM rel_role_permission
         WHERE roleId = #{roleId}
     </select>
+    <delete id="deleteByRoleId" parameterType="java.lang.String">
+        DELETE FROM rel_role_permission
+        WHERE roleId = #{roleId}
+    </delete>
 </mapper>

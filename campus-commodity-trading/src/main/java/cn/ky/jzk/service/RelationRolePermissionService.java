@@ -1,5 +1,6 @@
 package cn.ky.jzk.service;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -8,4 +9,8 @@ import java.util.Set;
  */
 public interface RelationRolePermissionService {
     Set<String> findPermissionByRoleId(String roleId);
+
+    void deleteByRoleId(String roleId);
+
+    String managePermission(String roleId, List<String> codes);
 }

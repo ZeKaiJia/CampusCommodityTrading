@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Author: Kevin
@@ -23,4 +22,6 @@ public interface PermissionMapper {
     List<Permission> select();
 
     Permission selectById(@Param("perId") int perId);
+
+    Permission selectByCode(@Param("perCode") String perCode);
 }

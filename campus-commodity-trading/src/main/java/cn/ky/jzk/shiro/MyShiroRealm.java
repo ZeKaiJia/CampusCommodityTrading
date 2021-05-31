@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,6 +25,8 @@ public class MyShiroRealm extends AuthorizingRealm {
     private static final Logger LOGGER = LoggerFactory.getLogger(MyShiroRealm.class);
     @Resource(name = "relationRolePermissionServiceImpl")
     private RelationRolePermissionService relationRolePermissionService;
+    @Resource(name = "roleServiceImpl")
+    private RoleService roleService;
     @Resource(name = "relationRoleUserServiceImpl")
     private RelationRoleUserService relationRoleUserService;
     @Resource(name = "userServiceImpl")
@@ -54,7 +57,12 @@ public class MyShiroRealm extends AuthorizingRealm {
             return null;
         }
         try {
-            Set<String> roles = relationRoleUserService.findRoleByUserName(userName);
+            Set<String> roleIds = relationRoleUserService.findRoleByUserName(userName);
+            Set<String> roles = new HashSet<>();
+            for (String id : roleIds) {
+                // TODO
+                roles.add(roleService.selectById(id).getRoleNameEn());
+            }
             simpleAuthorizationInfo.addRoles(roles);
             for (String role : roles) {
                 Set<String> permissions = relationRolePermissionService.findPermissionByRoleId(role);

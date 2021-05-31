@@ -70,4 +70,9 @@ public class PermissionServiceImpl extends AbstractService implements Permission
     public Permission selectById(int perId) {
         return permissionMapper.selectById(perId);
     }
+
+    @Override
+    public Permission selectByCode(String perCode) {
+        return permissionMapper.selectByCode(perCode);
+    }
 }

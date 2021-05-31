@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,5 +25,20 @@ public class RelationRolePermissionServiceImpl implements RelationRolePermission
     @Override
     public Set<String> findPermissionByRoleId(String roleId) {
         return relationRolePermissionMapper.findPermissionByRoleId(roleId);
+    }
+
+    @Override
+    public void deleteByRoleId(String roleId) {
+        relationRolePermissionMapper.deleteByRoleId(roleId);
+    }
+
+    @Override
+    public String managePermission(String roleId, List<String> codes) {
+        try {
+            relationRolePermissionMapper.managePermission(roleId, codes);
+        } catch (Exception e) {
+            return null;
+        }
+        return "Success";
     }
 }

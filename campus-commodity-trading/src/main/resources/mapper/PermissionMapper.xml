@@ -60,4 +60,9 @@
         FROM sys_permission
         WHERE perId = #{perId}
     </select>
+    <select id="selectByCode" resultType="cn.ky.jzk.model.Permission">
+        SELECT *
+        FROM sys_permission
+        WHERE perCode = #{perCode}
+    </select>
 </mapper>
