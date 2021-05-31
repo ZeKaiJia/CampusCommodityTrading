@@ -135,14 +135,12 @@
                             <i v-if="commodity.comPicture === '' || commodity.comPicture === null"
                                class="el-icon-present"></i>
                             <el-rate
-                                    v-if="commodity.comRate !== 0"
                                     v-model="commodity.comRate"
                                     :icon-classes="iconClasses"
                                     void-icon-class="el-icon-star-off"
                                     :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
                                     disabled show-score>
                             </el-rate>
-                            <el-row class="middleFont" v-if="commodity.comRate === 0">暂无评价</el-row>
                             <el-row class="middleFont">编号 - {{commodity.comId}}</el-row>
                             <el-row class="middleFont">名称 - {{commodity.comName}}</el-row>
                             <el-row class="middleFont">数量 - {{commodity.comQuantity}}单位</el-row>
@@ -235,7 +233,7 @@
                             <el-tooltip
                                     class="dark"
                                     effect="dark"
-                                    content="修改信息"
+                                    content="下单"
                                     placement="top"
                                     :enterable="false"
                                     :hide-after="2000"
@@ -243,16 +241,16 @@
                                 <!--修改按钮-->
                                 <el-button
                                         type="primary"
-                                        icon="el-icon-edit"
+                                        icon="el-icon-shopping-cart-2"
                                         size="mini"
-                                        @click="showEditDialog(scope.row.userName)"
+                                        @click="showBuyCommodityDialog(scope.row.comId)"
                                         round
                                 />
                             </el-tooltip>
                             <el-tooltip
                                     class="dark"
                                     effect="dark"
-                                    content="删除用户"
+                                    content="查询"
                                     placement="top"
                                     :enterable="false"
                                     :hide-after="2000"
@@ -260,9 +258,9 @@
                                 <!--删除按钮-->
                                 <el-button
                                         type="danger"
-                                        icon="el-icon-delete"
+                                        icon="el-icon-warning-outline"
                                         size="mini"
-                                        @click="removeUserByName(scope.row.userName)"
+                                        @click="checkCommodityUserInfo(scope.row.comId)"
                                         round
                                 />
                             </el-tooltip>
@@ -414,7 +412,7 @@
                                         </el-select>
                                     </el-form-item>
                                 <el-form-item label="租赁数量(单位)" prop="comQuantity">
-                                    <el-slider v-model="buyForm.comQuantity" show-input :min="1" :max="100"
+                                    <el-slider v-model="buyForm.comQuantity" show-input :min="1" :max="buyCommodityPost.comInfo.comQuantityNow"
                                                style="margin-left: 10px"></el-slider>
                                 </el-form-item>
                                 <el-form-item label="租赁时长（天)" prop="orderTime">
@@ -638,9 +636,7 @@
                 // this.orderForm.orderNewId = this.buyForm.comId
                 this.orderForm.orderBuyerAddress = this.buyForm.address
                 this.orderForm.orderBuyerName = getCookie('ID')
-                console.log(this.orderForm.orderTime)
                 this.orderForm.orderTime *=  86400000
-                console.log(this.orderForm.orderTime)
                 this.orderForm.orderPayStatus = 2
                 const {data: result} = await this.$http.get(`commodity/selectCommodityUser?comId=${this.orderForm.orderComId}`)
                 if (result.code !== 200) {
@@ -671,8 +667,8 @@
                     } else {
                         this.blockFlag = true
                         this.buyCommodityDialogVisible = false
-                        this.getCommodity()
-                        return this.$message.success('下单成功')
+                        await this.getCommodity()
+                        this.closeBuyCommodityDialogVisible()
                     }
                 }
             },
@@ -705,7 +701,7 @@
                 this.activeStep < 3 ? this.activeStep++ : this.activeStep
             },
             closeBuyCommodityDialogVisible() {
-                this.$message.success('购买成功，请到 商品管理 > 我的商品 中进行查看')
+                this.$message.success('下单成功，请到 订单查询 > 我的订单 中进行查看')
                 this.buyCommodityDialogVisible = false
             },
             buyCommodityPreStep() {
@@ -723,6 +719,7 @@
                 this.buyForm.comQuantity = 1
                 this.buyForm.address = ''
                 this.progressLoading = 0
+                this.orderForm.orderTime = 1
             },
             async showBuyCommodityDialog(comId) {
                 this.buyCommodityDialogVisible = true

@@ -33,7 +33,7 @@ public interface CommodityControllerApi {
     })
     Response<String> deleteAllZero(@ApiParam String userName);
 
-    @RequiresPermissions("saler:commodity:update")
+    @RequiresPermissions("user:commodity:update")
     @ApiOperation(value = "更新商品信息", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     Response<Commodity> update(Commodity commodity);
 

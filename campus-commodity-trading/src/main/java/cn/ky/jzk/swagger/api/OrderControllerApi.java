@@ -33,7 +33,7 @@ public interface OrderControllerApi {
     @ApiOperation(value = "查询全体订单", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     Response<List<Order>> select();
 
-    @RequiresPermissions("admin:order:selectById")
+    @RequiresPermissions("user:order:selectById")
     @ApiOperation(value = "根据ID号查询订单", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "订单号", example = "1", name = "id", required = true, paramType = "query", dataType = "integer")

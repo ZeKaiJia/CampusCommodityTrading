@@ -199,7 +199,6 @@
             // 验证邮箱
             const checkEmail = (rule, value, callback) => {
                 const regEmail = /^([a-zA-z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-                console.log(value)
                 if (regEmail.test(value) || value === '' || value === null) {
                     return callback()
                 } else {

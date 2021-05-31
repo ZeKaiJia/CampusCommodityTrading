@@ -4,7 +4,7 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }" @click.native="changeMenu('/')">首页</el-breadcrumb-item>
       <el-breadcrumb-item>系统配置</el-breadcrumb-item>
-      <el-breadcrumb-item>角色定义</el-breadcrumb-item>
+      <el-breadcrumb-item>角色分配</el-breadcrumb-item>
     </el-breadcrumb>
     <!--卡片视图-->
     <el-card>
@@ -201,7 +201,7 @@
         <el-button type="primary" @click="manage">修 改</el-button>
       </span>
     </el-dialog>
-    <!--提示对话框-->
+    <!--&lt;!&ndash;提示对话框&ndash;&gt;
     <el-dialog
       title="提醒！"
       :visible.sync="infoDialogVisible"
@@ -213,12 +213,12 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="infoDialogVisible = false">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog>-->
   </div>
 </template>
 
 <script>
-  import {checkError, getCookie, setCookie, timestampToTime} from '../../plugins/utils'
+  import {checkError, timestampToTime} from '../../plugins/utils'
 
   export default {
     name: 'Roles',
@@ -255,7 +255,7 @@
         // 控制分配权限对话框的显示
         manageDialogVisible: false,
         // 控制提示对话框的显示
-        infoDialogVisible: false,
+        /*infoDialogVisible: false,*/
         // 角色列表
         typeList: [],
         // 角色总数
@@ -312,15 +312,15 @@
     created() {
       this.information.$emit('activePath', this.routeUrl)
       this.getTypeList()
-      setTimeout(() => {
+      /*setTimeout(() => {
         if (this.checkInfo() < 2) {
           this.infoDialogVisible = true
         }
-      }, 1000)
+      }, 1000)*/
     },
     methods: {
       // 检查提示信息出现次数
-      checkInfo(){
+      /*checkInfo(){
         let times = getCookie('times')
         if (times === null || times === undefined || times === '') {
           setCookie('times', 1)
@@ -328,7 +328,7 @@
           setCookie('times', Number(times) + 1)
         }
         return times
-      },
+      },*/
       // 点击按钮删除用户信息
       async removeRole(roleId) {
         // 弹框询问

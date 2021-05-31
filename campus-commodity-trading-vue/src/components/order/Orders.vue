@@ -524,7 +524,9 @@
                 //     `commodity/selectById?comId=${res.data.orderNewId}`
                 // )
                 if (oldCom.code !== 200) {
-                    return this.$message.error('获取商品信息失败 ' + checkError(oldCom))
+                    this.receiveDialogVisible = true
+                    this.receiveOld = null
+                    return this.$message({message: '该商品已下架，您仍可进行评价', type: 'warning', customClass: 'zZindex'})
                 }
                 this.receiveOld = oldCom.data
                 // this.receiveNew = newCom.data
@@ -544,17 +546,18 @@
                 if (this.rate === null) {
                     this.$message.error('请填写评价!')
                 } else {
-                    const {data: old} = await this.$http.post(
-                        `commodity/updateRate?comId=${this.receiveOld.comId}&rate=${this.rate}`
-                    )
-                    this.rate = null
-                    if (old.code !== 200) {
-                        this.receiveDialogVisible = false
-                        this.$message.error('发布评价失败' + checkError(old))
-                    } else {
-                        this.$message.success('发布评价成功')
+                    if (this.receiveOld !== null) {
+                        const {data: old} = await this.$http.post(
+                            `commodity/updateRate?comId=${this.receiveOld.comId}&rate=${this.rate}`
+                        )
+                        this.rate = null
+                        if (old.code !== 200) {
+                            this.receiveDialogVisible = false
+                            this.$message.error('发布评价失败' + checkError(old))
+                        } else {
+                            this.$message.success('发布评价成功')
+                        }
                     }
-
                     this.updateForm.orderStatus = 3
                     const {data: res} = await this.$http.post('order/update', this.updateForm)
                     this.dialogLoading = false

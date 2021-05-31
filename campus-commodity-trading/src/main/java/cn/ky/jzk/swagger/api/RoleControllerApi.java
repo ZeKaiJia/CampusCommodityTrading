@@ -37,8 +37,7 @@ public interface RoleControllerApi {
             @ApiImplicitParam(value = "用户名", example = "Xb18620208", name = "userName", required = true, paramType = "query", dataType = "string")
     })
     Response<Role> selectUserRole(@ApiParam String userName);
-
-    @RequiresPermissions("admin:role:selectById")
+    
     @ApiOperation(value = "根据角色号查询角色", notes = "", consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "角色号", example = "1", name = "roleId", required = true, paramType = "query", dataType = "string")

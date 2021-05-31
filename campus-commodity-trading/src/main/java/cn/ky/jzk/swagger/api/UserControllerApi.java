@@ -24,7 +24,7 @@ public interface UserControllerApi {
     })
     Response<User> delete(@ApiParam String userName);
 
-    @RequiresPermissions("admin:user:select")
+
     @ApiOperation(value = "更新用户信息", notes = "", consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户名", example = "Xb18620208", name = "userName", required = true, paramType = "query", dataType = "string"),
@@ -42,7 +42,7 @@ public interface UserControllerApi {
     })
     Response<User> selectByName(@ApiParam String userName);
 
-    @RequiresPermissions("admin:user:select")
+
     @ApiOperation(value = "用户登陆", notes = "", consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     Response<String> login(User user);
 

@@ -99,8 +99,8 @@
                         id: 2,
                         authName: '系统配置',
                         children: [
-                            {id: 21, authName: '角色定义', path: 'roles'},
-                            {id: 22, authName: '权限分配', path: 'rights'}
+                            {id: 21, authName: '角色分配', path: 'roles'},
+                            {id: 22, authName: '权限定义', path: 'rights'}
                         ]
                     },
                     {
@@ -216,6 +216,10 @@
 
                     const list1 = this.menuList.slice(0, 1)
                     const list2 = this.menuList.slice(2, 4)
+                    this.menuList = list1.concat(list2)
+                } else if (this.userRole.roleNameEn === 'admin') {
+                    const list1 = this.menuList.slice(0, 2)
+                    const list2 = this.menuList.slice(4, 5)
                     this.menuList = list1.concat(list2)
                 }
             },

@@ -4,7 +4,7 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }" @click.native="changeMenu('/')">首页</el-breadcrumb-item>
       <el-breadcrumb-item>系统配置</el-breadcrumb-item>
-      <el-breadcrumb-item>权限分配</el-breadcrumb-item>
+      <el-breadcrumb-item>权限定义</el-breadcrumb-item>
     </el-breadcrumb>
     <!--卡片视图-->
     <el-card>

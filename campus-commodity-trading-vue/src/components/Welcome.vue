@@ -38,11 +38,11 @@
         </el-col>
         <el-col :span="6">
           <el-link
-                  @click="jump('/orders')"
+                  @click="jump('/roles')"
                   class="link"
                   :underline="false"
-                  icon="el-icon-s-order"
-          >订单记录
+                  icon="el-icon-share"
+          >角色分配
           </el-link>
         </el-col>
         <el-col :span="6">
@@ -51,7 +51,7 @@
                   class="link"
                   :underline="false"
                   icon="el-icon-s-custom"
-          >用户列表
+          >用户管理
           </el-link>
         </el-col>
         <el-col :span="6">
@@ -123,7 +123,7 @@
         </el-col>
         <el-col :span="6">
           <el-link
-                  @click="jump('/buyCommodity')"
+                  @click="jump('/myCommodity')"
                   class="link"
                   :underline="false"
                   icon="el-icon-s-promotion"

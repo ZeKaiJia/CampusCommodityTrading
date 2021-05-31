@@ -38,8 +38,8 @@ public class Swagger2Configuration {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("校园二手商品交易平台")
-                .description("校园二手商品交易平台 API 接口文档")
+                .title("智能化共享租赁平台")
+                .description("智能化共享租赁平台 API 接口文档")
                 .version(VERSION)
                 .termsOfServiceUrl("https://www.apache.org/licenses/LICENSE-2.0.html")
                 .build();
