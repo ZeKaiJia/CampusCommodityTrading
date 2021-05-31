@@ -1,7 +1,10 @@
 package cn.ky.jzk.shiro;
 
 import cn.ky.jzk.model.User;
-import cn.ky.jzk.service.*;
+import cn.ky.jzk.service.RelationRolePermissionService;
+import cn.ky.jzk.service.RelationRoleUserService;
+import cn.ky.jzk.service.RoleService;
+import cn.ky.jzk.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -12,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -57,12 +59,7 @@ public class MyShiroRealm extends AuthorizingRealm {
             return null;
         }
         try {
-            Set<String> roleIds = relationRoleUserService.findRoleByUserName(userName);
-            Set<String> roles = new HashSet<>();
-            for (String id : roleIds) {
-                // TODO
-                roles.add(roleService.selectById(id).getRoleNameEn());
-            }
+            Set<String> roles = relationRoleUserService.findRoleByUserName(userName);
             simpleAuthorizationInfo.addRoles(roles);
             for (String role : roles) {
                 Set<String> permissions = relationRolePermissionService.findPermissionByRoleId(role);

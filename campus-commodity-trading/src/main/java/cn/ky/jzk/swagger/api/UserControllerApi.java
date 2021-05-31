@@ -3,6 +3,7 @@ package cn.ky.jzk.swagger.api;
 import cn.ky.jzk.model.User;
 import cn.ky.jzk.vo.Response;
 import io.swagger.annotations.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.util.MimeTypeUtils;
 
 import java.util.List;
@@ -16,12 +17,14 @@ public interface UserControllerApi {
     })
     Response<User> insert(User user, @ApiParam String roleNameCn, @ApiParam Integer status);
 
+    @RequiresPermissions("admin:user:delete")
     @ApiOperation(value = "删除用户", notes = "", consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户名", example = "Xb18620208", name = "userName", required = true, paramType = "query", dataType = "string")
     })
     Response<User> delete(@ApiParam String userName);
 
+    @RequiresPermissions("admin:user:select")
     @ApiOperation(value = "更新用户信息", notes = "", consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户名", example = "Xb18620208", name = "userName", required = true, paramType = "query", dataType = "string"),
@@ -29,6 +32,7 @@ public interface UserControllerApi {
     })
     Response<User> update(User user, @ApiParam String roleNameCn, @ApiParam Integer status);
 
+    @RequiresPermissions("admin:user:select")
     @ApiOperation(value = "查询全体用户", notes = "", consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     public Response<List<User>> select();
 
@@ -38,12 +42,15 @@ public interface UserControllerApi {
     })
     Response<User> selectByName(@ApiParam String userName);
 
+    @RequiresPermissions("admin:user:select")
     @ApiOperation(value = "用户登陆", notes = "", consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     Response<String> login(User user);
 
+    @RequiresPermissions("user:user:logout")
     @ApiOperation(value = "用户退出", notes = "退出系统", consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     Response<String> userLogout();
 
+    @RequiresPermissions("inner:inner:user:toLogin")
     @ApiOperation(value = "强制登录", notes = "后台未登录用户强制登录", consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "GET")
     String toLogin();
 }
