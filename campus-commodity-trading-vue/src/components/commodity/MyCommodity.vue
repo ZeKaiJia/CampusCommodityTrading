@@ -308,6 +308,10 @@
                 <el-button type="primary" @click="editCommodity">修 改</el-button>
             </span>
         </el-dialog>
+        <!--回到顶部-->
+        <transition name="bounce">
+            <el-backtop bottom="50" right="50" visibility-height="10">🚀</el-backtop>
+        </transition>
     </div>
 </template>
 

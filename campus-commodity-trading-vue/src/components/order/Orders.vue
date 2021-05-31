@@ -317,11 +317,13 @@
             </el-card>
             <!--底部按钮区-->
             <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="receive" v-if="activeStep === 3">发 布</el-button>
-      </span>
+                <el-button type="primary" @click="receive" v-if="activeStep === 3">发 布</el-button>
+            </span>
         </el-dialog>
         <!--回到顶部-->
-        <el-backtop target=".el-main" :bottom="50">△</el-backtop>
+        <transition name="bounce">
+            <el-backtop bottom="50" right="50" visibility-height="10">🚀</el-backtop>
+        </transition>
     </div>
 </template>
 

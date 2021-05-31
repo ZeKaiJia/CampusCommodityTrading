@@ -439,7 +439,9 @@
             </span>
         </el-dialog>
         <!--回到顶部-->
-        <el-backtop target=".el-main" :bottom="50">△</el-backtop>
+        <transition name="bounce">
+            <el-backtop bottom="50" right="50" visibility-height="10">🚀</el-backtop>
+        </transition>
     </div>
 </template>
 

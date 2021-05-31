@@ -24,7 +24,7 @@
           />
           </el-input>
         </el-col>
-        <el-col :span="2.5">
+        <el-col :span="2">
           <el-button type="primary" @click="showAddDialog()"
           >添加用户
           </el-button
@@ -37,6 +37,17 @@
             type="warning"
             show-icon>
           </el-alert>
+        </el-col>
+        <el-col :span="6">
+          <el-upload
+                  style="float: right; margin-right: 12px"
+                  :on-change="handleChange"
+                  action=""
+                  :show-file-list="false"
+                  :http-request="uploadUser"
+                  accept=".xls,.xlsx">
+            <el-button type="primary">批量导入</el-button>
+          </el-upload>
         </el-col>
       </el-row>
       <!--用户列表区域-->
@@ -321,7 +332,9 @@
       </span>
     </el-dialog>
     <!--回到顶部-->
-    <el-backtop target=".el-main" :bottom="50">△</el-backtop>
+    <transition name="bounce">
+      <el-backtop bottom="50" right="50" visibility-height="10">🚀</el-backtop>
+    </transition>
   </div>
 </template>
 
@@ -396,6 +409,7 @@
       addDialogVisible: false,
       // 控制修改用户对话框的显示
       editDialogVisible: false,
+      fileList: [],
       // 添加用户的表单数据
       addForm: {
         userName: '',
@@ -481,6 +495,17 @@
     this.getUserList()
   },
   methods: {
+    async uploadUser() {
+      this.$notify({
+        title: '警告',
+        message: '若无法上传，请刷新页面并重新选择1M一下的文件',
+        type: 'warning',
+        showClose: false
+      });
+    },
+    handleChange(file, fileList) {
+      this.fileList = fileList.slice(-1)
+    },
     // 获取角色列表
     async getRoleList() {
       const { data: res } = await this.$http.get('role/select')

@@ -8,6 +8,10 @@ import './assets/icon/iconfont.css'
 import axios from 'axios'
 import dataV from '@jiaminghi/data-view';
 
+// Excel导入导出
+import XLSX from 'xlsx'
+Vue.use(XLSX)
+
 // 导入富文本编辑器
 import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
