@@ -15,6 +15,8 @@ public interface UserMapper {
 
     void insert(User user);
 
+    void importExcel(@Param("users") List<User> users);
+
     void delete(@Param("userName") String userName);
 
     void update(User user);

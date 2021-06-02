@@ -310,7 +310,7 @@
         </el-dialog>
         <!--回到顶部-->
         <transition name="bounce">
-            <el-backtop bottom="50" right="50" visibility-height="10">🚀</el-backtop>
+            <el-backtop :bottom="50" :right="50" :visibility-height="10">🚀</el-backtop>
         </transition>
     </div>
 </template>
@@ -442,7 +442,7 @@
                     }
                 )
                 const {data: res} = await this.$http.post(
-                    '/gitee/saveImg',
+                    '/upload/saveImg',
                     param
                 )
                 if (res.code !== 200) {

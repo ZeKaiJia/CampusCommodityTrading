@@ -8,8 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
-@Api(value = "/gitee/", tags = "外部模块")
-public interface GiteeImgControllerApi {
+@Api(value = "/upload/", tags = "外部模块")
+public interface UploadControllerApi {
     @RequiresPermissions("user:gitee:saveImg")
     @ApiOperation(value = "上传文件", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     @ApiImplicitParams({
@@ -20,4 +20,6 @@ public interface GiteeImgControllerApi {
     @RequiresPermissions("user:gitee:refreshPage")
     @ApiOperation(value = "刷新Gitee Page", notes = "",  consumes = MimeTypeUtils.APPLICATION_JSON_VALUE, produces = MimeTypeUtils.APPLICATION_JSON_VALUE,  httpMethod = "POST")
     Response<Map<String, Object>> refreshPage() throws Exception;
+
+
 }

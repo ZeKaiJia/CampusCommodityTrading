@@ -196,7 +196,7 @@
       </span>
         </el-dialog>
         <!--回到顶部-->
-        <el-backtop target=".el-main" :bottom="50">△</el-backtop>
+        <el-backtop :bottom="50" :right="50" :visibility-height="10">🚀</el-backtop>
     </div>
 </template>
 
@@ -375,7 +375,7 @@
                     }
                 )
                 const {data: res} = await this.$http.post(
-                    '/gitee/saveImg',
+                    '/upload/saveImg',
                     param
                 )
                 if (res.code !== 200 || res.status === 500) {

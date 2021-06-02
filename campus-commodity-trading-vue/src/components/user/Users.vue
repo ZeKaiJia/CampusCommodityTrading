@@ -43,6 +43,7 @@
                   style="float: right; margin-right: 12px"
                   :on-change="handleChange"
                   action=""
+                  :limit="1"
                   :show-file-list="false"
                   :http-request="uploadUser"
                   accept=".xls,.xlsx">
@@ -333,7 +334,7 @@
     </el-dialog>
     <!--回到顶部-->
     <transition name="bounce">
-      <el-backtop bottom="50" right="50" visibility-height="10">🚀</el-backtop>
+      <el-backtop :bottom="50" :right="50" :visibility-height="10">🚀</el-backtop>
     </transition>
   </div>
 </template>
@@ -495,20 +496,33 @@
     this.getUserList()
   },
   methods: {
-    async uploadUser() {
-      this.$notify({
-        title: '警告',
-        message: '若无法上传，请刷新页面并重新选择1M一下的文件',
-        type: 'warning',
-        showClose: false
-      });
+    // eslint-disable-next-line no-unused-vars
+    async uploadUser(file, fileList) {
+      this.loading = true
+      const param = new FormData()
+      param.append('excelFile', file.file)
+      const {data: res} = await this.$http.post('upload/importExcel', param)
+      if (res.code !== 200) {
+        return this.$message.error('导入失败')
+      } else {
+        await this.getUserList()
+        return this.$message.success('导入成功')
+      }
+      /*const {data: res} = await this.$http.post(
+              '/upload/saveImg',
+              param
+      )
+      if (res.code !== 200 || res.status === 500) {
+        this.loading = false
+        return this.$message.error('文件大小不能超过1M且只能上传一张')
+      }*/
     },
     handleChange(file, fileList) {
       this.fileList = fileList.slice(-1)
     },
     // 获取角色列表
     async getRoleList() {
-      const { data: res } = await this.$http.get('role/select')
+      const {data: res} = await this.$http.get('role/select')
       if (res.code !== 200) {
         return this.$message.error('获取角色列表失败!' + checkError(res))
       }

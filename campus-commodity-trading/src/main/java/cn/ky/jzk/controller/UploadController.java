@@ -4,13 +4,13 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import cn.ky.jzk.swagger.api.GiteeImgControllerApi;
+import cn.ky.jzk.service.UploadService;
+import cn.ky.jzk.swagger.api.UploadControllerApi;
 import cn.ky.jzk.util.GiteeImgBedConstant;
 import cn.ky.jzk.vo.Response;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -20,14 +20,25 @@ import java.util.Map;
  * @author kevin
  */
 @RestController
-@RequestMapping("/gitee")
-public class GiteeImgController extends BaseController implements GiteeImgControllerApi {
+@RequestMapping("/upload")
+public class UploadController extends BaseController implements UploadControllerApi {
+    @Autowired
+    @Qualifier(value = "uploadServiceImpl")
+    private UploadService uploadService;
+
     public final static String MESSAGE_COMMIT = "commit";
 
     public final static String MESSAGE_STATUS = "status";
 
+    @PostMapping("/importExcel")
+    @ResponseBody
+    public Response<String> importExcel(@RequestParam("excelFile")MultipartFile multipartFile) {
+        String info = uploadService.importExcel(multipartFile);
+        return dataAnalyse(info.equals("导入成功") ? info : null, 408, info);
+    }
+
     @Override
-    @RequestMapping("saveImg")
+    @PostMapping("/saveImg")
     @ResponseBody
     public Response<Map<String, Object>> saveImg(@RequestParam(value = "fileImg", required = true) MultipartFile fileImg) throws Exception {
 
@@ -66,7 +77,7 @@ public class GiteeImgController extends BaseController implements GiteeImgContro
     }
 
     @Override
-    @RequestMapping("refreshPage")
+    @PostMapping("/refreshPage")
     @ResponseBody
     public Response<Map<String, Object>> refreshPage() throws Exception {
 
