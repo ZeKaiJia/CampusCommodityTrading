@@ -38,9 +38,13 @@
             show-icon>
           </el-alert>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="3">
+          <el-button type="primary" style="float: right" @click="downloadUser">全体导出</el-button>
+        </el-col>
+        <el-col :span="3">
           <el-upload
-                  style="float: right; margin-right: 12px"
+                  ref="upload"
+                  style="float: right"
                   :on-change="handleChange"
                   action=""
                   :limit="1"
@@ -496,14 +500,35 @@
     this.getUserList()
   },
   methods: {
+    downloadUser() {
+      let host = window.location.host
+      let reg = /^localhost+/
+      let url = ''
+      if(reg.test(host)) {
+        url = '//localhost:14001'
+      } else {
+        url =  "//fwwb.ims.cool:14001"
+      }
+      window.location.href = url + '/upload/exportExcel'
+    },
+    handleChange(file, fileList) {
+      this.fileList = fileList.slice(-1)
+    },
     // eslint-disable-next-line no-unused-vars
     async uploadUser(file, fileList) {
       this.loading = true
       const param = new FormData()
-      param.append('excelFile', file.file)
+      this.fileList.forEach(
+              // eslint-disable-next-line no-unused-vars
+              (val, index) => {
+                param.append("excelFile", val.raw)
+              }
+      )
       const {data: res} = await this.$http.post('upload/importExcel', param)
+      this.$refs.upload.clearFiles();
       if (res.code !== 200) {
-        return this.$message.error('导入失败')
+        this.loading = false
+        return this.$message.error(res.message)
       } else {
         await this.getUserList()
         return this.$message.success('导入成功')
@@ -516,9 +541,6 @@
         this.loading = false
         return this.$message.error('文件大小不能超过1M且只能上传一张')
       }*/
-    },
-    handleChange(file, fileList) {
-      this.fileList = fileList.slice(-1)
     },
     // 获取角色列表
     async getRoleList() {

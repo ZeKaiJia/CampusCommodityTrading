@@ -21,6 +21,10 @@
             (#{user.userName}, #{user.userPassword}, #{user.userNick}, #{user.userGender}, #{user.userPhone},
              #{user.userEmail}, #{user.userQuest}, #{user.userAnswer}, #{user.userAvatar}, #{user.utcCreate},
              #{user.utcModify}, #{user.modifyBy}, 1, #{user.remark})
+        </foreach>;
+        INSERT INTO rel_user_role (userName, roleId) VALUES
+        <foreach collection="users" item="user" separator=",">
+            (#{user.userName}, #{user.customa})
         </foreach>
     </insert>
     <delete id="delete" parameterType="java.lang.String">

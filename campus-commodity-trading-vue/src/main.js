@@ -44,9 +44,16 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
-// TODO 配置请求的根路径
+let host = window.location.host
+let reg = /^localhost+/
+if(reg.test(host)) {
+    axios.defaults.baseURL = '//localhost:14001'
+} else {
+    axios.defaults.baseURL =  "//fwwb.ims.cool:14001"
+}
+/*
 axios.defaults.baseURL = '//localhost:14001'
-// axios.defaults.baseURL = '//fwwb.ims.cool:14001'
+// axios.defaults.baseURL = '//fwwb.ims.cool:14001'*/
 axios.defaults.withCredentials = true
 
 Vue.config.productionTip = false

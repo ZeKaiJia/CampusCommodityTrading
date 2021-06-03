@@ -67,6 +67,13 @@ public class UploadServiceImpl extends AbstractService implements UploadService 
             return "文件内容读取失败，请重试";
         }
         list.forEach(u -> packageInfo(request, u, 1));
+        list.forEach(u -> u.setCustoma(roleMapper.selectByNameCn(u.getCustoma()).getRoleId()));
+        for (User u : list) {
+            User temp = userMapper.selectByName(u.getUserName());
+            if (temp != null) {
+                return "有重复用户名的数据";
+            }
+        }
         userMapper.importExcel(list);
         return "导入成功";
     }
@@ -124,7 +131,11 @@ public class UploadServiceImpl extends AbstractService implements UploadService 
                 });
                 Optional.ofNullable(row.getCell(9)).ifPresent(v -> {
                     v.setCellType(CellType.STRING);
-                    user.setCustoma(v.getStringCellValue());
+                    String value = v.getStringCellValue();
+                    if (!v.equals("管理员") && !v.equals("出租方") && !v.equals("承租方")) {
+                        value = "管理员";
+                    }
+                    user.setCustoma(value);
                 });
                 list.add(user);
             }

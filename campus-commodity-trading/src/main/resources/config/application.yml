@@ -10,7 +10,7 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql:///javaweb?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql:///javaweb?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
   mvc:
     view:
       suffix: html
