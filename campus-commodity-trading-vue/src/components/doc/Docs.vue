@@ -6,9 +6,7 @@
       <el-breadcrumb-item>接口文档</el-breadcrumb-item>
       <el-breadcrumb-item>API文档</el-breadcrumb-item>
     </el-breadcrumb>
-    <!--TODO-->
-    <iframe src="//localhost:14001/doc.html" width="100%" height="95%" id="frame"/>
-<!--    <iframe src="//fwwb.ims.cool:14001/doc.html" width="100%" height="95%" id="frame"/>-->
+    <iframe :src="iframeUrl" width="100%" height="95%" id="frame"/>
   </div>
 </template>
 
@@ -19,13 +17,24 @@ export default {
     return {
       // 路由url
       routeUrl: '/docs',
+      iframeUrl: ''
     }
   },
   created() {
     this.information.$emit('activePath', this.routeUrl)
     this.changeStyle()
+    this.changeUrl()
   },
   methods: {
+    changeUrl() {
+      let host = window.location.host
+      let reg = /^localhost+/
+      if(reg.test(host)) {
+        this.iframeUrl = '//localhost:14001/doc.html'
+      } else {
+        this.iframeUrl =  "//fwwb.ims.cool:14001/doc.html"
+      }
+    },
     // 面包屑导航切换
     changeMenu(activePath) {
       this.information.$emit('activePath', activePath)

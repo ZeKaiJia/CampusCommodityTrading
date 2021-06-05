@@ -8,7 +8,6 @@
             </div>
             <!--标题-->
             <div class="login-title">
-                <!--TODO-->
                 <!--<span>校园二手商品交易平台</span>-->
                 <span>智能化共享租赁平台</span>
             </div>

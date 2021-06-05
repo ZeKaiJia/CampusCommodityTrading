@@ -47,7 +47,8 @@ public class UploadController extends BaseController implements UploadController
     @ResponseBody
     public void exportExcel(HttpServletRequest request, HttpServletResponse response) {
         List<User> users = userService.select();
-        String[] title = {"用户名", "密码", "昵称", "性别", "联系电话", "电子邮箱", "密保问题", "密保答案", "头像链接"};
+        String[] title = {"用户名", "密码", "昵称", "性别", "联系电话", "电子邮箱",
+                "密保问题", "密保答案", "头像链接"};
         HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook("用户导出表", title, users, null);
 
         //将文件存到指定位置
