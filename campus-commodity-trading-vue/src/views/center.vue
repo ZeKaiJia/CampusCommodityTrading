@@ -96,19 +96,19 @@ export default {
             value: 55
           },
           {
-            name: "胡馨月",
+            name: "贾泽楷2",
             value: 42
           },
           {
-            name: "宓彦阳",
+            name: "贾泽楷3",
             value: 36
           },
           {
-            name: "周庭康",
+            name: "贾泽楷4",
             value: 32
           },
           {
-            name: "朱星",
+            name: "贾泽楷5",
             value: 32
           },
           {

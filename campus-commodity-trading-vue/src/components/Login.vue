@@ -8,8 +8,8 @@
             </div>
             <!--标题-->
             <div class="login-title">
-                <!--<span>校园二手商品交易平台</span>-->
-                <span>智能化共享租赁平台</span>
+                <span>校园二手商品交易平台</span>
+                <!--<span>智能化共享租赁平台</span>-->
             </div>
             <!--登录表单区-->
             <el-form

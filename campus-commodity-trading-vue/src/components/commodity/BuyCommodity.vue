@@ -221,7 +221,8 @@
                     <el-table-column label="名称" prop="comName" align="center" width="240px"/>
                     <el-table-column label="数量" prop="comQuantity" align="center" width="80px"/>
                     <el-table-column label="存货" prop="comQuantityNow" align="center" width="80px"/>
-                    <el-table-column label="租价/天" prop="comEachPrice" align="center" width="120px"/>
+                    <!--<el-table-column label="租价/天" prop="comEachPrice" align="center" width="120px"/>-->
+                    <el-table-column label="单价" prop="comEachPrice" align="center" width="120px"/>
                     <el-table-column label="描述" prop="comDescription" align="center"/>
                     <el-table-column label="评分" align="center" width="60px">
                         <template slot-scope="scope">
@@ -411,14 +412,14 @@
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
-                                <el-form-item label="租赁数量(单位)" prop="comQuantity">
+                                <el-form-item label="购买数量(单位)" prop="comQuantity">
                                     <el-slider v-model="buyForm.comQuantity" show-input :min="1" :max="buyCommodityPost.comInfo.comQuantityNow"
                                                style="margin-left: 10px"></el-slider>
                                 </el-form-item>
-                                <el-form-item label="租赁时长（天)" prop="orderTime">
+                                <!--<el-form-item label="租赁时长（天)" prop="orderTime">
                                     <el-slider v-model="orderForm.orderTime" show-input :min="1" :max="365"
                                                style="margin-left: 10px"></el-slider>
-                                </el-form-item>
+                                </el-form-item>-->
                                 <!--</el-col>-->
                             </el-form>
                         </el-row>
@@ -517,7 +518,7 @@
                     orderSalerName: '',
                     orderBuyerName: '',
                     orderStatus: 1,
-                    orderTime: 1,
+                    // orderTime: 1,
                     orderPayStatus: 2,
                 },
                 // 修改表单的验证规则对象
@@ -597,8 +598,8 @@
             },
             resetQueryInfo() {
                 Object.keys(this.queryInfo).forEach(key => this.queryInfo[key] = "")
-                this.queryInfo.quantity = [0, 100]
-                this.queryInfo.price = [0, 1000]
+                this.queryInfo.quantity = [1, 100]
+                this.queryInfo.price = [1, 1000]
                 this.getCommodity()
             },
             // 图片加载成功
@@ -638,7 +639,7 @@
                 // this.orderForm.orderNewId = this.buyForm.comId
                 this.orderForm.orderBuyerAddress = this.buyForm.address
                 this.orderForm.orderBuyerName = getCookie('ID')
-                this.orderForm.orderTime *=  86400000
+                this.orderForm.orderTime =  86400000
                 this.orderForm.orderPayStatus = 2
                 const {data: result} = await this.$http.get(`commodity/selectCommodityUser?comId=${this.orderForm.orderComId}`)
                 if (result.code !== 200) {

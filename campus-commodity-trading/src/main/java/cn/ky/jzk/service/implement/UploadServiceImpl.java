@@ -132,7 +132,10 @@ public class UploadServiceImpl extends AbstractService implements UploadService 
                 Optional.ofNullable(row.getCell(9)).ifPresent(v -> {
                     v.setCellType(CellType.STRING);
                     String value = v.getStringCellValue();
-                    if (!v.equals("管理员") && !v.equals("出租方") && !v.equals("承租方")) {
+                    /*if (!v.equals("管理员") && !v.equals("出租方") && !v.equals("承租方")) {
+                        value = "管理员";
+                    }*/
+                    if (!v.equals("管理员") && !v.equals("卖家") && !v.equals("买家")) {
                         value = "管理员";
                     }
                     user.setCustoma(value);

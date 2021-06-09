@@ -89,7 +89,7 @@
                     class="link"
                     :underline="false"
                     icon="el-icon-s-home"
-            >租赁市场
+            >商品市场
             </el-link>
           </el-col>
           <el-col :span="6">

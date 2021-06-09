@@ -5,7 +5,8 @@
             <div class="top-head">
                 <div>
                     <i class="el-icon-s-goods"/>
-                    <span style="cursor: default;">智能化共享租赁平台</span>
+                    <!--<span style="cursor: default;">智能化共享租赁平台</span>-->
+                    <span style="cursor: default;">校园二手商品交易平台</span>
                 </div>
                 <div style="margin-right: 24px">
                     <span style="cursor: default;">{{this.showUser}}</span>
@@ -108,7 +109,7 @@
                         authName: '商品中心',
                         children: [
                             {id: 31, authName: '我的商品', path: 'myCommodity'},
-                            {id: 32, authName: '租赁商品', path: 'buyCommodity'}
+                            {id: 32, authName: '购买商品', path: 'buyCommodity'}
                         ]
                     },
                     {
@@ -217,11 +218,12 @@
                     const list1 = this.menuList.slice(0, 1)
                     const list2 = this.menuList.slice(2, 4)
                     this.menuList = list1.concat(list2)
-                } else if (this.userRole.roleNameEn === 'admin') {
+                }
+                /*else if (this.userRole.roleNameEn === 'admin') {
                     const list1 = this.menuList.slice(0, 2)
                     const list2 = this.menuList.slice(4, 5)
                     this.menuList = list1.concat(list2)
-                }
+                }*/
             },
             toggleCollapse() {
                 this.isCollapse = !this.isCollapse

@@ -169,11 +169,11 @@
                         <span>{{scope.row.orderPayStatus === 1 ? '已付款' : '未付款'}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="到期时间/租赁时间" align="center">
+                <!--<el-table-column label="到期时间/租赁时间" align="center">
                     <template slot-scope="scope">
                         <span>{{scope.row.orderStatus === 3 ? scope.row.orderTime : (scope.row.orderTime * 1.0 / 86400000 + '天')}}</span>
                     </template>
-                </el-table-column>
+                </el-table-column>-->
                 <el-table-column label="操作" align="center" width="200px">
                     <template slot-scope="scope">
                         <el-tooltip
