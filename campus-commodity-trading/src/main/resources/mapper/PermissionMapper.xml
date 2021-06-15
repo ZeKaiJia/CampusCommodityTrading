@@ -54,6 +54,7 @@
     <select id="select" resultType="cn.ky.jzk.model.Permission">
         SELECT *
         FROM sys_permission
+        ORDER BY customa
     </select>
     <select id="selectById" resultType="cn.ky.jzk.model.Permission">
         SELECT *

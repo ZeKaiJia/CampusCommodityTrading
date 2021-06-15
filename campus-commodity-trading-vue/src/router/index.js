@@ -9,12 +9,6 @@ import MyCommodity from "../components/commodity/MyCommodity";
 import BuyCommodity from "../components/commodity/BuyCommodity";
 import Rights from '../components/power/Rights'
 import Roles from '../components/power/Roles'
-import Students from '../components/student/Students'
-import Subjects from '../components/subject/Subjects'
-import Scores from '../components/score/Scores'
-import StuTranscripts from '../components/score/StuTranscripts'
-import SubTranscripts from '../components/score/SubTranscripts'
-import Statuses from '../components/status/Statuses'
 import NotFound404 from '../components/NotFound404'
 import Docs from '../components/doc/Docs'
 import { getCookie } from '../plugins/utils'
@@ -41,12 +35,6 @@ const router = new Router({
         { path: '/buyCommodity', component: BuyCommodity },
         { path: '/rights', component: Rights },
         { path: '/roles', component: Roles },
-        { path: '/students', component: Students },
-        { path: '/subjects', component: Subjects },
-        { path: '/scores', component: Scores },
-        { path: '/stuTranscripts', component: StuTranscripts },
-        { path: '/subTranscripts', component: SubTranscripts },
-        { path: '/statuses', component: Statuses },
         { path: '/docs', component: Docs },
         { path: '/orders', component: Orders }
       ]
